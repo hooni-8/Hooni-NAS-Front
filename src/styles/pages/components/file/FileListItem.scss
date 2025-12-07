@@ -1,0 +1,240 @@
+/* File List Item */
+.file-list-item {
+  position: relative;
+}
+
+.file-item-content {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f3f4f6;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.file-list-item:last-child .file-item-content {
+  border-bottom: none;
+}
+
+.file-item-content:hover {
+  background-color: #f9fafb;
+}
+
+@media (min-width: 768px) {
+  .file-item-content {
+    grid-template-columns: 1fr auto auto auto;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+  }
+}
+
+/* File Icon */
+.file-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+}
+
+.folder-icon {
+  color: #3b82f6 !important;
+}
+
+.document-icon {
+  color: #f97316 !important;
+}
+
+.image-icon {
+  color: #22c55e !important;
+}
+
+.video-icon {
+  color: #a855f7 !important;
+}
+
+.audio-icon {
+  color: #ec4899 !important;
+}
+
+.default-icon {
+  color: #6b7280 !important;
+}
+
+.file-icon-wrapper {
+  flex-shrink: 0;
+}
+
+/* File Name Section */
+.file-item-name-section {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .file-item-name-section {
+    gap: 0.75rem;
+  }
+}
+
+.file-name-info {
+  min-width: 0;
+}
+
+.file-name {
+  font-size: 0.875rem;
+  color: #111827;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (min-width: 768px) {
+  .file-name {
+    font-size: 1rem;
+  }
+}
+
+.file-meta-mobile {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #4b5563;
+}
+
+@media (min-width: 768px) {
+  .file-meta-mobile {
+    display: none;
+  }
+}
+
+/* File Item Size */
+.file-item-size {
+  display: none;
+  align-items: center;
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+@media (min-width: 768px) {
+  .file-item-size {
+    display: flex;
+  }
+}
+
+/* File Item Date */
+.file-item-date {
+  display: none;
+  align-items: center;
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+@media (min-width: 768px) {
+  .file-item-date {
+    display: flex;
+  }
+}
+
+/* File Item Action */
+.file-item-action {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+}
+
+/* Menu Button */
+.menu-button {
+  padding: 0.375rem;
+  border-radius: 0.25rem;
+  opacity: 1;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.menu-button:hover {
+  background-color: #e5e7eb;
+}
+
+@media (min-width: 768px) {
+  .menu-button {
+    opacity: 0;
+  }
+
+  .file-list-item:hover .menu-button {
+    opacity: 1;
+  }
+}
+
+.menu-icon {
+  width: 1rem;
+  height: 1rem;
+  color: #4b5563;
+}
+
+/* Menu Dropdown */
+.menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+}
+
+.menu-dropdown {
+  position: absolute;
+  top: 2rem;
+  right: 0;
+  width: 12rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  z-index: 20;
+}
+
+/* Menu Item */
+.menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: #374151;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.menu-item:hover {
+  background-color: #f9fafb;
+}
+
+.menu-item-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Delete Item */
+.delete-item {
+  color: #dc2626;
+}
+
+.delete-item:hover {
+  background-color: #fef2f2;
+}
+
+/* Menu Divider */
+.menu-divider {
+  border-top: 1px solid #e5e7eb;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
