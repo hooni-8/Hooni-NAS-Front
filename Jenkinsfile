@@ -14,7 +14,7 @@ pipeline {
 
 		ARGOCD_GIT_URL = "github.com/hooni-8/argocd.git"
 		ARGOCD_GIT_BRANCH = "main"
-		ARGOCD_DEPLOY_YAML_FILE = "NAS/hooni-NAS-front/deployment.yaml"
+		ARGOCD_DEPLOY_YAML_FILE = "NAS/NAS-front/deployment.yaml"
 	}
 
         stages {
