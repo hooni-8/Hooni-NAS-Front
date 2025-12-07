@@ -8,7 +8,7 @@ pipeline {
 
 	environment {
     	IMAGE_PATH = "NAS"
-		REPLACE_NAME = "hooni-NAS-front"
+		REPLACE_NAME = "NAS-front"
 		IMAGE_NAME = "${REPLACE_NAME}:v"
 		IMAGE_VERSION = "0.0.${BUILD_NUMBER}"
 
