@@ -7,8 +7,8 @@ pipeline {
 	}
 
 	environment {
-    	IMAGE_PATH = "NAS"
-		REPLACE_NAME = "NAS-front"
+    	IMAGE_PATH = "nas"
+		REPLACE_NAME = "nas-front"
 		IMAGE_NAME = "${REPLACE_NAME}:v"
 		IMAGE_VERSION = "0.0.${BUILD_NUMBER}"
 
