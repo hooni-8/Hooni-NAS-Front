@@ -2,6 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
     baseURL: process.env.REACT_APP_API_GATEWAY,
+    withCredentials: true,
 });
 
 // 1) 요청 시 accessToken 헤더 삽입
