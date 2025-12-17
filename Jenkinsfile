@@ -24,7 +24,7 @@ pipeline {
                             nodejs(nodeJSInstallationName: 'nodejs', configId: 'nexus-npm-config') {
                                 sh 'npm config ls'
                                 sh 'npm install --legacy-peer-deps'
-                                sh 'npm run build'
+                                sh 'npm run build:prod'
                             }
                     }
             }
