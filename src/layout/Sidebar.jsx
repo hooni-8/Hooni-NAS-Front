@@ -48,7 +48,7 @@ export default function Sidebar ({ selectedCategory, onCategoryChange, onClose }
             <div className="sidebar-header">
                 <div className="sidebar-logo-section">
                     <div className="sidebar-logo">
-                        <HardDrive className="sidebar-logo-icon" />
+                        <HardDrive className="sidebar-logo-icon"/>
                     </div>
                     <div className="sidebar-title-section">
                         <h1 className="sidebar-title">My Storage</h1>
@@ -60,7 +60,7 @@ export default function Sidebar ({ selectedCategory, onCategoryChange, onClose }
                         onClick={onClose}
                         className="sidebar-close-btn"
                     >
-                        <X className="sidebar-close-icon" />
+                        <X className="sidebar-close-icon"/>
                     </button>
                 )}
             </div>
@@ -114,23 +114,18 @@ export default function Sidebar ({ selectedCategory, onCategoryChange, onClose }
                         );
                     })}
                 </div>
-                {/*<button*/}
-                {/*    className="sidebar-nav-item"*/}
-                {/*    onClick={handleLogout}*/}
-                {/*>*/}
-                {/*    <span>로그아웃</span>*/}
-                {/*</button>*/}
-
-                <div className="px-3 pb-4 border-t border-gray-200 pt-4">
-                    <button
-                        onClick={handleLogout}
-                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-600 hover:bg-red-50 transition-colors"
-                    >
-                        <LogOut className="w-5 h-5"/>
-                        <span>로그아웃</span>
-                    </button>
-                </div>
             </nav>
+
+            {/* 로그아웃 버튼 */}
+            <div className="sidebar-logout">
+                <button
+                    onClick={handleLogout}
+                    className="sidebar-logout-btn"
+                >
+                    <LogOut className="sidebar-logout-icon"/>
+                    <span>로그아웃</span>
+                </button>
+            </div>
         </div>
     );
 }
