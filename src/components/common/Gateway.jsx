@@ -2,8 +2,6 @@ import api from "./GatewayInstance";
 
 const baseUrl = process.env.REACT_APP_API_GATEWAY;
 
-const accessToken = localStorage.getItem('accessToken');
-
 export const get = async (path, opts) => {
     let result = {};
 
@@ -24,7 +22,7 @@ export const get = async (path, opts) => {
 export const post = async (path, payload) => {
     let result = {};
 
-    await api.post(baseUrl + path, payload, {})
+    await api.post(baseUrl + path, payload)
         .then((response) => {
             if (response.status === 200) {
                 result = response;
@@ -41,9 +39,11 @@ export const post = async (path, payload) => {
 export const session = async () => {
     let result = { isLogin: false, userName: '', userCode: '', role: '' };
 
-    await api.post(baseUrl + "/auth/session", { accessToken })
+    await api.post("/auth/session")
         .then((response) => {
             const data = response.data;
+
+            console.log("response => ", response);
 
             result = {isLogin: data.status, userName: data.name, userCode: data.userCode, role: data.role};
         })

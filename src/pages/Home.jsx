@@ -7,14 +7,17 @@ import UploadModal from '@pages/components/modal/UploadModal';
 import "@styles/pages/Home.scss"
 
 import * as gateway from "@components/common/Gateway";
+import {useOutletContext} from "react-router-dom";
 
-export default function Home({
-                                 selectedCategory,
-                                 searchQuery,
-                                 viewMode,
-                                 isUploadModalOpen,
-                                 setIsUploadModalOpen
-                             }) {
+export default function Home() {
+
+    const {
+        selectedCategory,
+        searchQuery,
+        viewMode,
+        isUploadModalOpen,
+        setIsUploadModalOpen
+    } = useOutletContext();
 
     const mockFiles = [
         { id: '1', name: '여름 휴가 사진', type: 'folder', size: '1.2 GB', date: '2025-08-15' },
@@ -46,8 +49,7 @@ export default function Home({
     const [files, setFiles] = useState(mockFiles);
 
     const filteredFiles = files.filter(file => {
-        const matchesSearch =
-            file.name.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesSearch = file.name.toLowerCase().includes(searchQuery.toLowerCase());
 
         const matchesCategory =
             selectedCategory === 'all' ||

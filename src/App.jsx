@@ -1,14 +1,17 @@
 import React from 'react';
-import {BrowserRouter as Router } from 'react-router-dom';
 import '@styles/index.scss'
+import {BrowserRouter} from 'react-router-dom';
 
-import DashBoard from '@layout/DashBoard';
+import { AuthProvider } from "@layout/auth/AuthContext";
+import Router from "@nav/Router";
 
 function App() {
     return (
-        <Router>
-            <DashBoard />
-        </Router>
+        <BrowserRouter>
+            <AuthProvider>
+                <Router />
+            </AuthProvider>
+        </BrowserRouter>
     );
 }
 

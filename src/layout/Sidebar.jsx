@@ -8,10 +8,19 @@ import {
     Star,
     Trash2,
     Clock,
-    X
+    X,
+    LogOut
 } from 'lucide-react';
 import "@styles/pages/layout/Sidebar.scss";
+import * as gateway from "@components/common/Gateway";
+import { useAuth } from "@layout/auth/AuthContext";
+import {useNavigate} from "react-router-dom";
+
+
 export default function Sidebar ({ selectedCategory, onCategoryChange, onClose }) {
+
+    const { logout } = useAuth();
+    const navigate = useNavigate();
 
     const categories = [
         { id: 'all', name: '전체 파일', icon: HardDrive, color: '#4b5563' },
@@ -27,6 +36,12 @@ export default function Sidebar ({ selectedCategory, onCategoryChange, onClose }
         { id: 'starred', name: '즐겨찾기', icon: Star },
         { id: 'trash', name: '휴지통', icon: Trash2 },
     ];
+
+
+    const handleLogout = async () => {
+       await logout();
+       navigate("/", {replace: true});
+    }
 
     return (
         <div className="sidebar">
@@ -93,11 +108,27 @@ export default function Sidebar ({ selectedCategory, onCategoryChange, onClose }
                                 key={item.id}
                                 className="sidebar-nav-item"
                             >
-                                <Icon className="sidebar-nav-icon" style={{ color: '#4b5563' }} />
+                                <Icon className="sidebar-nav-icon" style={{color: '#4b5563'}}/>
                                 <span>{item.name}</span>
                             </button>
                         );
                     })}
+                </div>
+                {/*<button*/}
+                {/*    className="sidebar-nav-item"*/}
+                {/*    onClick={handleLogout}*/}
+                {/*>*/}
+                {/*    <span>로그아웃</span>*/}
+                {/*</button>*/}
+
+                <div className="px-3 pb-4 border-t border-gray-200 pt-4">
+                    <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-600 hover:bg-red-50 transition-colors"
+                    >
+                        <LogOut className="w-5 h-5"/>
+                        <span>로그아웃</span>
+                    </button>
                 </div>
             </nav>
         </div>
