@@ -43,8 +43,6 @@ export const session = async () => {
         .then((response) => {
             const data = response.data;
 
-            console.log("response => ", response);
-
             result = {isLogin: data.status, userName: data.name, userCode: data.userCode, role: data.role};
         })
         .catch((error) => {

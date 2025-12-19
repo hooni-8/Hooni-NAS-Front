@@ -1,26 +1,23 @@
-import {
-    HardDrive,
-    Folder,
-    Image,
-    FileText,
-    Video,
-    Music,
-    Star,
-    Trash2,
-    Clock,
-    X,
-    LogOut
-} from 'lucide-react';
-import "@styles/pages/layout/Sidebar.scss";
-import * as gateway from "@components/common/Gateway";
-import { useAuth } from "@layout/auth/AuthContext";
-import {useNavigate} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
+import * as gateway from "@components/common/Gateway";
+import * as format from "@components/utils/Format";
+import { useAuth } from "@layout/auth/AuthContext";
+
+import "@styles/pages/layout/Sidebar.scss";
+import { HardDrive, Folder, Image, FileText, Video, Music, Star, Trash2, Clock, X, LogOut } from 'lucide-react';
 
 export default function Sidebar ({ selectedCategory, onCategoryChange, onClose }) {
 
     const { logout } = useAuth();
     const navigate = useNavigate();
+
+    const [totalVolume, setTotalVolume] = useState(0);
+    const [freeVolume, setFreeVolume] = useState(0);
+    const [usableVolume, setUsableVolume] = useState(0);
+    const [usedPercent, setUsedPercent] = useState();
+
 
     const categories = [
         { id: 'all', name: '전체 파일', icon: HardDrive, color: '#4b5563' },
@@ -42,6 +39,32 @@ export default function Sidebar ({ selectedCategory, onCategoryChange, onClose }
        await logout();
        navigate("/", {replace: true});
     }
+
+    // Disk 용량 확인
+    useEffect(() => {
+        const diskVolume = async () => {
+
+            try {
+                const response = await gateway.post("/nas/api/v1/volume/disk");
+
+                if (response.status === 200) {
+                    const { total, free, usable } = response.data;
+
+                    setTotalVolume(total);
+                    setFreeVolume(free);
+                    setUsableVolume(usable);
+
+                    setUsedPercent(format.usedPercent(total, usable));
+                } else {
+                    console.error("통신 중 오류가 발생했습니다.");
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        diskVolume();
+    }, []);
 
     return (
         <div className="sidebar">
@@ -68,10 +91,15 @@ export default function Sidebar ({ selectedCategory, onCategoryChange, onClose }
             <div className="sidebar-storage">
                 <div className="sidebar-storage-info">
                     <span className="sidebar-storage-label">저장 공간</span>
-                    <span className="sidebar-storage-usage">3.2 GB / 15 GB</span>
+                    <span className="sidebar-storage-usage">{ format.formatBytes(totalVolume - usableVolume) } / { format.formatBytes(totalVolume) }</span>
                 </div>
                 <div className="sidebar-storage-bar">
-                    <div className="sidebar-storage-fill"></div>
+                    <div
+                        className="sidebar-storage-fill"
+                        style={{width: usedPercent}}
+                    >
+                        <span className="sidebar-storage-percent">{ usedPercent }</span>
+                    </div>
                 </div>
             </div>
 

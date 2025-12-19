@@ -113,19 +113,47 @@
   font-weight: 500;
 }
 
+//.sidebar-storage-bar {
+//  width: 100%;
+//  background-color: #e5e7eb;
+//  border-radius: 9999px;
+//  height: 1.5rem;
+//  overflow: hidden;
+//}
+//
+//.sidebar-storage-fill {
+//  background: linear-gradient(to right, #3b82f6, #a855f7);
+//  height: 100%;
+//  border-radius: 9999px;
+//}
+
 .sidebar-storage-bar {
   width: 100%;
   background-color: #e5e7eb;
   border-radius: 9999px;
-  height: 0.5rem;
+  height: 1.5rem;
   overflow: hidden;
 }
 
 .sidebar-storage-fill {
+  position: relative;
   background: linear-gradient(to right, #3b82f6, #a855f7);
   height: 100%;
-  width: 21%;
   border-radius: 9999px;
+  transition: width 0.4s ease;
+  min-width: 3rem;
+}
+
+.sidebar-storage-percent {
+  position: absolute;
+  right: 0.5rem;        // 오른쪽 끝에서 살짝 안쪽
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+  white-space: nowrap;
+  pointer-events: none;
 }
 
 /* Sidebar Nav */
