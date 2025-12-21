@@ -47,7 +47,7 @@ export default function Sidebar ({ selectedCategory, onCategoryChange, onClose }
             try {
                 const response = await gateway.post("/nas/api/v1/volume/disk");
 
-                if (response.status === 200) {
+                if (response.status === 200 && response.code === "0000") {
                     const { total, free, usable } = response.data;
 
                     setTotalVolume(total);

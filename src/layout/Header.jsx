@@ -1,24 +1,21 @@
 import React, {useEffect, useRef, useState} from 'react';
-import { Search, Upload, Grid3x3, List, Bell, User, Menu, FolderPlus, LogOut, ChevronDown } from 'lucide-react';
+import { Search, Upload, Grid3x3, List, User, Menu, FolderPlus, ChevronDown } from 'lucide-react';
 
 import "@styles/pages/layout/Header.scss"
-import { useAuth } from "@layout/auth/AuthContext";
-import {useNavigate} from "react-router-dom";
+import CreateFolderModal from "@layout/components/HeaderDropdown";
 
 export default function Header({
                            searchQuery,
-                           onSearchChange,
+                           setSearchQuery,
                            viewMode,
-                           onViewModeChange,
-                           onUploadClick,
+                           setViewMode,
+                           showUploadModal,
                            onMenuClick,
                            onCreateFolderClick
                        }) {
 
     const [showUserMenu, setShowUserMenu] = useState(false);
     const menuRef = useRef(null);
-
-    const navigate = useNavigate();
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -31,12 +28,7 @@ export default function Header({
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    const { logout } = useAuth();
 
-    const handleLogout = async () => {
-        await logout();
-        navigate("/", {replace: true});
-    }
     return (
         <header className="header">
             <div className="header-container">
@@ -55,46 +47,47 @@ export default function Header({
                             type="text"
                             placeholder="파일 검색..."
                             value={searchQuery}
-                            onChange={(e) => onSearchChange(e.target.value)}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                             className="header-search-input"
                         />
                     </div>
                 </div>
 
                 <div className="header-actions">
-                    {/* Mobile View Toggle */}
+
+                    {/*---------------View Toggle---------------*/}
                     <div className="header-view-toggle mobile">
                         <button
-                            onClick={() => onViewModeChange('grid')}
+                            onClick={() => setViewMode('grid')}
                             className={`header-view-btn ${viewMode === 'grid' ? 'active' : ''}`}
                         >
                             <Grid3x3 className="header-view-icon-small"/>
                         </button>
                         <button
-                            onClick={() => onViewModeChange('list')}
+                            onClick={() => setViewMode('list')}
                             className={`header-view-btn ${viewMode === 'list' ? 'active' : ''}`}
                         >
                             <List className="header-view-icon-small"/>
                         </button>
                     </div>
 
-                    {/* Desktop View Toggle */}
                     <div className="header-view-toggle desktop">
                         <button
-                            onClick={() => onViewModeChange('grid')}
+                            onClick={() => setViewMode('grid')}
                             className={`header-view-btn ${viewMode === 'grid' ? 'active' : ''}`}
                         >
                             <Grid3x3 className="header-view-icon"/>
                         </button>
                         <button
-                            onClick={() => onViewModeChange('list')}
+                            onClick={() => setViewMode('list')}
                             className={`header-view-btn ${viewMode === 'list' ? 'active' : ''}`}
                         >
                             <List className="header-view-icon"/>
                         </button>
                     </div>
+                    {/*---------------View Toggle---------------*/}
 
-                    {/* Desktop Create Folder Button */}
+                    {/*---------------Create Folder Button---------------*/}
                     <button
                         onClick={onCreateFolderClick}
                         className="header-desktop-folder-btn"
@@ -103,35 +96,30 @@ export default function Header({
                         <span>폴더 생성</span>
                     </button>
 
-                    {/* Desktop Upload Button */}
-                    <button
-                        onClick={onUploadClick}
-                        className="header-desktop-upload-btn"
-                    >
-                        <Upload className="header-btn-icon"/>
-                        <span>업로드</span>
-                    </button>
-
-                    {/* Mobile Create Folder Button */}
                     <button
                         onClick={onCreateFolderClick}
                         className="header-mobile-folder-btn"
                     >
                         <FolderPlus className="header-mobile-icon"/>
                     </button>
+                    {/*---------------Create Folder Button---------------*/}
 
-                    {/* Mobile Upload Button */}
+                    {/*---------------Upload Button---------------*/}
                     <button
-                        onClick={onUploadClick}
+                        onClick={showUploadModal}
+                        className="header-desktop-upload-btn"
+                    >
+                        <Upload className="header-btn-icon"/>
+                        <span>업로드</span>
+                    </button>
+
+                    <button
+                        onClick={showUploadModal}
                         className="header-mobile-upload-btn"
                     >
                         <Upload className="header-mobile-icon"/>
                     </button>
-
-                    {/* Desktop Icons */}
-                    <button className="header-notification-btn">
-                        <Bell className="header-icon"/>
-                    </button>
+                    {/*---------------Upload Button---------------*/}
 
                     {/* Desktop User Menu */}
                     <div className="header-user-menu" ref={menuRef}>
@@ -147,28 +135,7 @@ export default function Header({
 
                         {/* User Dropdown Menu */}
                         {showUserMenu && (
-                            <div className="header-dropdown-menu">
-                                <div className="header-dropdown-header">
-                                    <p className="header-dropdown-title">사용자</p>
-                                    <p className="header-dropdown-email">user@example.com</p>
-                                </div>
-                                <button className="header-dropdown-item">
-                                    <User className="header-dropdown-icon"/>
-                                    <span>내 프로필</span>
-                                </button>
-                                <button className="header-dropdown-item">
-                                    <Bell className="header-dropdown-icon"/>
-                                    <span>알림 설정</span>
-                                </button>
-                                <div className="header-dropdown-divider"></div>
-                                <button
-                                    onClick={handleLogout}
-                                    className="header-dropdown-item logout"
-                                >
-                                    <LogOut className="header-dropdown-icon"/>
-                                    <span>로그아웃</span>
-                                </button>
-                            </div>
+                            <CreateFolderModal />
                         )}
                     </div>
                 </div>

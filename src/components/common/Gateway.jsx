@@ -9,7 +9,7 @@ export const get = async (path, opts) => {
         params: opts,
     }).then((response) => {
         if (response.status === 200) {
-            result = response;
+            result = response.data;
             result.status = response.status;
         }
     }).catch((error) => {
@@ -19,13 +19,13 @@ export const get = async (path, opts) => {
     return result;
 }
 
-export const post = async (path, payload) => {
+export const post = async (path, payload, config) => {
     let result = {};
 
-    await api.post(baseUrl + path, payload)
+    await api.post(baseUrl + path, payload, config)
         .then((response) => {
             if (response.status === 200) {
-                result = response;
+                result = response.data;
                 result.status = response.status;
             }
         })

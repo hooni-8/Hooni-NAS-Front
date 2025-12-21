@@ -16,3 +16,13 @@ export const usedPercent = (total, usable) => {
     const percent = ((total - usable) / total) * 100;
     return `${percent.toFixed(1)}%`;
 }
+
+// 타입 구분
+export const getFileType = (filename) => {
+    const ext = filename.split('.').pop()?.toLowerCase();
+    if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext || '')) return 'image';
+    if (['mp4', 'avi', 'mov', 'wmv'].includes(ext || '')) return 'video';
+    if (['mp3', 'wav', 'ogg', 'm4a'].includes(ext || '')) return 'audio';
+    if (['pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx'].includes(ext || '')) return 'document';
+    return 'document';
+};

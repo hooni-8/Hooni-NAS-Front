@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 
 import { Outlet } from "react-router-dom";
 import Header from "@layout/Header";
@@ -14,6 +14,10 @@ export default function DashBoard() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
     const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
+
+    const showUploadModal = () => {
+        setIsUploadModalOpen(!isUploadModalOpen);
+    }
 
     return (
         <>
@@ -51,10 +55,10 @@ export default function DashBoard() {
 
                     <Header
                         searchQuery={searchQuery}
-                        onSearchChange={setSearchQuery}
+                        setSearchQuery={setSearchQuery}
                         viewMode={viewMode}
-                        onViewModeChange={setViewMode}
-                        onUploadClick={() => setIsUploadModalOpen(true)}
+                        setViewMode={setViewMode}
+                        showUploadModal={showUploadModal}
                         onMenuClick={() => setIsMobileMenuOpen(true)}
                         onCreateFolderClick={() => setIsCreateFolderModalOpen(true)}
                     />
@@ -66,6 +70,7 @@ export default function DashBoard() {
                             viewMode,
                             isUploadModalOpen,
                             setIsUploadModalOpen,
+                            showUploadModal,
                         }}
                     />
 

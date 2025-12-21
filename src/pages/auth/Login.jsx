@@ -40,7 +40,7 @@ export default function Login() {
             const response = await gateway.post("/auth/login", payload);
 
             if (response.status === 200) {
-                if (response.data.code === '0000') {
+                if (response.code === '0000') {
                     loginSuccess();
                     navigate("/home", { replace: true });
                 } else {

@@ -33,6 +33,7 @@
   cursor: pointer;
   color: #4b5563;
   transition: color 0.2s ease;
+  position: relative; /* 배지 위치 기준점 */
 }
 
 .mobile-nav-item:hover {
@@ -88,4 +89,40 @@
   height: 1.5rem;
   opacity: 0;
   pointer-events: none;
+}
+
+/* 업로드 배지 컨테이너 */
+.upload-badge {
+  position: absolute;
+  top: -0.25rem;
+  right: -0.25rem;
+  z-index: 10;
+}
+
+/* 배지 도트 */
+.upload-badge-dot {
+  width: 0.625rem;
+  height: 0.625rem;
+  background-color: #10b981;
+  border-radius: 9999px;
+  position: relative;
+}
+
+/* 핑 애니메이션 효과 */
+.upload-badge-ping {
+  width: 0.625rem;
+  height: 0.625rem;
+  background-color: #10b981;
+  border-radius: 9999px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
 }

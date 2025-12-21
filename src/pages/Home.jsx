@@ -3,6 +3,8 @@ import React, {useEffect, useState} from 'react';
 import FileGrid from '@pages/components/file/FileGrid';
 import MobileNav from '@layout/MobileNav';
 import UploadModal from '@pages/components/modal/UploadModal';
+import UploadProgressBar from "@pages/components/loding/UploadProgressBar";
+import {useUpload} from "@pages/components/loding/UploadProvider";
 
 import "@styles/pages/Home.scss"
 
@@ -16,8 +18,14 @@ export default function Home() {
         searchQuery,
         viewMode,
         isUploadModalOpen,
-        setIsUploadModalOpen
+        setIsUploadModalOpen,
+        showUploadModal,
     } = useOutletContext();
+
+    const [progressBarOpen, setProgressBarOpen] = useState(false);
+    const [rendering, setRendering] = useState(false);
+
+    const { files, setQueue, pendingToReadyUpdateFile, pendingFiles, readyFiles, uploadingFiles, processQueue} = useUpload();
 
     const mockFiles = [
         { id: '1', name: '여름 휴가 사진', type: 'folder', size: '1.2 GB', date: '2025-08-15' },
@@ -28,25 +36,9 @@ export default function Home() {
         { id: '6', name: '스크린샷.png', type: 'image', size: '2.1 MB', date: '2025-12-03' },
         { id: '7', name: '보고서.docx', type: 'document', size: '1.5 MB', date: '2025-11-30' },
         { id: '8', name: '디자인 파일', type: 'folder', size: '850 MB', date: '2025-10-12' },
-        { id: '9', name: '디자인 파일', type: 'folder', size: '850 MB', date: '2025-10-12' },
-        { id: '10', name: '디자인 파일', type: 'folder', size: '850 MB', date: '2025-10-12' },
-        { id: '11', name: '디자인 파일', type: 'folder', size: '850 MB', date: '2025-10-12' },
-        { id: '12', name: '디자인 파일', type: 'folder', size: '850 MB', date: '2025-10-12' },
-        { id: '13', name: '디자인 파일', type: 'folder', size: '850 MB', date: '2025-10-12' },
-        { id: '14', name: '디자인 파일', type: 'folder', size: '850 MB', date: '2025-10-12' },
-        { id: '15', name: '디자인 파일', type: 'folder', size: '850 MB', date: '2025-10-12' },
-        { id: '16', name: '디자인 파일', type: 'folder', size: '850 MB', date: '2025-10-12' },
-        { id: '17', name: '디자인 파일', type: 'folder', size: '850 MB', date: '2025-10-12' },
-        { id: '18', name: '디자인 파일', type: 'folder', size: '850 MB', date: '2025-10-12' },
-        { id: '19', name: '디자인 파일', type: 'folder', size: '850 MB', date: '2025-10-12' },
-        { id: '20', name: '디자인 파일', type: 'folder', size: '850 MB', date: '2025-10-12' },
-        { id: '21', name: '디자인 파일', type: 'folder', size: '850 MB', date: '2025-10-12' },
-        { id: '22', name: '디자인 파일', type: 'folder', size: '850 MB', date: '2025-10-12' },
-        { id: '23', name: '디자인 파일', type: 'folder', size: '850 MB', date: '2025-10-12' },
-        { id: '24', name: '디자인 파일', type: 'folder', size: '850 MB', date: '2025-10-12' },
     ];
 
-    const [files, setFiles] = useState(mockFiles);
+    // const [files, setFiles] = useState(mockFiles);
 
     const filteredFiles = files.filter(file => {
         const matchesSearch = file.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -62,22 +54,55 @@ export default function Home() {
         return matchesSearch && matchesCategory;
     });
 
-    const handleUpload = (uploadedFiles) => {
-        setFiles(prev => [...uploadedFiles, ...prev]);
+    const showProgressBar = () => {
+        setProgressBarOpen(!progressBarOpen);
+    }
+
+    const handleUpload = () => {
+        showUploadModal();
+        if (!progressBarOpen) showProgressBar();
+
+        pendingToReadyUpdateFile();
+        setQueue(prev => [...prev, ...pendingFiles])
+
+        setRendering(true);
     };
+
+    // readyFiles 변경 감지
+    useEffect(() => {
+        if (rendering && readyFiles.length > 0) {
+            processQueue();
+            setRendering(false);
+        }
+    }, [readyFiles, rendering]);
+
 
     return (
         <div className="storage-layout">
             <div className="storage-main-content">
                 <FileGrid files={filteredFiles} viewMode={viewMode}/>
 
-                <MobileNav onUploadClick={() => setIsUploadModalOpen(true)}/>
+                <MobileNav
+                    onUploadClick={() => setIsUploadModalOpen(true)}
+                    progressBarOpen={showProgressBar}
+                    uploadingCount={uploadingFiles.length}
+                />
             </div>
 
             {isUploadModalOpen && (
                 <UploadModal
-                    onClose={() => setIsUploadModalOpen(false)}
-                    onUpload={handleUpload}
+                    showUploadModal={showUploadModal}
+                    handleUpload={handleUpload}
+                    pendingFiles={pendingFiles}
+                />
+            )}
+
+            {progressBarOpen && (
+                <UploadProgressBar
+                    // files={uploadingFiles}
+                    // onCancel={}
+                    // onClose={}
+                    // forceExpanded={}
                 />
             )}
         </div>
