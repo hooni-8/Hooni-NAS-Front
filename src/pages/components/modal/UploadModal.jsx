@@ -53,7 +53,7 @@ export default function UploadModal({ showUploadModal, handleUpload, pendingFile
                 <div className="upload-modal-header">
                     <h2 className="upload-modal-title">파일 업로드</h2>
                     <button
-                        onClick={showUploadModal}
+                        onClick={() => showUploadModal("CANCEL")}
                         className="upload-modal-close-btn"
                     >
                         <X className="upload-modal-close-icon" />
@@ -115,7 +115,7 @@ export default function UploadModal({ showUploadModal, handleUpload, pendingFile
 
                 <div className="upload-modal-actions">
                     <button
-                        onClick={showUploadModal}
+                        onClick={() => showUploadModal("CANCEL")}
                         className="upload-modal-cancel-btn"
                     >
                         취소

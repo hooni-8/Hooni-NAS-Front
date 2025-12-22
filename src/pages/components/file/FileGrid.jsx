@@ -4,8 +4,8 @@ import FileListItem from '@pages/components/file/FileListItem';
 
 import "@styles/pages/components/file/FileGrid.scss"
 
-export default function FileGrid({ files, viewMode }) {
-    if (files.length === 0) {
+export default function FileGrid({ fileList, viewMode }) {
+    if (fileList.length === 0) {
         return (
             <div className="file-grid-empty">
                 <div className="empty-content">
@@ -31,7 +31,7 @@ export default function FileGrid({ files, viewMode }) {
                         <div>수정일</div>
                         <div className="list-header-action"></div>
                     </div>
-                    {files.map(file => (
+                    {fileList.map(file => (
                         <FileListItem key={file.id} file={file} />
                     ))}
                 </div>
@@ -42,7 +42,7 @@ export default function FileGrid({ files, viewMode }) {
     return (
         <div className="file-grid-container grid-view">
             <div className="grid-wrapper">
-                {files.map(file => (
+                {fileList.map(file => (
                     <FileCard key={file.id} file={file} />
                 ))}
             </div>

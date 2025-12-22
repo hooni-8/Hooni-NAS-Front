@@ -1,15 +1,17 @@
 import React, {useEffect, useState} from 'react';
+import {useOutletContext} from "react-router-dom";
 
 import FileGrid from '@pages/components/file/FileGrid';
 import MobileNav from '@layout/MobileNav';
 import UploadModal from '@pages/components/modal/UploadModal';
 import UploadProgressBar from "@pages/components/loding/UploadProgressBar";
-import {useUpload} from "@pages/components/loding/UploadProvider";
 
 import "@styles/pages/Home.scss"
 
 import * as gateway from "@components/common/Gateway";
-import {useOutletContext} from "react-router-dom";
+import * as format from "@components/utils/Format";
+
+import { useUpload } from "@pages/components/loding/UploadProvider";
 
 export default function Home() {
 
@@ -25,34 +27,9 @@ export default function Home() {
     const [progressBarOpen, setProgressBarOpen] = useState(false);
     const [rendering, setRendering] = useState(false);
 
-    const { files, setQueue, pendingToReadyUpdateFile, pendingFiles, readyFiles, uploadingFiles, processQueue} = useUpload();
+    const { setQueue, uploadDoneAt, setUploadDoneAt, pendingToReadyUpdateFile, pendingFiles, readyFiles, uploadingFiles, processQueue} = useUpload();
 
-    const mockFiles = [
-        { id: '1', name: '여름 휴가 사진', type: 'folder', size: '1.2 GB', date: '2025-08-15' },
-        { id: '2', name: '프로젝트 문서', type: 'folder', size: '245 MB', date: '2025-11-20' },
-        { id: '3', name: '프레젠테이션.pdf', type: 'document', size: '4.2 MB', date: '2025-12-01' },
-        { id: '4', name: '배경음악.mp3', type: 'audio', size: '3.8 MB', date: '2025-11-28' },
-        { id: '5', name: '튜토리얼.mp4', type: 'video', size: '125 MB', date: '2025-11-15' },
-        { id: '6', name: '스크린샷.png', type: 'image', size: '2.1 MB', date: '2025-12-03' },
-        { id: '7', name: '보고서.docx', type: 'document', size: '1.5 MB', date: '2025-11-30' },
-        { id: '8', name: '디자인 파일', type: 'folder', size: '850 MB', date: '2025-10-12' },
-    ];
-
-    // const [files, setFiles] = useState(mockFiles);
-
-    const filteredFiles = files.filter(file => {
-        const matchesSearch = file.name.toLowerCase().includes(searchQuery.toLowerCase());
-
-        const matchesCategory =
-            selectedCategory === 'all' ||
-            (selectedCategory === 'folders' && file.type === 'folder') ||
-            (selectedCategory === 'images' && file.type === 'image') ||
-            (selectedCategory === 'documents' && file.type === 'document') ||
-            (selectedCategory === 'videos' && file.type === 'video') ||
-            (selectedCategory === 'audio' && file.type === 'audio');
-
-        return matchesSearch && matchesCategory;
-    });
+    const [fileList, setFileList] = useState([]);
 
     const showProgressBar = () => {
         setProgressBarOpen(!progressBarOpen);
@@ -76,11 +53,54 @@ export default function Home() {
         }
     }, [readyFiles, rendering]);
 
+    useEffect(() => {
+        getFileList()
+    }, [uploadDoneAt]);
+
+    const getFileList = async () => {
+        try {
+            const response = await gateway.post("/nas/api/v1/file/list");
+
+            if (response.status === 200 && response.code === "0000") {
+                const convertedFiles = response.data.map(file => ({
+                    ...file,
+                    id: file.fileId,
+                    name: file.originName,
+                    size: format.formatBytes(file.fileSize),
+                    type: format.getFileType(file.extension),
+                    date: file.lastModifiedAt
+                }));
+
+                setFileList(convertedFiles);
+
+            } else {
+                alert("목록을 불러오던 중 오류가 발생했습니다.");
+            }
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setUploadDoneAt('');
+        }
+    }
+
+    const filteredFiles = fileList.filter(file => {
+        const matchesSearch = file.name.toLowerCase().includes(searchQuery.toLowerCase());
+
+        const matchesCategory =
+            selectedCategory === 'all' ||
+            (selectedCategory === 'folders' && file.type === 'folder') ||
+            (selectedCategory === 'images' && file.type === 'image') ||
+            (selectedCategory === 'documents' && file.type === 'document') ||
+            (selectedCategory === 'videos' && file.type === 'video') ||
+            (selectedCategory === 'audio' && file.type === 'audio');
+
+        return matchesSearch && matchesCategory;
+    });
 
     return (
         <div className="storage-layout">
             <div className="storage-main-content">
-                <FileGrid files={filteredFiles} viewMode={viewMode}/>
+                <FileGrid fileList={filteredFiles} viewMode={viewMode}/>
 
                 <MobileNav
                     onUploadClick={() => setIsUploadModalOpen(true)}

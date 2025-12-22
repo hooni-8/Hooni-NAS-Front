@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
-
 import { Outlet } from "react-router-dom";
+
 import Header from "@layout/Header";
 import Sidebar from "@layout/Sidebar";
 
 import CreateFolderModal from "@pages/components/modal/CreateFolderModal";
+
+import { useUpload } from "@pages/components/loding/UploadProvider";
 
 export default function DashBoard() {
 
@@ -15,8 +17,13 @@ export default function DashBoard() {
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
     const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
 
-    const showUploadModal = () => {
+    const { deleteStatusFile } = useUpload();
+
+    const showUploadModal = (type) => {
         setIsUploadModalOpen(!isUploadModalOpen);
+        if (type === "CANCEL") {
+            deleteStatusFile("PENDING");
+        }
     }
 
     return (

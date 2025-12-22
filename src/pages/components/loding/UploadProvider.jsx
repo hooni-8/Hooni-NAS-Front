@@ -10,6 +10,13 @@ const MAX_CONCURRENCY = 3;
 export const UploadProvider = ({ children }) => {
     const [files, setFiles] = useState([]);
     const [queue, setQueue] = useState([]);
+    const [uploadDoneAt, setUploadDoneAt] = useState('');
+
+    const pendingFiles = files.filter(f => f.status === "PENDING");
+    const readyFiles = files.filter(f => f.status === "READY");
+    const uploadingFiles = files.filter(f => f.status === "LOADING");
+    const successFiles = files.filter(f => f.status === "SUCCESS");
+    const errorFiles = files.filter(f => f.status === "ERROR");
 
     // 파일 등록
     const addFiles = (files) => {
@@ -29,24 +36,28 @@ export const UploadProvider = ({ children }) => {
             prev.map(f => f.status === "PENDING" ?  ({ ...f, status: "READY"}) : f))
     };
 
-    const pendingFiles = files.filter(f => f.status === "PENDING");
-    const readyFiles = files.filter(f => f.status === "READY");
-    const uploadingFiles = files.filter(f => f.status === "LOADING");
-    const successFiles = files.filter(f => f.status === "SUCCESS");
-    const errorFiles = files.filter(f => f.status === "ERROR");
+    const deleteStatusFile = (updates) => {
+        setFiles(prev =>
+            prev.filter(file => file.status !== updates)
+        );
+    }
 
     const uploadSingleFile = async (fileItem) => {
 
         // 업로드 시작 상태 업데이트
         updateFile(fileItem.id, { status: "LOADING", progress: 0 });
 
-        const payload = { folderId: "860ce165-cddc-0d62-406b-023d02dbd04c" };
+        const payload = {
+            folderId: "860ce165-cddc-0d62-406b-023d02dbd04c",
+            lastModifiedAt: fileItem.file.lastModified,
+        };
+
         const formData = new FormData();
         formData.append("files", fileItem.file);
-        formData.append("fileRequest", new Blob([JSON.stringify(payload)], { type: "application/json" }));
+        formData.append("request", new Blob([JSON.stringify(payload)], { type: "application/json" }));
 
         try {
-            await gateway.post("/nas/api/v1/file/upload", formData, {
+            const response = await gateway.post("/nas/api/v1/upload/progress", formData, {
                 onUploadProgress: (e) => {
                     const percent = e.total ? Math.round((e.loaded * 100) / e.total) : 0;
 
@@ -55,9 +66,12 @@ export const UploadProvider = ({ children }) => {
                 }
             });
 
-            // 완료 처리
-            updateFile(fileItem.id, { status: "SUCCESS", progress: 100 });
-
+            if (response.status === 200 && response.code === "0000") {
+                updateFile(fileItem.id, { status: "SUCCESS", progress: 100 });
+                setUploadDoneAt(Date.now());
+            } else {
+                updateFile(fileItem.id, { status: "ERROR" });
+            }
         } catch (e) {
             console.error(e);
             updateFile(fileItem.id, { status: "ERROR" });
@@ -97,7 +111,10 @@ export const UploadProvider = ({ children }) => {
     return (
         <UploadContext.Provider value={{
             files
+            , setFiles
             , setQueue
+            , uploadDoneAt
+            , setUploadDoneAt
             , pendingFiles
             , readyFiles
             , uploadingFiles
@@ -106,6 +123,7 @@ export const UploadProvider = ({ children }) => {
             , addFiles
             , pendingToReadyUpdateFile
             , processQueue
+            , deleteStatusFile
         }}>
             {children}
         </UploadContext.Provider>

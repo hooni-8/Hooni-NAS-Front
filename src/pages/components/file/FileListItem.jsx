@@ -8,7 +8,7 @@ export default function FileListItem({ file }) {
 
     const getFileIcon = () => {
         const getColorClass = () => {
-            switch (file.type) {
+            switch (file.extension) {
                 case 'folder':
                     return { color: '#3b82f6' };
                 case 'document':
