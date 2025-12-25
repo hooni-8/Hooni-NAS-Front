@@ -85,15 +85,13 @@
 
 @media (min-width: 1024px) {
   .file-grid-container {
-    padding: 1.5rem 2rem;
-    padding-bottom: 2rem;
+    padding: 1.5rem 2rem 2rem;
   }
 }
 
 @media (min-width: 1024px) {
   .file-grid-container {
     padding: 1.5rem 2rem;
-    padding-bottom: 1.5rem;
   }
 }
 
@@ -105,7 +103,9 @@
   background-color: white;
   border-radius: 0.5rem;
   border: 1px solid #e5e7eb;
-  //overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .grid-view {
@@ -164,3 +164,21 @@
     grid-template-columns: repeat(5, 1fr);
   }
 }
+
+///* VirtuosoGrid 스크롤바 숨김 */
+//[data-virtuoso-scroller="true"] {
+//  overflow: auto;              // 스크롤 유지
+//  -ms-overflow-style: none;    // IE 10+
+//  scrollbar-width: none;       // Firefox
+//}
+//
+///* Chrome, Safari, Edge */
+//[data-virtuoso-scroller="true"]::-webkit-scrollbar {
+//  width: 0px;
+//  height: 0px;
+//}
+//
+///* optional: overscroll 컨트롤 */
+//[data-virtuoso-scroller="true"] {
+//  overscroll-behavior: contain;
+//}

@@ -19,6 +19,22 @@ export const get = async (path, opts) => {
     return result;
 }
 
+export const getBlob = async (path) => {
+    try {
+        const response = await api.get(baseUrl + path, {
+            responseType: 'blob',
+        });
+
+        if (response.status === 200) {
+            return response;
+        }
+
+    } catch (error) {
+        console.error('이미지 로드 에러:', error);
+        return null;
+    }
+}
+
 export const post = async (path, payload, config) => {
     let result = {};
 

@@ -1,23 +1,56 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import { VirtuosoGrid, Virtuoso } from "react-virtuoso";
+
+import * as gateway from "@components/common/Gateway";
+import * as format from "@components/utils/Format";
+import { useUpload } from "@pages/components/loding/UploadProvider";
+import { GridComponents } from "@pages/components/file/GridComponents";
+
+import EmptyFile from "@pages/components/file/EmptyFile";
 import FileCard from '@pages/components/file/FileCard';
 import FileListItem from '@pages/components/file/FileListItem';
 
 import "@styles/pages/components/file/FileGrid.scss"
 
-export default function FileGrid({ fileList, viewMode }) {
-    if (fileList.length === 0) {
+export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
+    const [fileList, setFileList] = useState([]);
+    const { uploadDoneAt, setUploadDoneAt } = useUpload();
+
+    useEffect(() => {
+        getFileList();
+    }, [uploadDoneAt]);
+
+    const getFileList = async () => {
+        try {
+            const response = await gateway.post("/nas/api/v1/file/list");
+
+            if (response.status === 200 && response.code === "0000") {
+                const convertedFiles = response.data.map(file => ({
+                    ...file,
+                    id: file.fileId,
+                    name: file.originName,
+                    size: format.formatBytes(file.fileSize),
+                    type: format.getFileType(file.extension),
+                    dateText: new Date(file.lastModifiedAt).toLocaleDateString('ko-KR'),
+                }));
+
+                setFileList(convertedFiles);
+            }
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setUploadDoneAt("");
+        }
+    };
+
+    const filteredFiles = fileList.filter(file => {
+        const matchesSearch = file.name.toLowerCase().includes(searchQuery.toLowerCase());
+        return format.matchesCategory(matchesSearch, selectedCategory, file);
+    });
+
+    if (filteredFiles.length === 0) {
         return (
-            <div className="file-grid-empty">
-                <div className="empty-content">
-                    <div className="empty-icon-wrapper">
-                        <svg className="empty-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                        </svg>
-                    </div>
-                    <h3 className="empty-title">파일이 없습니다</h3>
-                    <p className="empty-description">파일을 업로드하거나 다른 카테고리를 선택해보세요</p>
-                </div>
-            </div>
+            <EmptyFile />
         );
     }
 
@@ -31,9 +64,14 @@ export default function FileGrid({ fileList, viewMode }) {
                         <div>수정일</div>
                         <div className="list-header-action"></div>
                     </div>
-                    {fileList.map(file => (
-                        <FileListItem key={file.id} file={file} />
-                    ))}
+
+                    <Virtuoso
+                        style={{ flex: 1 }}
+                        data={filteredFiles}
+                        itemContent={(index, file) => (
+                            <FileListItem file={file} />
+                        )}
+                    />
                 </div>
             </div>
         );
@@ -41,11 +79,13 @@ export default function FileGrid({ fileList, viewMode }) {
 
     return (
         <div className="file-grid-container grid-view">
-            <div className="grid-wrapper">
-                {fileList.map(file => (
-                    <FileCard key={file.id} file={file} />
-                ))}
-            </div>
+                <VirtuosoGrid
+                    data={filteredFiles}
+                    components={GridComponents}
+                    itemContent={(index, file) => (
+                        <FileCard file={file} />
+                    )}
+                />
         </div>
     );
 }
