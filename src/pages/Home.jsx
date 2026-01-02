@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {useOutletContext} from "react-router-dom";
+import * as gateway from "@components/common/Gateway";
+import { useOutletContext } from "react-router-dom";
 import { useUpload } from "@pages/components/loding/UploadProvider";
 
 import FileGrid from '@pages/components/file/FileGrid';
@@ -22,6 +23,7 @@ export default function Home() {
 
     const [progressBarOpen, setProgressBarOpen] = useState(false);
     const [rendering, setRendering] = useState(false);
+    const [activeFolderId, setActiveFolderId] = useState(null);
 
     const { setQueue, pendingToReadyUpdateFile, pendingFiles, readyFiles, uploadingFiles, processQueue } = useUpload();
 
@@ -47,6 +49,20 @@ export default function Home() {
         }
     }, [readyFiles, rendering]);
 
+    useEffect(() => {
+        const fetchRootFolder = async () => {
+            const response = await gateway.post("/nas/api/v1/folder/root");
+
+            if (response.status === 200 && response.code === "0000") {
+                sessionStorage.setItem("_rf", response.data.folderId);
+                sessionStorage.setItem("_af", response.data.folderId);
+                setActiveFolderId(response.data.folderId);
+            }
+        }
+
+        fetchRootFolder();
+    }, []);
+
     return (
         <div className="storage-layout">
             <div className="storage-main-content">
@@ -54,6 +70,7 @@ export default function Home() {
                     selectedCategory={selectedCategory}
                     searchQuery={searchQuery}
                     viewMode={viewMode}
+                    activeFolderId={activeFolderId}
                 />
 
                 <MobileNav

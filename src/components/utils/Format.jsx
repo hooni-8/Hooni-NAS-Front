@@ -67,7 +67,7 @@ export const matchesCategory = (matchesSearch, selectedCategory, file) => {
 }
 
 const getColorClass = (file) => {
-    switch (file.extension) {
+    switch (file.type) {
         case 'folder': return { color: '#3b82f6' };
         case 'document': return { color: '#f97316' };
         case 'image': return { color: '#22c55e' };

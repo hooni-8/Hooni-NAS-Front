@@ -1,31 +1,37 @@
 import { useState } from 'react';
-import { X, Folder } from 'lucide-react';
+import * as gateway from "@components/common/Gateway";
 
+import { X, Folder } from 'lucide-react';
 import "@styles/pages/components/modal/CreateFolderModal.scss"
 
-export default function CreateFolderModal({ onClose, onCreateFolder }) {
+export default function CreateFolderModal({ onClose }) {
     const [folderName, setFolderName] = useState('');
     const [isCreating, setIsCreating] = useState(false);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (!folderName.trim()) return;
+    const handleCreate = async () => {
+        if (!folderName.trim()) {
+            alert("폴더명을 입력해주세요");
+            return;
+        }
 
         setIsCreating(true);
 
-        setTimeout(() => {
-            const newFolder = {
-                id: Math.random().toString(36).substr(2, 9),
-                name: folderName,
-                type: 'folder',
-                size: '0 MB',
-                date: new Date().toISOString().split('T')[0],
-            };
+        const payload = {
+            folderName: folderName,
+            activeFolderId: sessionStorage.getItem("_af")
+        }
 
-            onCreateFolder(newFolder);
+        try {
+            const response = await gateway.post("/nas/api/v1/folder/create", payload);
+
+            if (response.status === 200 && response.code === "0000") {
+                onClose();
+            }
+        } catch (e) {
+            console.error(e);
+        } finally {
             setIsCreating(false);
-            onClose();
-        }, 500);
+        }
     };
 
     return (
@@ -41,7 +47,7 @@ export default function CreateFolderModal({ onClose, onCreateFolder }) {
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="create-folder-form">
+                <div className="create-folder-content">
                     <div className="create-folder-field">
                         <label htmlFor="folderName" className="create-folder-label">
                             폴더 이름
@@ -82,12 +88,12 @@ export default function CreateFolderModal({ onClose, onCreateFolder }) {
                             ) : (
                                 <>
                                     <Folder className="create-folder-submit-icon" />
-                                    <span>폴더 만들기</span>
+                                    <span onClick={handleCreate} >폴더 만들기</span>
                                 </>
                             )}
                         </button>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     );

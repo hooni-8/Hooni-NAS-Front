@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import { Search, Upload, Grid3x3, List, User, Menu, FolderPlus, ChevronDown } from 'lucide-react';
 
 import "@styles/pages/layout/Header.scss"
-import CreateFolderModal from "@layout/components/HeaderDropdown";
+import HeaderDropdown from "@layout/components/HeaderDropdown";
 
 export default function Header({
                            searchQuery,
@@ -135,7 +135,7 @@ export default function Header({
 
                         {/* User Dropdown Menu */}
                         {showUserMenu && (
-                            <CreateFolderModal />
+                            <HeaderDropdown />
                         )}
                     </div>
                 </div>

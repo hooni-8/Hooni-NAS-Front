@@ -12,25 +12,32 @@ import FileListItem from '@pages/components/file/FileListItem';
 
 import "@styles/pages/components/file/FileGrid.scss"
 
-export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
+export default function FileGrid({ selectedCategory, searchQuery, viewMode, activeFolderId }) {
     const [fileList, setFileList] = useState([]);
     const { uploadDoneAt, setUploadDoneAt } = useUpload();
 
     useEffect(() => {
-        getFileList();
-    }, [uploadDoneAt]);
+        if (activeFolderId) {
+            fetchFileList();
+        }
+    }, [uploadDoneAt, activeFolderId]);
 
-    const getFileList = async () => {
+    const fetchFileList = async () => {
+
+        const payload = {
+            activeFolderId: sessionStorage.getItem("_af")
+        }
+
         try {
-            const response = await gateway.post("/nas/api/v1/file/list");
+            const response = await gateway.post("/nas/api/v1/file/list", payload);
 
             if (response.status === 200 && response.code === "0000") {
                 const convertedFiles = response.data.map(file => ({
                     ...file,
-                    id: file.fileId,
-                    name: file.originName,
-                    size: format.formatBytes(file.fileSize),
-                    type: format.getFileType(file.extension),
+                    id: file.itemId,
+                    name: file.itemName,
+                    size: file.itemType !== 'folder' && format.formatBytes(file.itemSize),
+                    type: file.itemType === 'folder' ? 'folder' : format.getFileType(file.extension),
                     dateText: new Date(file.lastModifiedAt).toLocaleDateString('ko-KR'),
                 }));
 

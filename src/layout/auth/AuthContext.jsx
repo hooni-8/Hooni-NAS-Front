@@ -40,6 +40,8 @@ export const AuthProvider = ({ children }) => {
         } catch (e) {
             console.error(e);
         } finally {
+            sessionStorage.removeItem("_af");
+            sessionStorage.removeItem("_rf");
             setIsAuthenticated(false);
             setUser(null);
             navigate("/", { replace: true });
