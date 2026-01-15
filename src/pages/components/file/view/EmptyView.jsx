@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function EmptyFile() {
+export default function EmptyView() {
     return (
         <div className="file-grid-empty">
             <div className="empty-content">

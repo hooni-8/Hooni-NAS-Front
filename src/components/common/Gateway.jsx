@@ -19,10 +19,11 @@ export const get = async (path, opts) => {
     return result;
 }
 
-export const getBlob = async (path) => {
+export const getBlob = async (path, opts) => {
     try {
         const response = await api.get(baseUrl + path, {
             responseType: 'blob',
+            params: opts,
         });
 
         if (response.status === 200) {

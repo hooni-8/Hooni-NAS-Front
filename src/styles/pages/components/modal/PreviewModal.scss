@@ -1,0 +1,295 @@
+/* File Preview Modal Styles */
+.file-preview-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 1rem;
+}
+
+/* Header */
+.file-preview-modal-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), transparent);
+}
+
+@media (min-width: 768px) {
+  .file-preview-modal-header {
+    padding: 1.5rem;
+  }
+}
+
+.file-preview-modal-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.file-preview-modal-title {
+  color: white;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.file-preview-modal-meta {
+  color: #d1d5db;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.file-preview-modal-close-btn {
+  padding: 0.5rem;
+  color: white;
+  background-color: transparent;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-left: 1rem;
+  flex-shrink: 0;
+}
+
+.file-preview-modal-close-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.file-preview-modal-close-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* Navigation Arrows */
+.file-preview-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0.75rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  color: white;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.file-preview-nav-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.file-preview-nav-btn-left {
+  left: 1rem;
+}
+
+.file-preview-nav-btn-right {
+  right: 1rem;
+}
+
+.file-preview-nav-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* Main Content */
+.file-preview-modal-content {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 2rem;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Preview Types */
+.file-preview-image-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #111827;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  flex: 1;
+  min-height: 0; /* flexbox 오버플로우 방지 */
+}
+
+.file-preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* 전체 이미지가 보이도록 */
+}
+
+.file-preview-video-container {
+  background-color: #111827;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.file-preview-video {
+  width: 100%;
+  max-height: 60vh;
+}
+
+.file-preview-audio-container {
+  background-color: #111827;
+  border-radius: 0.5rem;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.file-preview-audio-icon-wrapper {
+  width: 8rem;
+  height: 8rem;
+  background: linear-gradient(to bottom right, #3b82f6, #9333ea);
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.file-preview-audio-icon {
+  width: 4rem;
+  height: 4rem;
+  color: white;
+}
+
+.file-preview-audio-player {
+  width: 100%;
+  max-width: 28rem;
+}
+
+.file-preview-document-container {
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.file-preview-document-icon-wrapper {
+  width: 8rem;
+  height: 8rem;
+  background: linear-gradient(to bottom right, #3b82f6, #9333ea);
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.file-preview-document-icon {
+  width: 4rem;
+  height: 4rem;
+  color: white;
+}
+
+.file-preview-document-title {
+  color: #111827;
+  margin-bottom: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.file-preview-document-message {
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+}
+
+.file-preview-document-download-btn {
+  padding: 0.625rem 1.5rem;
+  background: linear-gradient(to right, #3b82f6, #9333ea);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.file-preview-document-download-btn:hover {
+  background: linear-gradient(to right, #2563eb, #7e22ce);
+}
+
+/* Footer Actions */
+.file-preview-modal-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
+}
+
+@media (min-width: 768px) {
+  .file-preview-modal-footer {
+    padding: 1.5rem;
+  }
+}
+
+.file-preview-action-btn {
+  padding: 0.625rem 1rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.file-preview-action-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.file-preview-action-btn-delete {
+  background-color: rgba(239, 68, 68, 0.8);
+}
+
+.file-preview-action-btn-delete:hover {
+  background-color: rgba(220, 38, 38, 0.8);
+}
+
+.file-preview-action-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.file-preview-action-text {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .file-preview-action-text {
+    display: inline;
+  }
+}

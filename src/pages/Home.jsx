@@ -7,28 +7,37 @@ import FileGrid from '@pages/components/file/FileGrid';
 import MobileNav from '@layout/MobileNav';
 import UploadModal from '@pages/components/modal/UploadModal';
 import UploadProgressBar from "@pages/components/loding/UploadProgressBar";
+import PreviewModal from '@pages/components/modal/PreviewModal';
 
 import "@styles/pages/Home.scss"
 
 export default function Home() {
 
-    const {
-        selectedCategory,
-        searchQuery,
-        viewMode,
-        isUploadModalOpen,
-        setIsUploadModalOpen,
-        showUploadModal,
-    } = useOutletContext();
+    const { selectedCategory, searchQuery, viewMode, isUploadModalOpen, setIsUploadModalOpen, showUploadModal } = useOutletContext();
+    const { setQueue, pendingToReadyUpdateFile, pendingFiles, readyFiles, uploadingFiles, processQueue } = useUpload();
 
     const [progressBarOpen, setProgressBarOpen] = useState(false);
+    const [previewOpen, setPreviewOpen] = useState(false);
+
     const [rendering, setRendering] = useState(false);
     const [activeFolderId, setActiveFolderId] = useState(null);
 
-    const { setQueue, pendingToReadyUpdateFile, pendingFiles, readyFiles, uploadingFiles, processQueue } = useUpload();
+    const [selectedFile, setSelectedFile] = useState({});
 
     const showProgressBar = () => {
         setProgressBarOpen(!progressBarOpen);
+    }
+
+    const showPreviewModal = (file) => {
+        if (file.type === "folder") return;
+
+        setSelectedFile(file);
+        setPreviewOpen(true);
+    }
+
+    const closePreviewModal = () => {
+        setSelectedFile({});
+        setPreviewOpen(false);
     }
 
     const handleUpload = () => {
@@ -71,6 +80,7 @@ export default function Home() {
                     searchQuery={searchQuery}
                     viewMode={viewMode}
                     activeFolderId={activeFolderId}
+                    showPreviewModal={showPreviewModal}
                 />
 
                 <MobileNav
@@ -79,6 +89,14 @@ export default function Home() {
                     uploadingCount={uploadingFiles.length}
                 />
             </div>
+
+            {previewOpen && (
+                <PreviewModal
+                    closePreviewModal={closePreviewModal}
+                    activeFolderId={activeFolderId}
+                    selectedFile={selectedFile}
+                />
+            )}
 
             {isUploadModalOpen && (
                 <UploadModal

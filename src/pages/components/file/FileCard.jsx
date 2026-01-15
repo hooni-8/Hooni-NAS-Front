@@ -9,7 +9,7 @@ import { MoreVertical } from 'lucide-react';
 
 const thumbnailCache = new Map();
 
-const FileCard = React.memo(({ file }) => {
+const FileCard = React.memo(({ activeFolderId, file, showPreviewModal }) => {
     const [showMenu, setShowMenu] = useState(false);
 
     const [thumbUrl, setThumbUrl] = useState(null);
@@ -23,9 +23,13 @@ const FileCard = React.memo(({ file }) => {
             return;
         }
 
+        const payload = {
+            activeFolderId
+        }
+
         const fetchThumbnail = async () => {
             try {
-                const response = await gateway.getBlob( `/nas/api/v1/file/thumbnail/${file.id}` );
+                const response = await gateway.getBlob( `/nas/api/v1/file/thumbnail/${file.id}`, payload );
 
                 const url = URL.createObjectURL(response.data);
                 thumbnailCache.set(file.id, url);
@@ -40,7 +44,7 @@ const FileCard = React.memo(({ file }) => {
 
     return (
         <div className="file-card-wrapper group">
-            <div className="file-card">
+            <div className="file-card" onDoubleClick={() => showPreviewModal(file)} >
                 <div className="file-card-relative">
                     <div className={`file-card-icon-container ${format.getFileColor(file)}`}>
                         {file.type === "image" && thumbUrl && !thumbError ? (

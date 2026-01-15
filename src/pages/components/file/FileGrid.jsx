@@ -1,20 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import { VirtuosoGrid, Virtuoso } from "react-virtuoso";
 
 import * as gateway from "@components/common/Gateway";
 import * as format from "@components/utils/Format";
 import { useUpload } from "@pages/components/loding/UploadProvider";
-import { GridComponents } from "@pages/components/file/GridComponents";
 
-import EmptyFile from "@pages/components/file/EmptyFile";
-import FileCard from '@pages/components/file/FileCard';
-import FileListItem from '@pages/components/file/FileListItem';
+import EmptyView from "@pages/components/file/view/EmptyView";
+import GridView from '@pages/components/file/view/GridView';
+import ListView from '@pages/components/file/view/ListView';
 
 import "@styles/pages/components/file/FileGrid.scss"
 
-export default function FileGrid({ selectedCategory, searchQuery, viewMode, activeFolderId }) {
+export default function FileGrid({ selectedCategory, searchQuery, viewMode, activeFolderId, showPreviewModal, closePreviewModal }) {
     const [fileList, setFileList] = useState([]);
-    const { uploadDoneAt, setUploadDoneAt } = useUpload();
+    const {uploadDoneAt, setUploadDoneAt} = useUpload();
 
     useEffect(() => {
         if (activeFolderId) {
@@ -25,7 +23,7 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode, acti
     const fetchFileList = async () => {
 
         const payload = {
-            activeFolderId: sessionStorage.getItem("_af")
+            activeFolderId: activeFolderId
         }
 
         try {
@@ -55,44 +53,23 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode, acti
         return format.matchesCategory(matchesSearch, selectedCategory, file);
     });
 
-    if (filteredFiles.length === 0) {
-        return (
-            <EmptyFile />
-        );
-    }
-
-    if (viewMode === 'list') {
-        return (
-            <div className="file-grid-container list-view">
-                <div className="list-wrapper">
-                    <div className="list-header">
-                        <div>이름</div>
-                        <div>크기</div>
-                        <div>수정일</div>
-                        <div className="list-header-action"></div>
-                    </div>
-
-                    <Virtuoso
-                        style={{ flex: 1 }}
-                        data={filteredFiles}
-                        itemContent={(index, file) => (
-                            <FileListItem file={file} />
-                        )}
-                    />
-                </div>
-            </div>
-        );
-    }
-
     return (
-        <div className="file-grid-container grid-view">
-                <VirtuosoGrid
-                    data={filteredFiles}
-                    components={GridComponents}
-                    itemContent={(index, file) => (
-                        <FileCard file={file} />
-                    )}
+        <>
+            {filteredFiles.length === 0 &&
+                <EmptyView />
+            }
+
+            {viewMode === 'list' ?(
+                <ListView
+                    filteredFiles={filteredFiles}
                 />
-        </div>
+            ) : (
+                <GridView
+                    activeFolderId={activeFolderId}
+                    filteredFiles={filteredFiles}
+                    showPreviewModal={showPreviewModal}
+                />
+            )}
+        </>
     );
 }

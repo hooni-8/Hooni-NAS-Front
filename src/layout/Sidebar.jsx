@@ -6,6 +6,8 @@ import * as format from "@components/utils/Format";
 import { useAuth } from "@layout/auth/AuthContext";
 
 import "@styles/pages/layout/Sidebar.scss";
+
+import Logo from "@assets/imgs/Hooni_logo.png";
 import { HardDrive, Folder, Image, FileText, Video, Music, Star, Trash2, Clock, X, LogOut } from 'lucide-react';
 
 export default function Sidebar ({ selectedCategory, onCategoryChange, onClose }) {
@@ -70,13 +72,16 @@ export default function Sidebar ({ selectedCategory, onCategoryChange, onClose }
         <div className="sidebar">
             <div className="sidebar-header">
                 <div className="sidebar-logo-section">
+                    {/*<div className="sidebar-logo">*/}
+                    {/*    <HardDrive className="sidebar-logo-icon"/>*/}
+                    {/*</div>*/}
                     <div className="sidebar-logo">
-                        <HardDrive className="sidebar-logo-icon"/>
+                        <img src={Logo}/>
                     </div>
-                    <div className="sidebar-title-section">
-                        <h1 className="sidebar-title">My Storage</h1>
-                        <p className="sidebar-subtitle">개인 저장소</p>
-                    </div>
+                    {/*<div className="sidebar-title-section">*/}
+                    {/*    <h1 className="sidebar-title">My Storage</h1>*/}
+                    {/*    <p className="sidebar-subtitle">개인 저장소</p>*/}
+                    {/*</div>*/}
                 </div>
                 {onClose && (
                     <button

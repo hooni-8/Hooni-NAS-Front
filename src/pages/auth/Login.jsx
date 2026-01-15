@@ -6,7 +6,8 @@ import { useAuth } from "@layout/auth/AuthContext";
 
 import "@styles/pages/auth/Login.scss"
 
-import { HardDrive, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import Logo from "@assets/imgs/Hooni_logo.png";
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 
 export default function Login() {
 
@@ -66,16 +67,13 @@ export default function Login() {
                 {/* 헤더 */}
                 <div className="login-header">
                     <div className="logo-box">
-                        <HardDrive className="w-8 h-8 text-white"/>
+                        <img src={Logo}/>
                     </div>
-                    <h1 className="header-title">My Storage</h1>
-                    <p className="header-sub">안전한 개인 저장소에 오신 것을 환영합니다</p>
                 </div>
 
                 {/* 로그인 폼 */}
                 <div className="login-box">
                     <div className="login-group">
-                        <label className="label">이메일</label>
                         <div className="input-wrapper">
                             <Mail className="input-icon-left"/>
                             <input
@@ -83,14 +81,13 @@ export default function Login() {
                                 className="input"
                                 value={userId}
                                 onChange={(e) => setUserId(e.target.value)}
-                                placeholder={"example"}
+                                placeholder={"ID"}
                                 required
                             />
                         </div>
                     </div>
 
                     <div className="login-group">
-                        <label className="label">비밀번호</label>
                         <div className="input-wrapper">
                             <Lock className="input-icon-left"/>
                             <input
@@ -98,7 +95,7 @@ export default function Login() {
                                 className="input"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                placeholder={"••••••••"}
+                                placeholder={"Password"}
                                 onKeyDown={handleEnter}
                                 required
                             />
