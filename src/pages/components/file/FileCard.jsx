@@ -16,7 +16,7 @@ const FileCard = React.memo(({ activeFolderId, file, showPreviewModal }) => {
     const [thumbError, setThumbError] = useState(false);
 
     useEffect(() => {
-        if (file.type !== "image") return;
+        if (file.type !== "image" && file.type !== "video") return;
 
         if (thumbnailCache.has(file.id)) {
             setThumbUrl(thumbnailCache.get(file.id));
@@ -47,7 +47,7 @@ const FileCard = React.memo(({ activeFolderId, file, showPreviewModal }) => {
             <div className="file-card" onDoubleClick={() => showPreviewModal(file)} >
                 <div className="file-card-relative">
                     <div className={`file-card-icon-container ${format.getFileColor(file)}`}>
-                        {file.type === "image" && thumbUrl && !thumbError ? (
+                        {(file.type === "image" || file.type === "video") && thumbUrl && !thumbError ? (
                             <img src={thumbUrl} alt={file.name} loading="lazy" />
                         ) : (
                             format.getFileIcon(file)

@@ -124,24 +124,30 @@
   border-radius: 0.5rem;
   overflow: hidden;
   flex: 1;
-  min-height: 0; /* flexbox 오버플로우 방지 */
+  min-height: 0;
 }
 
 .file-preview-image {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* 전체 이미지가 보이도록 */
+  object-fit: contain;
 }
 
 .file-preview-video-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: #111827;
   border-radius: 0.5rem;
   overflow: hidden;
+  flex: 1;
+  min-height: 0;
 }
 
 .file-preview-video {
   width: 100%;
-  max-height: 60vh;
+  height: 100%;
+  object-fit: contain;
 }
 
 .file-preview-audio-container {

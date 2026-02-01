@@ -13,7 +13,6 @@ export default function PreviewModal({ closePreviewModal, activeFolderId, select
 
     // 여기에서 미리보기 가져오기
     useEffect(() => {
-        if (selectedFile.type !== "image") return;
 
         if (previewCache.has(selectedFile.id)) {
             setPreviewUrl(previewCache.get(selectedFile.id));
@@ -58,6 +57,7 @@ export default function PreviewModal({ closePreviewModal, activeFolderId, select
                             src={previewUrl}
                             alt={selectedFile.name}
                             controls
+                            autoPlay
                             className="file-preview-video"
                         >
                             브라우저가 비디오를 지원하지 않습니다.
