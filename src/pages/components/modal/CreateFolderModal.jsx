@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import * as gateway from "@components/common/Gateway";
+import * as gateway from "@components/common/gateway/Gateway";
 
 import { X, Folder } from 'lucide-react';
 import "@styles/pages/components/modal/CreateFolderModal.scss"

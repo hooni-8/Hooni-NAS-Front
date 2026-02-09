@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import * as gateway from "@components/common/Gateway";
+import * as gateway from "@components/common/gateway/Gateway";
 import * as format from "@components/utils/Format";
 
 import MenuDropdown from "@pages/components/file/MenuDropdown";
@@ -9,7 +9,7 @@ import { MoreVertical } from 'lucide-react';
 
 const thumbnailCache = new Map();
 
-const FileCard = React.memo(({ activeFolderId, file, showPreviewModal }) => {
+const FileCard = React.memo(({ activeFolderId, file, showPreviewModal, fetchFileList }) => {
     const [showMenu, setShowMenu] = useState(false);
 
     const [thumbUrl, setThumbUrl] = useState(null);
@@ -34,7 +34,7 @@ const FileCard = React.memo(({ activeFolderId, file, showPreviewModal }) => {
                 const url = URL.createObjectURL(response.data);
                 thumbnailCache.set(file.id, url);
                 setThumbUrl(url);
-            } catch {
+            } catch (e) {
                 setThumbError(true);
             }
         };
@@ -64,7 +64,11 @@ const FileCard = React.memo(({ activeFolderId, file, showPreviewModal }) => {
                     </button>
 
                     {showMenu && (
-                        <MenuDropdown setShowMenu={setShowMenu} />
+                        <MenuDropdown
+                            file={file}
+                            setShowMenu={setShowMenu}
+                            fetchFileList={fetchFileList}
+                        />
                     )}
 
                 </div>

@@ -4,7 +4,7 @@ import { Virtuoso } from "react-virtuoso";
 
 import FileListItem from '@pages/components/file/FileListItem';
 
-export default function ListView({ filteredFiles }) {
+export default function ListView({ filteredFiles, showPreviewModal, fetchFileList }) {
 
     return (
         <div className="file-grid-container list-view">
@@ -20,7 +20,11 @@ export default function ListView({ filteredFiles }) {
                     style={{flex: 1}}
                     data={filteredFiles}
                     itemContent={(index, file) => (
-                        <FileListItem file={file}/>
+                        <FileListItem
+                            file={file}
+                            showPreviewModal={showPreviewModal}
+                            fetchFileList={fetchFileList}
+                        />
                     )}
                 />
             </div>

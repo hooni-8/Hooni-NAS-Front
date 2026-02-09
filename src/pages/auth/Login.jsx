@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import * as gateway from "@components/common/Gateway";
+import * as gateway from "@components/common/gateway/Gateway";
 import {useNavigate} from  "react-router-dom"
 
 import { useAuth } from "@layout/auth/AuthContext";

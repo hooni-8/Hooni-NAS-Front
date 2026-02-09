@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 
-import * as gateway from "@components/common/Gateway";
+import * as gateway from "@components/common/gateway/Gateway";
 import * as format from "@components/utils/Format";
+
 import { useUpload } from "@pages/components/loding/UploadProvider";
 
 import EmptyView from "@pages/components/file/view/EmptyView";
@@ -12,7 +13,8 @@ import "@styles/pages/components/file/FileGrid.scss"
 
 export default function FileGrid({ selectedCategory, searchQuery, viewMode, activeFolderId, showPreviewModal, closePreviewModal }) {
     const [fileList, setFileList] = useState([]);
-    const {uploadDoneAt, setUploadDoneAt} = useUpload();
+
+    const { uploadDoneAt, setUploadDoneAt } = useUpload();
 
     useEffect(() => {
         if (activeFolderId) {
@@ -62,12 +64,15 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode, acti
             {viewMode === 'list' ?(
                 <ListView
                     filteredFiles={filteredFiles}
+                    showPreviewModal={showPreviewModal}
+                    fetchFileList={fetchFileList}
                 />
             ) : (
                 <GridView
                     activeFolderId={activeFolderId}
                     filteredFiles={filteredFiles}
                     showPreviewModal={showPreviewModal}
+                    fetchFileList={fetchFileList}
                 />
             )}
         </>

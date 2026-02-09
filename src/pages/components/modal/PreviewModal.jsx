@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import * as gateway from "@components/common/Gateway";
+import * as gateway from "@components/common/gateway/Gateway";
 
 import "@styles/pages/components/modal/PreviewModal.scss"
 import { X, Download, Share2, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';

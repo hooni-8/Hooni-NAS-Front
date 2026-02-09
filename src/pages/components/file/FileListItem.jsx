@@ -6,12 +6,12 @@ import MenuDropdown from "@pages/components/file/MenuDropdown";
 import "@styles/pages/components/file/FileListItem.scss";
 import { MoreVertical } from 'lucide-react';
 
-const FileListItem = memo(({ file }) => {
+const FileListItem = memo(({ file, showPreviewModal, fetchFileList }) => {
     const [showMenu, setShowMenu] = useState(false);
 
     return (
         <div className="file-list-item group">
-            <div className="file-item-content">
+            <div className="file-item-content" onDoubleClick={() => showPreviewModal(file)}>
                 <div className="file-item-name-section">
                     <div className="file-icon-wrapper">
                         {format.getListFileIcon(file)}
@@ -48,7 +48,11 @@ const FileListItem = memo(({ file }) => {
                     </button>
 
                     {showMenu && (
-                        <MenuDropdown setShowMenu={setShowMenu} />
+                        <MenuDropdown
+                            file={file}
+                            setShowMenu={setShowMenu}
+                            fetchFileList={fetchFileList}
+                        />
                     )}
                 </div>
             </div>
