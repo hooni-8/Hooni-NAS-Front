@@ -1,6 +1,7 @@
 import React from "react";
 
-export default function EmptyView() {
+export default function EmptyGridView({handleBackFolder, rootFolderFlag}) {
+
     return (
         <div className="file-grid-empty">
             <div className="empty-content">
@@ -12,6 +13,10 @@ export default function EmptyView() {
                 </div>
                 <h3 className="empty-title">파일이 없습니다</h3>
                 <p className="empty-description">파일을 업로드하거나 다른 카테고리를 선택해보세요</p>
+
+                { !rootFolderFlag &&
+                    <button onClick={handleBackFolder}>뒤로가기</button>
+                }
             </div>
         </div>
     )

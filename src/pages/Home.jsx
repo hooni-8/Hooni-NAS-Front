@@ -24,15 +24,21 @@ export default function Home() {
 
     const [selectedFile, setSelectedFile] = useState({});
 
+    const [rootFolderFlag, setRootFolderFlag] = useState(false);
+
     const showProgressBar = () => {
         setProgressBarOpen(!progressBarOpen);
     }
 
     const showPreviewModal = (file) => {
-        if (file.type === "folder") return;
-
-        setSelectedFile(file);
-        setPreviewOpen(true);
+        if (file.type === "folder") {
+            setActiveFolderId(file.id);
+            sessionStorage.setItem("_af", file.id);
+            sessionStorage.setItem("_rf", file.parentId);
+        } else {
+            setSelectedFile(file);
+            setPreviewOpen(true);
+        }
     }
 
     const closePreviewModal = () => {
@@ -60,12 +66,21 @@ export default function Home() {
 
     useEffect(() => {
         const fetchRootFolder = async () => {
-            const response = await gateway.post("/nas/api/v1/folder/root");
+            // _af : Active Folder
+            // _rf : Root Folder
+            const afFolderId = sessionStorage.getItem("_af");
 
-            if (response.status === 200 && response.code === "0000") {
-                sessionStorage.setItem("_rf", response.data.folderId);
-                sessionStorage.setItem("_af", response.data.folderId);
-                setActiveFolderId(response.data.folderId);
+            if (afFolderId !== '' && afFolderId !== null) {
+                setActiveFolderId(afFolderId);
+            } else {
+                const response = await gateway.post("/nas/api/v1/folder/root");
+
+                if (response.status === 200 && response.code === "0000") {
+                    sessionStorage.setItem("_rf", response.data.folderId);
+                    sessionStorage.setItem("_af", response.data.folderId);
+                    setActiveFolderId(response.data.folderId);
+                    setRootFolderFlag(true);
+                }
             }
         }
 
@@ -80,7 +95,9 @@ export default function Home() {
                     searchQuery={searchQuery}
                     viewMode={viewMode}
                     activeFolderId={activeFolderId}
+                    setActiveFolderId={setActiveFolderId}
                     showPreviewModal={showPreviewModal}
+                    rootFolderFlag={rootFolderFlag}
                 />
 
                 <MobileNav

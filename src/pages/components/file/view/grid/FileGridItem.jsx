@@ -4,12 +4,12 @@ import * as format from "@components/utils/Format";
 
 import MenuDropdown from "@pages/components/file/MenuDropdown";
 
-import "@styles/pages/components/file/FileCard.scss"
+import "@styles/pages/components/file/FileGridItem.scss"
 import { MoreVertical } from 'lucide-react';
 
 const thumbnailCache = new Map();
 
-const FileCard = React.memo(({ activeFolderId, file, showPreviewModal, fetchFileList }) => {
+const FileGridItem = React.memo(({ activeFolderId, file, showPreviewModal, fetchFileList }) => {
     const [showMenu, setShowMenu] = useState(false);
 
     const [thumbUrl, setThumbUrl] = useState(null);
@@ -86,4 +86,4 @@ const FileCard = React.memo(({ activeFolderId, file, showPreviewModal, fetchFile
     );
 });
 
-export default FileCard;
+export default FileGridItem;

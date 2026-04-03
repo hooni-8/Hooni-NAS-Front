@@ -270,6 +270,10 @@
   color: #6b7280;
 }
 
+.empty {
+  visibility: hidden;
+}
+
 @media (min-width: 1024px) {
   .file-card-meta {
     font-size: 0.875rem;

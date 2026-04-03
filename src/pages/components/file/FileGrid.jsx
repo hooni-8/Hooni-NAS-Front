@@ -5,16 +5,16 @@ import * as format from "@components/utils/Format";
 
 import { useUpload } from "@pages/components/loding/UploadProvider";
 
-import EmptyView from "@pages/components/file/view/EmptyView";
-import GridView from '@pages/components/file/view/GridView';
-import ListView from '@pages/components/file/view/ListView';
+import GridView from '@pages/components/file/view/grid/GridView';
+import ListView from '@pages/components/file/view/list/ListView';
 
 import "@styles/pages/components/file/FileGrid.scss"
 
-export default function FileGrid({ selectedCategory, searchQuery, viewMode, activeFolderId, showPreviewModal, closePreviewModal }) {
-    const [fileList, setFileList] = useState([]);
+export default function FileGrid({ selectedCategory, searchQuery, viewMode, activeFolderId, setActiveFolderId, showPreviewModal, rootFolderFlag }) {
 
     const { uploadDoneAt, setUploadDoneAt } = useUpload();
+
+    const [fileList, setFileList] = useState([]);
 
     useEffect(() => {
         if (activeFolderId) {
@@ -55,17 +55,22 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode, acti
         return format.matchesCategory(matchesSearch, selectedCategory, file);
     });
 
+    const handleBackFolder = () => {
+        const _rf = sessionStorage.getItem("_rf");
+
+        sessionStorage.setItem("_af", _rf);
+        setActiveFolderId(_rf);
+    };
+
     return (
         <>
-            {filteredFiles.length === 0 &&
-                <EmptyView />
-            }
-
-            {viewMode === 'list' ?(
+            {viewMode === 'list' ? (
                 <ListView
                     filteredFiles={filteredFiles}
                     showPreviewModal={showPreviewModal}
                     fetchFileList={fetchFileList}
+                    handleBackFolder={handleBackFolder}
+                    rootFolderFlag={rootFolderFlag}
                 />
             ) : (
                 <GridView
@@ -73,6 +78,8 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode, acti
                     filteredFiles={filteredFiles}
                     showPreviewModal={showPreviewModal}
                     fetchFileList={fetchFileList}
+                    handleBackFolder={handleBackFolder}
+                    rootFolderFlag={rootFolderFlag}
                 />
             )}
         </>

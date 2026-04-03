@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Outlet } from "react-router-dom";
 
 import Header from "@layout/Header";
@@ -24,6 +24,15 @@ export default function DashBoard() {
         if (type === "CANCEL") {
             deleteStatusFile("PENDING");
         }
+    }
+
+    useEffect(() => {
+        setViewMode(localStorage.getItem("viewMode"));
+    }, []);
+
+    const changeViewMode = (type) => {
+        setViewMode(type);
+        localStorage.setItem("viewMode", type);
     }
 
     return (
@@ -64,7 +73,7 @@ export default function DashBoard() {
                         searchQuery={searchQuery}
                         setSearchQuery={setSearchQuery}
                         viewMode={viewMode}
-                        setViewMode={setViewMode}
+                        changeViewMode={changeViewMode}
                         showUploadModal={showUploadModal}
                         onMenuClick={() => setIsMobileMenuOpen(true)}
                         onCreateFolderClick={() => setIsCreateFolderModalOpen(true)}

@@ -8,7 +8,7 @@ export default function Header({
                            searchQuery,
                            setSearchQuery,
                            viewMode,
-                           setViewMode,
+                           changeViewMode,
                            showUploadModal,
                            onMenuClick,
                            onCreateFolderClick
@@ -58,13 +58,13 @@ export default function Header({
                     {/*---------------View Toggle---------------*/}
                     <div className="header-view-toggle mobile">
                         <button
-                            onClick={() => setViewMode('grid')}
+                            onClick={() => changeViewMode('grid')}
                             className={`header-view-btn ${viewMode === 'grid' ? 'active' : ''}`}
                         >
                             <Grid3x3 className="header-view-icon-small"/>
                         </button>
                         <button
-                            onClick={() => setViewMode('list')}
+                            onClick={() => changeViewMode('list')}
                             className={`header-view-btn ${viewMode === 'list' ? 'active' : ''}`}
                         >
                             <List className="header-view-icon-small"/>
@@ -73,13 +73,13 @@ export default function Header({
 
                     <div className="header-view-toggle desktop">
                         <button
-                            onClick={() => setViewMode('grid')}
+                            onClick={() => changeViewMode('grid')}
                             className={`header-view-btn ${viewMode === 'grid' ? 'active' : ''}`}
                         >
                             <Grid3x3 className="header-view-icon"/>
                         </button>
                         <button
-                            onClick={() => setViewMode('list')}
+                            onClick={() => changeViewMode('list')}
                             className={`header-view-btn ${viewMode === 'list' ? 'active' : ''}`}
                         >
                             <List className="header-view-icon"/>
