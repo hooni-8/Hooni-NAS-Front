@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {useNavigate, useParams} from "react-router-dom";
 
 import * as gateway from "@components/common/gateway/Gateway";
 import * as format from "@components/utils/Format";
@@ -7,40 +8,61 @@ import { useUpload } from "@pages/components/loding/UploadProvider";
 
 import GridView from '@pages/components/file/view/grid/GridView';
 import ListView from '@pages/components/file/view/list/ListView';
+import PreviewModal from '@pages/components/modal/PreviewModal';
 
 import "@styles/pages/components/file/FileGrid.scss"
 
-export default function FileGrid({ selectedCategory, searchQuery, viewMode, activeFolderId, setActiveFolderId, showPreviewModal, rootFolderFlag }) {
+export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
+
+    const { folderId } = useParams();
+    const navigate = useNavigate();
 
     const { uploadDoneAt, setUploadDoneAt } = useUpload();
 
+    const [folderInfo, setFolderInfo] = useState('');
     const [fileList, setFileList] = useState([]);
+    const [previewOpen, setPreviewOpen] = useState(false);
+
+    const [selectedFile, setSelectedFile] = useState({});
+
+    // 미리보기 및 폴더 이동
+    const showPreviewModal = (file) => {
+        if (file.type === "FOLDER") {
+            navigate(`/main/${file.itemId}`);
+        } else {
+            setSelectedFile(file);
+            setPreviewOpen(true);
+        }
+    }
+
+    // 미리보기 종료
+    const closePreviewModal = () => {
+        setSelectedFile({});
+        setPreviewOpen(false);
+    }
 
     useEffect(() => {
-        if (activeFolderId) {
+        if (folderId) {
             fetchFileList();
         }
-    }, [uploadDoneAt, activeFolderId]);
+    }, [uploadDoneAt, folderId]);
 
     const fetchFileList = async () => {
 
-        const payload = {
-            activeFolderId: activeFolderId
-        }
-
         try {
-            const response = await gateway.post("/nas/api/v1/file/list", payload);
+            const response = await gateway.post("/nas/api/v1/file/list", { folderId: folderId });
 
             if (response.status === 200 && response.code === "0000") {
-                const convertedFiles = response.data.map(file => ({
+                const convertedFiles = response.data.file.map(file => ({
                     ...file,
                     id: file.itemId,
                     name: file.itemName,
-                    size: file.itemType !== 'folder' && format.formatBytes(file.itemSize),
-                    type: file.itemType === 'folder' ? 'folder' : format.getFileType(file.extension),
+                    size: file.itemType !== 'FOLDER' && format.formatBytes(file.itemSize),
+                    type: file.itemType === 'FOLDER' ? 'FOLDER' : format.getFileType(file.extension),
                     dateText: new Date(file.lastModifiedAt).toLocaleDateString('ko-KR'),
                 }));
 
+                setFolderInfo(response.data.folderInfo);
                 setFileList(convertedFiles);
             }
         } catch (e) {
@@ -56,10 +78,7 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode, acti
     });
 
     const handleBackFolder = () => {
-        const _rf = sessionStorage.getItem("_rf");
-
-        sessionStorage.setItem("_af", _rf);
-        setActiveFolderId(_rf);
+        navigate(`/main/${folderInfo.parentFolderId}`);
     };
 
     return (
@@ -70,16 +89,23 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode, acti
                     showPreviewModal={showPreviewModal}
                     fetchFileList={fetchFileList}
                     handleBackFolder={handleBackFolder}
-                    rootFolderFlag={rootFolderFlag}
+                    folderInfo={folderInfo}
                 />
             ) : (
                 <GridView
-                    activeFolderId={activeFolderId}
+                    folderId={folderId}
                     filteredFiles={filteredFiles}
                     showPreviewModal={showPreviewModal}
                     fetchFileList={fetchFileList}
                     handleBackFolder={handleBackFolder}
-                    rootFolderFlag={rootFolderFlag}
+                    folderInfo={folderInfo}
+                />
+            )}
+
+            {previewOpen && (
+                <PreviewModal
+                    closePreviewModal={closePreviewModal}
+                    selectedFile={selectedFile}
                 />
             )}
         </>

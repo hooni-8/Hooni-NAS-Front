@@ -1,4 +1,6 @@
 import {useEffect, useState} from "react";
+import { useParams } from "react-router-dom";
+
 import * as gateway from "@components/common/gateway/Gateway";
 
 import "@styles/pages/components/modal/PreviewModal.scss"
@@ -6,7 +8,9 @@ import { X, Download, Share2, Trash2, ChevronLeft, ChevronRight } from 'lucide-r
 
 const previewCache = new Map();
 
-export default function PreviewModal({ closePreviewModal, activeFolderId, selectedFile, file, onClose, onPrevious, onNext, hasPrevious = true, hasNext = true }) {
+export default function PreviewModal({ closePreviewModal, selectedFile, file, onClose, onPrevious, onNext, hasPrevious = true, hasNext = true }) {
+
+    const { folderId } = useParams();
 
     const [previewUrl, setPreviewUrl] = useState(null);
     const [previewError, setPreviewError] = useState(null);
@@ -19,13 +23,9 @@ export default function PreviewModal({ closePreviewModal, activeFolderId, select
             return;
         }
 
-        const payload = {
-            activeFolderId
-        }
-
         const fetchPreview = async () => {
             try {
-                const response = await gateway.getBlob( `/nas/api/v1/file/preview/${selectedFile.id}`, payload );
+                const response = await gateway.getBlob( `/nas/api/v1/file/preview/${selectedFile.id}`, { folderId: folderId } );
 
                 const url = URL.createObjectURL(response.data);
                 previewCache.set(selectedFile.id, url);

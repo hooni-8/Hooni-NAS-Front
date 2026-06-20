@@ -33,7 +33,7 @@ export const getFileType = (filename) => {
 // 파일 컬러
 export const getFileColor = (file) => {
     switch (file.type) {
-        case 'folder': return 'file-card-bg-folder';
+        case 'FOLDER': return 'file-card-bg-folder';
         case 'document': return 'file-card-bg-document';
         case 'image': return 'file-card-bg-image';
         case 'video': return 'file-card-bg-video';
@@ -45,7 +45,7 @@ export const getFileColor = (file) => {
 // 파일 아이콘
 export const getFileIcon = (file) => {
     switch (file.type) {
-        case 'folder': return <Folder className="card-icon folder-icon" />;
+        case 'FOLDER': return <Folder className="card-icon folder-icon" />;
         case 'document': return <FileText className="card-icon document-icon" />;
         case 'image': return <Image className="card-icon image-icon" />;
         case 'video': return <Video className="card-icon video-icon" />;
@@ -68,7 +68,7 @@ export const matchesCategory = (matchesSearch, selectedCategory, file) => {
 
 const getColorClass = (file) => {
     switch (file.type) {
-        case 'folder': return { color: '#3b82f6' };
+        case 'FOLDER': return { color: '#3b82f6' };
         case 'document': return { color: '#f97316' };
         case 'image': return { color: '#22c55e' };
         case 'video': return { color: '#a855f7' };
@@ -85,7 +85,7 @@ export const getListFileIcon = (file) => {
     };
 
     switch (file.type) {
-        case 'folder': return <Folder {...iconProps} />;
+        case 'FOLDER': return <Folder {...iconProps} />;
         case 'document': return <FileText {...iconProps} />;
         case 'image': return <Image {...iconProps} />;
         case 'video': return <Video {...iconProps} />;

@@ -43,7 +43,12 @@ export default function Login() {
             if (response.status === 200) {
                 if (response.code === '0000') {
                     loginSuccess();
-                    navigate("/home", { replace: true });
+
+                    const response2 = await gateway.post("/nas/api/v1/folder/root");
+
+                    if (response2.status === 200 && response2.code === "0000") {
+                        navigate(`/main/${response2.data.folderId}`, { replace: true });
+                    }
                 } else {
                     alert("아이디와 비밀번호를 확인해주세요.");
                 }

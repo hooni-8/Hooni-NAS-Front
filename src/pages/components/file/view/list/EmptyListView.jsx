@@ -1,7 +1,7 @@
 import React from "react";
 import {Folder} from "lucide-react";
 
-export default function EmptyListView({ backFolder, rootFolderFlag }) {
+export default function EmptyListView({ handleBackFolder }) {
 
     const iconProps = {
         className: 'file-icon',
@@ -10,7 +10,7 @@ export default function EmptyListView({ backFolder, rootFolderFlag }) {
 
     return (
         <div className="file-list-item group">
-            <div className="file-item-content" onDoubleClick={backFolder}>
+            <div className="file-item-content" onDoubleClick={handleBackFolder}>
                 <div className="file-item-name-section">
                     <div className="file-icon-wrapper">
                         <Folder {...iconProps} />

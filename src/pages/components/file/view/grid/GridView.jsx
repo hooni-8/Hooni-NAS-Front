@@ -7,16 +7,15 @@ import FileGridItem from '@pages/components/file/view/grid/FileGridItem';
 import EmptyGridView from "@pages/components/file/view/grid/EmptyGridView";
 import FileGridBackItem from '@pages/components/file/view/grid/FileGridBackItem';
 
-export default function GridView({ activeFolderId, filteredFiles, showPreviewModal, fetchFileList, handleBackFolder, rootFolderFlag }) {
+export default function GridView({ folderId, filteredFiles, showPreviewModal, fetchFileList, handleBackFolder, folderInfo }) {
 
-    const data = !rootFolderFlag ? [{ type: "back" }, ...filteredFiles] : filteredFiles;
+    const data = folderInfo && folderInfo.folderId !== folderInfo.parentFolderId ? [{ type: "back" }, ...filteredFiles] : filteredFiles;
 
     return (
         <div className="file-grid-container grid-view">
             { filteredFiles.length === 0 ? (
                 <EmptyGridView
                     handleBackFolder={handleBackFolder}
-                    rootFolderFlag={rootFolderFlag}
                 />
             ) : (
                 <VirtuosoGrid
@@ -33,7 +32,7 @@ export default function GridView({ activeFolderId, filteredFiles, showPreviewMod
                         return (
                             <FileGridItem
                                 file={file}
-                                activeFolderId={activeFolderId}
+                                folderId={folderId}
                                 showPreviewModal={showPreviewModal}
                                 fetchFileList={fetchFileList}
                             />

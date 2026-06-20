@@ -6,9 +6,9 @@ import FileListItem from '@pages/components/file/view/list/FileListItem';
 import EmptyListView from "@pages/components/file/view/list/EmptyListView";
 import FileListBackItem from '@pages/components/file/view/list/FileListBackItem';
 
-export default function ListView({ filteredFiles, showPreviewModal, fetchFileList, handleBackFolder, rootFolderFlag }) {
+export default function ListView({ filteredFiles, showPreviewModal, fetchFileList, handleBackFolder, folderInfo }) {
 
-    const data = !rootFolderFlag ? [{ type: "back" }, ...filteredFiles] : filteredFiles;
+    const data = folderInfo && folderInfo.folderId !== folderInfo.parentFolderId ? [{ type: "back" }, ...filteredFiles] : filteredFiles;
 
     return (
         <div className="file-grid-container list-view">
@@ -22,8 +22,7 @@ export default function ListView({ filteredFiles, showPreviewModal, fetchFileLis
 
                 {filteredFiles.length === 0 ? (
                     <EmptyListView
-                        backFolder={handleBackFolder}
-                        rootFolderFlag={rootFolderFlag}
+                        handleBackFolder={handleBackFolder}
                     />
                 ) : (
                     <Virtuoso
@@ -33,7 +32,7 @@ export default function ListView({ filteredFiles, showPreviewModal, fetchFileLis
                             if (file.type === "back") {
                                 return (
                                     <FileListBackItem
-                                        backFolder={handleBackFolder}
+                                        handleBackFolder={handleBackFolder}
                                     />
                                 )
                             }
