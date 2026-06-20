@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { useOutletContext } from "react-router-dom";
+import {useOutletContext, useParams} from "react-router-dom";
 import { useUpload } from "@pages/components/loding/UploadProvider";
 
 import * as gateway from "@components/common/gateway/Gateway";
@@ -12,6 +12,8 @@ import UploadProgressBar from "@pages/components/loding/UploadProgressBar";
 import "@styles/pages/Home.scss"
 
 export default function Main() {
+
+    const folderId = useParams();
 
     const { selectedCategory, searchQuery, viewMode, isUploadModalOpen, setIsUploadModalOpen, showUploadModal } = useOutletContext();
     const { setQueue, pendingToReadyUpdateFile, pendingFiles, readyFiles, uploadingFiles, processQueue } = useUpload();
@@ -37,7 +39,7 @@ export default function Main() {
     // readyFiles 변경 감지
     useEffect(() => {
         if (rendering && readyFiles.length > 0) {
-            processQueue();
+            processQueue(folderId);
             setRendering(false);
         }
     }, [readyFiles, rendering]);

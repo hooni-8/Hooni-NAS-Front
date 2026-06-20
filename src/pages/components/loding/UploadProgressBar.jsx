@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, ChevronDown, ChevronUp, CheckCircle2, AlertCircle, File as FileIcon } from 'lucide-react';
 import "@styles/pages/components/loding/UploadProgressBar.scss";
-import {useUpload} from "@pages/components/loding/UploadProvider";
+import { useUpload } from "@pages/components/loding/UploadProvider";
 
 export default function UploadProgressBar({ onCancel, onClose, forceExpanded }) {
     const [isExpanded, setIsExpanded] = useState(true);
