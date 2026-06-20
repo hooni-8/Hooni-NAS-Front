@@ -18,6 +18,7 @@ export default function Router(props) {
             {/* Protected */}
             <Route element={<ProtectedLayout />}>
                 <Route element={<DashBoard />}>
+                    <Route path="/main" element={<Main {...props} />} />
                     <Route path="/main/:folderId" element={<Main {...props} />} />
                 </Route>
 

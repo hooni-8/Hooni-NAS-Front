@@ -42,11 +42,18 @@ export const AuthProvider = ({ children }) => {
         } catch (e) {
             console.error(e);
         } finally {
-            sessionStorage.removeItem("_af");
-            sessionStorage.removeItem("_rf");
             setIsAuthenticated(false);
             setUser(null);
             navigate("/", { replace: true });
+        }
+    }
+
+    const rootFolder = async () => {
+        const response = await gateway.post("/nas/api/v1/folder/root");
+
+        if (response.status === 200 && response.code === "0000") {
+            loginSuccess();
+            navigate(`/main/${response.data.folderId}`, { replace: true });
         }
     }
 
@@ -55,7 +62,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, user, loading, loginSuccess, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, user, loading, loginSuccess, logout, rootFolder }}>
             {children}
         </AuthContext.Provider>
     );

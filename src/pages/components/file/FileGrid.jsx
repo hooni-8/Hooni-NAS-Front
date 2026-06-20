@@ -5,6 +5,7 @@ import * as gateway from "@components/common/gateway/Gateway";
 import * as format from "@components/utils/Format";
 
 import { useUpload } from "@pages/components/loding/UploadProvider";
+import { useAuth } from "@layout/auth/AuthContext";
 
 import GridView from '@pages/components/file/view/grid/GridView';
 import ListView from '@pages/components/file/view/list/ListView';
@@ -18,6 +19,7 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
     const navigate = useNavigate();
 
     const { uploadDoneAt, setUploadDoneAt } = useUpload();
+    const { rootFolder } = useAuth();
 
     const [folderInfo, setFolderInfo] = useState('');
     const [fileList, setFileList] = useState([]);
@@ -44,6 +46,8 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
     useEffect(() => {
         if (folderId) {
             fetchFileList();
+        } else {
+            rootFolder();
         }
     }, [uploadDoneAt, folderId]);
 

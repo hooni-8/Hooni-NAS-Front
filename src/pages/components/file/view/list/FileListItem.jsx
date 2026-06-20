@@ -6,7 +6,7 @@ import MenuDropdown from "@pages/components/file/MenuDropdown";
 import "@styles/pages/components/file/FileListItem.scss";
 import { MoreVertical } from 'lucide-react';
 
-const FileListItem = memo(({ file, showPreviewModal, fetchFileList }) => {
+const FileListItem = memo(({ file, folderInfo, showPreviewModal, fetchFileList }) => {
     const [showMenu, setShowMenu] = useState(false);
 
     return (
@@ -50,6 +50,7 @@ const FileListItem = memo(({ file, showPreviewModal, fetchFileList }) => {
                     {showMenu && (
                         <MenuDropdown
                             file={file}
+                            folderInfo={folderInfo}
                             setShowMenu={setShowMenu}
                             fetchFileList={fetchFileList}
                         />

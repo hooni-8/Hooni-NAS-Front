@@ -9,7 +9,7 @@ import { MoreVertical } from 'lucide-react';
 
 const thumbnailCache = new Map();
 
-const FileGridItem = React.memo(({ folderId, file, showPreviewModal, fetchFileList }) => {
+const FileGridItem = React.memo(({ folderInfo, file, showPreviewModal, fetchFileList }) => {
     const [showMenu, setShowMenu] = useState(false);
 
     const [thumbUrl, setThumbUrl] = useState(null);
@@ -25,7 +25,7 @@ const FileGridItem = React.memo(({ folderId, file, showPreviewModal, fetchFileLi
 
         const fetchThumbnail = async () => {
             try {
-                const response = await gateway.getBlob( `/nas/api/v1/file/thumbnail/${file.id}`, {folderId: folderId} );
+                const response = await gateway.getBlob( `/nas/api/v1/file/thumbnail/${file.id}`, {folderId: folderInfo.folderId} );
 
                 const url = URL.createObjectURL(response.data);
                 thumbnailCache.set(file.id, url);
@@ -62,6 +62,7 @@ const FileGridItem = React.memo(({ folderId, file, showPreviewModal, fetchFileLi
                     {showMenu && (
                         <MenuDropdown
                             file={file}
+                            folderInfo={folderInfo}
                             setShowMenu={setShowMenu}
                             fetchFileList={fetchFileList}
                         />

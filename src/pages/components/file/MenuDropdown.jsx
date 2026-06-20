@@ -6,7 +6,7 @@ import { useModal } from "@components/common/modal/useModal";
 
 import {Download, Share2, Star, Trash2} from "lucide-react";
 
-export default function MenuDropdown({ file, setShowMenu, fetchFileList }) {
+export default function MenuDropdown({ file, folderInfo, setShowMenu, fetchFileList }) {
 
     const { openConfirm, openAlert, closeConfirm } = useModal();
 
@@ -25,7 +25,7 @@ export default function MenuDropdown({ file, setShowMenu, fetchFileList }) {
 
         const payload = {
             fileId: id,
-            activeFolderId: sessionStorage.getItem("_af")
+            folderId: folderInfo.folderId
         };
 
         try {

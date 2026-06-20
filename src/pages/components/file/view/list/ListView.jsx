@@ -6,7 +6,7 @@ import FileListItem from '@pages/components/file/view/list/FileListItem';
 import EmptyListView from "@pages/components/file/view/list/EmptyListView";
 import FileListBackItem from '@pages/components/file/view/list/FileListBackItem';
 
-export default function ListView({ filteredFiles, showPreviewModal, fetchFileList, handleBackFolder, folderInfo }) {
+export default function ListView({ folderInfo, filteredFiles, showPreviewModal, fetchFileList, handleBackFolder }) {
 
     const data = folderInfo && folderInfo.folderId !== folderInfo.parentFolderId ? [{ type: "back" }, ...filteredFiles] : filteredFiles;
 
@@ -39,6 +39,7 @@ export default function ListView({ filteredFiles, showPreviewModal, fetchFileLis
                             return (
                                 <FileListItem
                                     file={file}
+                                    folderInfo={folderInfo}
                                     showPreviewModal={showPreviewModal}
                                     fetchFileList={fetchFileList}
                                 />

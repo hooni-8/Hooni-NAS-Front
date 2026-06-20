@@ -17,11 +17,11 @@ export default function Login() {
     const [isLoading, setIsLoading] = useState(false);
 
     const navigate = useNavigate();
-    const { loginSuccess, isAuthenticated, loading } = useAuth();
+    const { loginSuccess, isAuthenticated, loading, rootFolder } = useAuth();
 
     useEffect(() => {
         if (!loading && isAuthenticated) {
-            navigate("/home", { replace: true });
+            rootFolder();
         }
     }, [loading, isAuthenticated, navigate]);
 
@@ -43,12 +43,7 @@ export default function Login() {
             if (response.status === 200) {
                 if (response.code === '0000') {
                     loginSuccess();
-
-                    const response2 = await gateway.post("/nas/api/v1/folder/root");
-
-                    if (response2.status === 200 && response2.code === "0000") {
-                        navigate(`/main/${response2.data.folderId}`, { replace: true });
-                    }
+                    rootFolder();
                 } else {
                     alert("아이디와 비밀번호를 확인해주세요.");
                 }
