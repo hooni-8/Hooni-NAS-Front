@@ -1,10 +1,14 @@
 import { useState } from 'react';
-import * as gateway from "@components/common/gateway/Gateway";
+import { useParams } from "react-router-dom";
 
+import * as gateway from "@components/common/gateway/Gateway";
 import { X, Folder } from 'lucide-react';
 import "@styles/pages/components/modal/CreateFolderModal.scss"
 
 export default function CreateFolderModal({ onClose }) {
+
+    const { folderId } = useParams();
+
     const [folderName, setFolderName] = useState('');
     const [isCreating, setIsCreating] = useState(false);
 
@@ -18,7 +22,7 @@ export default function CreateFolderModal({ onClose }) {
 
         const payload = {
             folderName: folderName,
-            activeFolderId: sessionStorage.getItem("_af")
+            folderId: folderId
         }
 
         try {
