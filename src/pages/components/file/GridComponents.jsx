@@ -11,7 +11,7 @@ export const GridComponents = {
         </div>
     )),
     Item: ({ children }) => (
-        <div>
+        <div className="grid-item">
             {children}
         </div>
     )

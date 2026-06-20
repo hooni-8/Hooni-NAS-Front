@@ -14,6 +14,10 @@
   cursor: pointer;
 }
 
+.grid-item {
+  min-width: 0;
+}
+
 .file-card:hover {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   border-color: #d1d5db;
@@ -244,16 +248,22 @@
   display: flex;
   flex-direction: column;
   gap: 0;
+  min-width: 0;
+  width: 100%;
 }
 
 /* File Card Name */
 .file-card-name {
   font-size: 0.875rem;
   color: #111827;
-  white-space: nowrap;
+  margin-bottom: 0.25rem;
+
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-bottom: 0.25rem;
+  white-space: nowrap;
+
+  width: 100%;
+  min-width: 0;
 }
 
 @media (min-width: 1024px) {
