@@ -6,6 +6,8 @@ import * as gateway from "@components/common/gateway/Gateway";
 import "@styles/pages/components/modal/PreviewModal.scss"
 import { X, Download, Share2, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 
+const baseUrl = process.env.REACT_APP_API_GATEWAY;
+
 const previewCache = new Map();
 
 export default function PreviewModal({ closePreviewModal, selectedFile, file, onClose, onPrevious, onNext, hasPrevious = true, hasNext = true }) {
@@ -25,11 +27,16 @@ export default function PreviewModal({ closePreviewModal, selectedFile, file, on
 
         const fetchPreview = async () => {
             try {
-                const response = await gateway.getBlob( `/nas/api/v1/file/preview/${selectedFile.id}`, { folderId: folderId } );
+                if (selectedFile.type === 'video') {
+                    // setPreviewUrl(baseUrl + `/nas/api/v1/file/video/${selectedFile.id}?folderId=${folderId}`);
 
-                const url = URL.createObjectURL(response.data);
-                previewCache.set(selectedFile.id, url);
-                setPreviewUrl(url);
+                    const response = await gateway.get(`/video-entry/${selectedFile.id}`);
+
+                    setPreviewUrl(baseUrl + response.url + `&folderId=${folderId}`);
+
+                } else {
+                    setPreviewUrl(baseUrl + `/nas/api/v1/file/preview/${selectedFile.id}?folderId=${folderId}`);
+                }
             } catch {
                 setPreviewError(true);
             }

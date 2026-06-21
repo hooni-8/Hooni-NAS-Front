@@ -47,7 +47,7 @@ export const UploadProvider = ({ children }) => {
 
         // 업로드 시작 상태 업데이트
         updateFile(fileItem.id, { status: "LOADING", progress: 0 });
-console.log(folderInfo.folderId);
+
         const payload = {
             folderId: folderInfo.folderId,
             lastModifiedAt: fileItem.file.lastModified,

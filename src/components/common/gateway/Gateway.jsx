@@ -9,7 +9,9 @@ export const get = async (path, opts) => {
         params: opts,
     }).then((response) => {
         if (response.status === 200) {
-            result = response.data;
+            if (response?.data) {
+                result = response.data;
+            }
             result.status = response.status;
         }
     }).catch((error) => {
@@ -42,8 +44,10 @@ export const post = async (path, payload, config) => {
     await api.post(baseUrl + path, payload, config)
         .then((response) => {
             if (response.status === 200) {
-                result = response.data;
-                result.status = response.status;
+                if (response?.data) {
+                    result = response?.data;
+                }
+                result.status = response?.status;
             }
         })
         .catch((error) => {
