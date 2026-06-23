@@ -6,7 +6,7 @@ import Sidebar from "@layout/Sidebar";
 
 import CreateFolderModal from "@pages/components/modal/CreateFolderModal";
 
-import { useUpload } from "@pages/components/loding/UploadProvider";
+import { useFileUpload } from "@hooks/useFileUpload";
 
 export default function DashBoard() {
 
@@ -17,7 +17,7 @@ export default function DashBoard() {
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
     const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
 
-    const { deleteStatusFile } = useUpload();
+    const { deleteStatusFile } = useFileUpload();
 
     const showUploadModal = (type) => {
         setIsUploadModalOpen(!isUploadModalOpen);

@@ -1,10 +1,9 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import * as gateway from "@components/common/gateway/Gateway";
 
-import {useNavigate} from "react-router-dom";
-
-const AuthContext = createContext(null);
+export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
@@ -61,11 +60,18 @@ export const AuthProvider = ({ children }) => {
         checkSession();
     }, []);
 
+    const value = {
+        isAuthenticated,
+        user,
+        loading,
+        loginSuccess,
+        logout,
+        rootFolder
+    }
+
     return (
-        <AuthContext.Provider value={{ isAuthenticated, user, loading, loginSuccess, logout, rootFolder }}>
+        <AuthContext.Provider value={ value }>
             {children}
         </AuthContext.Provider>
     );
 };
-
-export const useAuth = () => useContext(AuthContext);

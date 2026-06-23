@@ -1,6 +1,6 @@
 import { AlertCircle, CheckCircle2, Info, X, XCircle } from 'lucide-react';
 
-import { useModal } from "@components/common/modal/useModal";
+import { useModal } from "@hooks/useModal";
 
 import "@styles/components/common/modal/CustomConfirm.scss";
 
@@ -8,9 +8,23 @@ export default function CustomConfirm() {
 
     const { confirmOpen, confirmConfig, closeConfirm } = useModal();
 
-    if (!confirmOpen) return null;
+    if (!confirmOpen || !confirmConfig) return null;
 
-    const {type, title, message, confirmBtn, onConfirm} = confirmConfig;
+    const { type, title, message, confirmBtn, onConfirm, onClose } = confirmConfig;
+
+    const handleConfirm = async () => {
+        try {
+            await onConfirm?.();
+        } finally {
+            closeConfirm();
+            onClose?.();
+        }
+    };
+
+    const handleClose = () => {
+        closeConfirm();
+        onClose?.();
+    };
 
     const getConfig = () => {
         switch (type) {
@@ -21,6 +35,7 @@ export default function CustomConfirm() {
                     iconColorClass: 'confirm-icon-color-success',
                     confirmButtonClass: 'confirm-button-success',
                 };
+
             case 'error':
                 return {
                     icon: XCircle,
@@ -28,6 +43,7 @@ export default function CustomConfirm() {
                     iconColorClass: 'confirm-icon-color-error',
                     confirmButtonClass: 'confirm-button-error',
                 };
+
             case 'warning':
                 return {
                     icon: AlertCircle,
@@ -35,6 +51,7 @@ export default function CustomConfirm() {
                     iconColorClass: 'confirm-icon-color-warning',
                     confirmButtonClass: 'confirm-button-warning',
                 };
+
             case 'info':
                 return {
                     icon: Info,
@@ -42,6 +59,7 @@ export default function CustomConfirm() {
                     iconColorClass: 'confirm-icon-color-info',
                     confirmButtonClass: 'confirm-button-info',
                 };
+
             default:
                 return {
                     icon: Info,
@@ -63,22 +81,31 @@ export default function CustomConfirm() {
                         <div className={`confirm-icon-wrapper ${config.iconBgClass}`}>
                             <Icon className={`confirm-icon ${config.iconColorClass}`} />
                         </div>
+
                         <div className="confirm-text-content">
                             <h3 className="confirm-title">{title}</h3>
                             <p className="confirm-message">{message}</p>
                         </div>
-                        <button onClick={closeConfirm} className="confirm-close-button">
+
+                        <button
+                            onClick={handleClose}
+                            className="confirm-close-button"
+                        >
                             <X className="confirm-close-icon" />
                         </button>
                     </div>
                 </div>
 
                 <div className="confirm-footer">
-                    <button onClick={closeConfirm} className="confirm-cancel-button">
+                    <button
+                        onClick={handleClose}
+                        className="confirm-cancel-button"
+                    >
                         취소
                     </button>
+
                     <button
-                        onClick={onConfirm}
+                        onClick={handleConfirm}
                         className={`confirm-confirm-button ${config.confirmButtonClass}`}
                     >
                         {confirmBtn}

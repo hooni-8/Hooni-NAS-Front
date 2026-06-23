@@ -14,6 +14,8 @@ module.exports = {
 					'@nav': './src/nav',
 					'@pages': './src/pages',
 					'@styles': './src/styles',
+					'@provider': './src/provider',
+					'@hooks': './src/hooks',
 				},
 			},
 		},

@@ -28,8 +28,6 @@ export default function PreviewModal({ closePreviewModal, selectedFile, file, on
         const fetchPreview = async () => {
             try {
                 if (selectedFile.type === 'video') {
-                    // setPreviewUrl(baseUrl + `/nas/api/v1/file/video/${selectedFile.id}?folderId=${folderId}`);
-
                     const response = await gateway.get(`/video-entry/${selectedFile.id}`);
 
                     setPreviewUrl(baseUrl + response.url + `&folderId=${folderId}`);
@@ -49,26 +47,24 @@ export default function PreviewModal({ closePreviewModal, selectedFile, file, on
         switch (selectedFile.type) {
             case 'image':
                 return (
-                    <div className="file-preview-image-container">
+                    <div className="file-preview-container">
                         <img
                             src={previewUrl}
                             alt={selectedFile.name}
-                            className="file-preview-image"
+                            className="file-preview"
                         />
                     </div>
                 );
             case 'video':
                 return (
-                    <div className="file-preview-video-container">
+                    <div className="file-preview-container">
                         <video
                             src={previewUrl}
                             alt={selectedFile.name}
                             controls
                             autoPlay
-                            className="file-preview-video"
-                        >
-                            브라우저가 비디오를 지원하지 않습니다.
-                        </video>
+                            className="file-preview"
+                        />
                     </div>
                 );
             // case 'audio':

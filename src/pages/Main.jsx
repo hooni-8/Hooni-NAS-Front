@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useOutletContext, useParams} from "react-router-dom";
-import { useUpload } from "@pages/components/loding/UploadProvider";
+import { useFileUpload } from "@hooks/useFileUpload";
 
 import * as gateway from "@components/common/gateway/Gateway";
 
@@ -16,7 +16,7 @@ export default function Main() {
     const folderId = useParams();
 
     const { selectedCategory, searchQuery, viewMode, isUploadModalOpen, setIsUploadModalOpen, showUploadModal } = useOutletContext();
-    const { setQueue, pendingToReadyUpdateFile, pendingFiles, readyFiles, uploadingFiles, processQueue } = useUpload();
+    const { setQueue, pendingToReadyUpdateFile, pendingFiles, readyFiles, uploadingFiles, processQueue } = useFileUpload();
 
     const [progressBarOpen, setProgressBarOpen] = useState(false);
 

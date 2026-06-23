@@ -4,8 +4,8 @@ import {useNavigate, useParams} from "react-router-dom";
 import * as gateway from "@components/common/gateway/Gateway";
 import * as format from "@components/utils/Format";
 
-import { useUpload } from "@pages/components/loding/UploadProvider";
-import { useAuth } from "@layout/auth/AuthContext";
+import { useFileUpload } from "@hooks/useFileUpload";
+import { useAuth } from "@hooks/useAuth";
 
 import GridView from '@pages/components/file/view/grid/GridView';
 import ListView from '@pages/components/file/view/list/ListView';
@@ -18,7 +18,7 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
     const { folderId } = useParams();
     const navigate = useNavigate();
 
-    const { uploadDoneAt, setUploadDoneAt } = useUpload();
+    const { uploadDoneAt, setUploadDoneAt } = useFileUpload();
     const { rootFolder } = useAuth();
 
     const [folderInfo, setFolderInfo] = useState('');

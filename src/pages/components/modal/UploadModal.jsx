@@ -3,12 +3,12 @@ import {X, Upload, File as FileIcon, CheckCircle2, ImageIcon, VideoIcon, FileAud
 
 import "@styles/pages/components/modal/UploadModal.scss";
 import * as format from "@components/utils/Format";
-import { useUpload } from "@pages/components/loding/UploadProvider";
+import { useFileUpload } from "@hooks/useFileUpload";
 
 export default function UploadModal({ showUploadModal, handleUpload, pendingFiles}) {
     const [isDragging, setIsDragging] = useState(false);
 
-    const { addFiles } = useUpload();
+    const { addFiles } = useFileUpload();
 
     const handleDragOver = (e) => {
         e.preventDefault();

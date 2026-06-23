@@ -3,6 +3,7 @@ import React, { createContext, useState } from 'react';
 export const ModalContext = createContext(null);
 
 export const ModalProvider = ({ children }) => {
+
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [confirmConfig, setConfirmConfig] = useState({});
 
@@ -10,8 +11,8 @@ export const ModalProvider = ({ children }) => {
     const [alertConfig, setAlertConfig] = useState({});
 
     /* ===== confirm ===== */
-    const openConfirm = ({ type, title, message, confirmBtn, onConfirm }) => {
-        setConfirmConfig({ type, title, message, confirmBtn, onConfirm });
+    const openConfirm = (config) => {
+        setConfirmConfig(config);
         setConfirmOpen(true);
     };
 
@@ -21,8 +22,8 @@ export const ModalProvider = ({ children }) => {
     };
 
     /* ===== alert ===== */
-    const openAlert = ({ type, title, message }) => {
-        setAlertConfig({ type, title, message });
+    const openAlert = (config) => {
+        setAlertConfig(config);
         setAlertOpen(true);
     };
 
@@ -31,21 +32,21 @@ export const ModalProvider = ({ children }) => {
         setAlertConfig({});
     };
 
-    return (
-        <ModalContext.Provider
-            value={{
-                confirmOpen,
-                confirmConfig,
-                openConfirm,
-                closeConfirm,
+    const value = {
+        confirmOpen,
+        confirmConfig,
+        openConfirm,
+        closeConfirm,
 
-                alertOpen,
-                alertConfig,
-                openAlert,
-                closeAlert
-            }}
-        >
+        alertOpen,
+        alertConfig,
+        openAlert,
+        closeAlert
+    }
+
+    return (
+        <ModalContext.Provider value={ value }>
             {children}
         </ModalContext.Provider>
     );
-}
+};

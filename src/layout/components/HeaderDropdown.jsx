@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@layout/auth/AuthContext";
+import { useAuth } from "@hooks/useAuth";
 
 import "@styles/pages/layout/components/HeaderDropdown.scss";
 import {Bell, LogOut, User} from "lucide-react";

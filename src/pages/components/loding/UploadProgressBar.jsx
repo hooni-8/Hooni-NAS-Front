@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { X, ChevronDown, ChevronUp, CheckCircle2, AlertCircle, File as FileIcon } from 'lucide-react';
 import "@styles/pages/components/loding/UploadProgressBar.scss";
-import { useUpload } from "@pages/components/loding/UploadProvider";
+import { useFileUpload } from "@hooks/useFileUpload";
 
 export default function UploadProgressBar({ onCancel, onClose, forceExpanded }) {
     const [isExpanded, setIsExpanded] = useState(true);
-    const { files, successFiles } = useUpload();
+    const { files, successFiles } = useFileUpload();
 
     // forceExpanded가 true로 변경되면 펼침
     useEffect(() => {

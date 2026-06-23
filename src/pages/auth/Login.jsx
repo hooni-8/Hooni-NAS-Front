@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import * as gateway from "@components/common/gateway/Gateway";
 import {useNavigate} from  "react-router-dom"
 
-import { useAuth } from "@layout/auth/AuthContext";
+import { useAuth } from "@hooks/useAuth";
 
 import "@styles/pages/auth/Login.scss"
 

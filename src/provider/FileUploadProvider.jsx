@@ -1,13 +1,13 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useState } from "react";
 
 import * as gateway from "@components/common/gateway/Gateway";
 
-const UploadContext = createContext(null);
+export const FileUploadContext = createContext(null);
 
 let RUNNING_COUNT = 0;
 const MAX_CONCURRENCY = 3;
 
-export const UploadProvider = ({ children }) => {
+export const FileUploadProvider = ({ children }) => {
 
     const [files, setFiles] = useState([]);
     const [queue, setQueue] = useState([]);
@@ -109,26 +109,26 @@ export const UploadProvider = ({ children }) => {
         });
     };
 
+    const value = {
+        files,
+        setFiles,
+        setQueue,
+        uploadDoneAt,
+        setUploadDoneAt,
+        pendingFiles,
+        readyFiles,
+        uploadingFiles,
+        successFiles,
+        errorFiles,
+        addFiles,
+        pendingToReadyUpdateFile,
+        processQueue,
+        deleteStatusFile
+    };
+
     return (
-        <UploadContext.Provider value={{
-            files
-            , setFiles
-            , setQueue
-            , uploadDoneAt
-            , setUploadDoneAt
-            , pendingFiles
-            , readyFiles
-            , uploadingFiles
-            , successFiles
-            , errorFiles
-            , addFiles
-            , pendingToReadyUpdateFile
-            , processQueue
-            , deleteStatusFile
-        }}>
+        <FileUploadContext.Provider value={ value }>
             {children}
-        </UploadContext.Provider>
+        </FileUploadContext.Provider>
     );
 }
-
-export const useUpload = () => useContext(UploadContext);

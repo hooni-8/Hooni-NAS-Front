@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import * as gateway from "@components/common/gateway/Gateway";
 import * as format from "@components/utils/Format";
-import { useAuth } from "@layout/auth/AuthContext";
+import { useAuth } from "@hooks/useAuth";
 
 import "@styles/pages/layout/Sidebar.scss";
 

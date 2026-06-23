@@ -1,16 +1,21 @@
 import { CheckCircle2, XCircle, AlertCircle, Info, X } from 'lucide-react';
 
-import { useModal } from "@components/common/modal/useModal";
+import { useModal } from "@hooks/useModal";
 
-import '@styles/components/common/modal/CustomAlert.scss';
+import "@styles/components/common/modal/CustomAlert.scss";
 
 export default function CustomAlert() {
 
     const { alertOpen, alertConfig, closeAlert } = useModal();
 
-    if (!alertOpen) return null;
+    if (!alertOpen || alertConfig) return null;
 
-    const { type, title, message } = alertConfig;
+    const { type, title, message, onClose } = alertConfig;
+
+    const handleClose = () => {
+        onClose?.();
+        closeAlert();
+    };
 
     const getConfig = () => {
         switch (type) {
@@ -21,6 +26,7 @@ export default function CustomAlert() {
                     iconColorClass: 'alert-icon-color-success',
                     confirmButtonClass: 'alert-button-success',
                 };
+
             case 'error':
                 return {
                     icon: XCircle,
@@ -28,6 +34,7 @@ export default function CustomAlert() {
                     iconColorClass: 'alert-icon-color-error',
                     confirmButtonClass: 'alert-button-error',
                 };
+
             case 'warning':
                 return {
                     icon: AlertCircle,
@@ -35,7 +42,16 @@ export default function CustomAlert() {
                     iconColorClass: 'alert-icon-color-warning',
                     confirmButtonClass: 'alert-button-warning',
                 };
+
             case 'info':
+                return {
+                    icon: Info,
+                    iconBgClass: 'alert-icon-bg-info',
+                    iconColorClass: 'alert-icon-color-info',
+                    confirmButtonClass: 'alert-button-info',
+                };
+
+            default:
                 return {
                     icon: Info,
                     iconBgClass: 'alert-icon-bg-info',
@@ -56,11 +72,16 @@ export default function CustomAlert() {
                         <div className={`alert-icon-wrapper ${config.iconBgClass}`}>
                             <Icon className={`alert-icon ${config.iconColorClass}`} />
                         </div>
+
                         <div className="alert-text-content">
                             <h3 className="alert-title">{title}</h3>
                             <p className="alert-message">{message}</p>
                         </div>
-                        <button onClick={closeAlert} className="alert-close-button">
+
+                        <button
+                            onClick={handleClose}
+                            className="alert-close-button"
+                        >
                             <X className="alert-close-icon" />
                         </button>
                     </div>
@@ -68,7 +89,7 @@ export default function CustomAlert() {
 
                 <div className="alert-footer">
                     <button
-                        onClick={closeAlert}
+                        onClick={handleClose}
                         className={`alert-confirm-button ${config.confirmButtonClass}`}
                     >
                         확인
