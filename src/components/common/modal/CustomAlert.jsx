@@ -8,7 +8,7 @@ export default function CustomAlert() {
 
     const { alertOpen, alertConfig, closeAlert } = useModal();
 
-    if (!alertOpen || alertConfig) return null;
+    if (!alertOpen || !alertConfig) return null;
 
     const { type, title, message, onClose } = alertConfig;
 
