@@ -68,6 +68,7 @@ export const FileUploadProvider = ({ children }) => {
 
             if (response.status === 200 && response.code === "0000") {
                 updateFile(fileItem.id, { status: "SUCCESS", progress: 100 });
+                setUploadDoneAt(Date.now());
             } else {
                 updateFile(fileItem.id, { status: "ERROR" });
             }
@@ -101,7 +102,7 @@ export const FileUploadProvider = ({ children }) => {
                     processQueue(folderId); // 빈 슬롯이 생겼으니 다시 채우기
                 });
             });
-            setUploadDoneAt(Date.now());
+
             // 아직 안 꺼낸 나머지 큐 유지
             return rest;
         });
