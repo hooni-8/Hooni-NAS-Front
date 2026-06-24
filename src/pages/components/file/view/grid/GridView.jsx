@@ -7,7 +7,8 @@ import FileGridItem from '@pages/components/file/view/grid/FileGridItem';
 import EmptyGridView from "@pages/components/file/view/grid/EmptyGridView";
 import FileGridBackItem from '@pages/components/file/view/grid/FileGridBackItem';
 
-export default function GridView({ folderInfo,
+export default function GridView({
+                                     folderInfo,
                                      filteredFiles,
                                      showPreviewModal,
                                      showReNameModal,
