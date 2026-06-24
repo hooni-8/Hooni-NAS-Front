@@ -43,13 +43,12 @@ export const FileUploadProvider = ({ children }) => {
         );
     }
 
-    const uploadSingleFile = async (fileItem, folderInfo) => {
-
+    const uploadSingleFile = async (fileItem, folderId) => {
         // 업로드 시작 상태 업데이트
         updateFile(fileItem.id, { status: "LOADING", progress: 0 });
 
         const payload = {
-            folderId: folderInfo.folderId,
+            folderId: folderId,
             lastModifiedAt: fileItem.file.lastModified,
         };
 
@@ -69,7 +68,6 @@ export const FileUploadProvider = ({ children }) => {
 
             if (response.status === 200 && response.code === "0000") {
                 updateFile(fileItem.id, { status: "SUCCESS", progress: 100 });
-                setUploadDoneAt(Date.now());
             } else {
                 updateFile(fileItem.id, { status: "ERROR" });
             }
@@ -103,7 +101,7 @@ export const FileUploadProvider = ({ children }) => {
                     processQueue(folderId); // 빈 슬롯이 생겼으니 다시 채우기
                 });
             });
-
+            setUploadDoneAt(Date.now());
             // 아직 안 꺼낸 나머지 큐 유지
             return rest;
         });

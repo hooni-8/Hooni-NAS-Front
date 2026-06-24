@@ -10,6 +10,15 @@ export const ModalProvider = ({ children }) => {
     const [alertOpen, setAlertOpen] = useState(false);
     const [alertConfig, setAlertConfig] = useState({});
 
+    const [modal, setModal] = useState({
+        createFolder: false,
+        previewOpen: false,
+        reNameOpen: false,
+        uploadOpen: false,
+        progressBarOpen: false,
+        rendering: false,
+    })
+
     /* ===== confirm ===== */
     const openConfirm = (config) => {
         setConfirmConfig(config);
@@ -32,6 +41,20 @@ export const ModalProvider = ({ children }) => {
         setAlertConfig({});
     };
 
+    const openModal = (name) => {
+        setModal(prev => ({
+            ...prev,
+            [name]: true
+        }));
+    };
+
+    const closeModal = (name) => {
+        setModal(prev => ({
+            ...prev,
+            [name]: false
+        }));
+    };
+
     const value = {
         confirmOpen,
         confirmConfig,
@@ -41,7 +64,11 @@ export const ModalProvider = ({ children }) => {
         alertOpen,
         alertConfig,
         openAlert,
-        closeAlert
+        closeAlert,
+
+        modal,
+        openModal,
+        closeModal,
     }
 
     return (

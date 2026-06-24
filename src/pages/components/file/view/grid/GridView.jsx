@@ -7,7 +7,13 @@ import FileGridItem from '@pages/components/file/view/grid/FileGridItem';
 import EmptyGridView from "@pages/components/file/view/grid/EmptyGridView";
 import FileGridBackItem from '@pages/components/file/view/grid/FileGridBackItem';
 
-export default function GridView({ folderInfo, filteredFiles, showPreviewModal, fetchFileList, handleBackFolder }) {
+export default function GridView({ folderInfo,
+                                     filteredFiles,
+                                     showPreviewModal,
+                                     showReNameModal,
+                                     fetchFileList,
+                                     handleBackFolder
+}) {
 
     const data = folderInfo && folderInfo.folderId !== folderInfo.parentFolderId ? [{ type: "back" }, ...filteredFiles] : filteredFiles;
 
@@ -33,8 +39,10 @@ export default function GridView({ folderInfo, filteredFiles, showPreviewModal, 
                             <FileGridItem
                                 file={file}
                                 folderInfo={folderInfo}
-                                showPreviewModal={showPreviewModal}
                                 fetchFileList={fetchFileList}
+
+                                showPreviewModal={showPreviewModal}
+                                showReNameModal={showReNameModal}
                             />
                         )
                     }}

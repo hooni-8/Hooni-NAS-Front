@@ -4,31 +4,12 @@ import { Outlet } from "react-router-dom";
 import Header from "@layout/Header";
 import Sidebar from "@layout/Sidebar";
 
-import CreateFolderModal from "@pages/components/modal/CreateFolderModal";
-
-import { useFileUpload } from "@hooks/useFileUpload";
-
 export default function DashBoard() {
 
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
-    const [viewMode, setViewMode] = useState('grid');
+    const [viewMode, setViewMode] = useState(() => localStorage.getItem("viewMode") || 'grid');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-    const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
-
-    const { deleteStatusFile } = useFileUpload();
-
-    const showUploadModal = (type) => {
-        setIsUploadModalOpen(!isUploadModalOpen);
-        if (type === "CANCEL") {
-            deleteStatusFile("PENDING");
-        }
-    }
-
-    useEffect(() => {
-        setViewMode(localStorage.getItem("viewMode"));
-    }, []);
 
     const changeViewMode = (type) => {
         setViewMode(type);
@@ -74,28 +55,17 @@ export default function DashBoard() {
                         setSearchQuery={setSearchQuery}
                         viewMode={viewMode}
                         changeViewMode={changeViewMode}
-                        showUploadModal={showUploadModal}
                         onMenuClick={() => setIsMobileMenuOpen(true)}
-                        onCreateFolderClick={() => setIsCreateFolderModalOpen(true)}
                     />
 
                     <Outlet
                         context={{
                             selectedCategory,
                             searchQuery,
-                            viewMode,
-                            isUploadModalOpen,
-                            setIsUploadModalOpen,
-                            showUploadModal,
+                            viewMode
                         }}
                     />
 
-                    {isCreateFolderModalOpen && (
-                        <CreateFolderModal
-                            onClose={() => setIsCreateFolderModalOpen(false)}
-                            // onCreateFolder={handleCreateFolder}
-                        />
-                    )}
                 </div>
             </div>
         </>

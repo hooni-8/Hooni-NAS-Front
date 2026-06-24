@@ -1,21 +1,24 @@
 import React, {useEffect, useRef, useState} from 'react';
-import { Search, Upload, Grid3x3, List, User, Menu, FolderPlus, ChevronDown } from 'lucide-react';
 
-import "@styles/pages/layout/Header.scss"
+import { useModal } from "@hooks/useModal";
+
 import HeaderDropdown from "@layout/components/HeaderDropdown";
+
+import { Search, Upload, Grid3x3, List, User, Menu, FolderPlus, ChevronDown } from 'lucide-react';
+import "@styles/pages/layout/Header.scss"
 
 export default function Header({
                            searchQuery,
                            setSearchQuery,
                            viewMode,
                            changeViewMode,
-                           showUploadModal,
-                           onMenuClick,
-                           onCreateFolderClick
+                           onMenuClick
                        }) {
 
     const [showUserMenu, setShowUserMenu] = useState(false);
     const menuRef = useRef(null);
+
+    const { openModal } = useModal();
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -89,7 +92,7 @@ export default function Header({
 
                     {/*---------------Create Folder Button---------------*/}
                     <button
-                        onClick={onCreateFolderClick}
+                        onClick={() => openModal("createFolder")}
                         className="header-desktop-folder-btn"
                     >
                         <FolderPlus className="header-btn-icon"/>
@@ -97,7 +100,7 @@ export default function Header({
                     </button>
 
                     <button
-                        onClick={onCreateFolderClick}
+                        onClick={() => openModal("createFolder")}
                         className="header-mobile-folder-btn"
                     >
                         <FolderPlus className="header-mobile-icon"/>
@@ -106,7 +109,7 @@ export default function Header({
 
                     {/*---------------Upload Button---------------*/}
                     <button
-                        onClick={showUploadModal}
+                        onClick={() => openModal("uploadOpen")}
                         className="header-desktop-upload-btn"
                     >
                         <Upload className="header-btn-icon"/>
@@ -114,7 +117,7 @@ export default function Header({
                     </button>
 
                     <button
-                        onClick={showUploadModal}
+                        onClick={() => openModal("uploadOpen")}
                         className="header-mobile-upload-btn"
                     >
                         <Upload className="header-mobile-icon"/>

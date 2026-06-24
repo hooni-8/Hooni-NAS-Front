@@ -1,48 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import {useOutletContext, useParams} from "react-router-dom";
+import React from 'react';
+import { useOutletContext } from "react-router-dom";
 import { useFileUpload } from "@hooks/useFileUpload";
-
-import * as gateway from "@components/common/gateway/Gateway";
 
 import FileGrid from '@pages/components/file/FileGrid';
 import MobileNav from '@layout/MobileNav';
-import UploadModal from '@pages/components/modal/UploadModal';
-import UploadProgressBar from "@pages/components/loding/UploadProgressBar";
 
 import "@styles/pages/Home.scss"
 
 export default function Main() {
 
-    const folderId = useParams();
+    const { selectedCategory, searchQuery, viewMode, setIsUploadModalOpen } = useOutletContext();
+    const { uploadingFiles } = useFileUpload();
 
-    const { selectedCategory, searchQuery, viewMode, isUploadModalOpen, setIsUploadModalOpen, showUploadModal } = useOutletContext();
-    const { setQueue, pendingToReadyUpdateFile, pendingFiles, readyFiles, uploadingFiles, processQueue } = useFileUpload();
-
-    const [progressBarOpen, setProgressBarOpen] = useState(false);
-
-    const [rendering, setRendering] = useState(false);
-
-    const showProgressBar = () => {
-        setProgressBarOpen(!progressBarOpen);
-    }
-
-    const handleUpload = () => {
-        showUploadModal();
-        if (!progressBarOpen) showProgressBar();
-
-        pendingToReadyUpdateFile();
-        setQueue(prev => [...prev, ...pendingFiles])
-
-        setRendering(true);
-    };
-
-    // readyFiles 변경 감지
-    useEffect(() => {
-        if (rendering && readyFiles.length > 0) {
-            processQueue(folderId);
-            setRendering(false);
-        }
-    }, [readyFiles, rendering]);
 
     return (
         <div className="storage-layout">
@@ -55,22 +24,9 @@ export default function Main() {
 
                 <MobileNav
                     onUploadClick={() => setIsUploadModalOpen(true)}
-                    progressBarOpen={showProgressBar}
                     uploadingCount={uploadingFiles.length}
                 />
             </div>
-
-            {isUploadModalOpen && (
-                <UploadModal
-                    showUploadModal={showUploadModal}
-                    handleUpload={handleUpload}
-                    pendingFiles={pendingFiles}
-                />
-            )}
-
-            {progressBarOpen && (
-                <UploadProgressBar />
-            )}
         </div>
     );
 }

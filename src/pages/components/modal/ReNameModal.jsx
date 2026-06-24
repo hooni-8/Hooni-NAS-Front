@@ -1,44 +1,33 @@
-import { useState } from 'react';
-import { useParams } from "react-router-dom";
+import {useEffect, useState} from 'react';
 
-import { useModal } from "@hooks/useModal";
+import { useFileControl } from "@hooks/useFileControl"
 
-import * as gateway from "@components/common/gateway/Gateway";
-
-import { X, Folder } from 'lucide-react';
+import { X, FolderPen, FilePen } from 'lucide-react';
 import "@styles/pages/components/modal/CreateFolderModal.scss"
 
-export default function CreateFolderModal({ fetchFileList }) {
+export default function ReNameModal({ selectedFile, handleRenameAfter, closeReNameModal }) {
 
-    const { folderId } = useParams();
+    const { reNameFile } = useFileControl();
 
-    const { closeModal } = useModal();
-
-    const [folderName, setFolderName] = useState('');
+    const [changeName, setChangeName] = useState('');
     const [isCreating, setIsCreating] = useState(false);
 
-    const handleCreate = async () => {
-        if (!folderName.trim()) {
-            alert("폴더명을 입력해주세요");
-            return;
-        }
+    const Icon = selectedFile.type === "FOLDER" ? FolderPen : FilePen;
 
-        setIsCreating(true);
+    useEffect(() => {
+        setChangeName(selectedFile.itemName);
+    }, []);
 
-        const payload = {
-            folderName: folderName,
-            folderId: folderId
-        }
+    const handleRenameSuccess = (fileId, changeName) => {
+        handleRenameAfter(fileId, changeName);
+        closeReNameModal();
+    };
 
+    const handleRename = async () => {
         try {
-            const response = await gateway.post("/nas/api/v1/folder/create", payload);
+            setIsCreating(true);
 
-            if (response.status === 200 && response.code === "0000") {
-                closeModal("createFolder");
-                fetchFileList();
-            }
-        } catch (e) {
-            console.error(e);
+            await reNameFile(selectedFile, changeName, handleRenameSuccess);
         } finally {
             setIsCreating(false);
         }
@@ -48,9 +37,9 @@ export default function CreateFolderModal({ fetchFileList }) {
         <div className="create-folder-modal-overlay">
             <div className="create-folder-modal">
                 <div className="create-folder-header">
-                    <h2 className="create-folder-title">새 폴더 만들기</h2>
+                    <h2 className="create-folder-title">파일명 변경</h2>
                     <button
-                        onClick={() => closeModal("createFolder")}
+                        onClick={closeReNameModal}
                         className="create-folder-close-btn"
                     >
                         <X className="create-folder-close-icon" />
@@ -60,18 +49,18 @@ export default function CreateFolderModal({ fetchFileList }) {
                 <div className="create-folder-content">
                     <div className="create-folder-field">
                         <div className="create-folder-input-wrapper">
-                            <Folder className="create-folder-input-icon" />
+                            <Icon className="create-folder-input-icon" />
                             <input
                                 id="folderName"
                                 type="text"
-                                value={folderName}
-                                onChange={(e) => setFolderName(e.target.value)}
+                                value={changeName}
+                                onChange={(e) => setChangeName(e.target.value)}
                                 onKeyDown={(e) => {
                                     if (e.key === "Enter") {
-                                        handleCreate();
+                                        handleRename();
                                     }
                                 }}
-                                placeholder="폴더 이름을 입력하세요"
+                                placeholder="변경할 이름을 입력하세요"
                                 autoFocus
                                 required
                                 className="create-folder-input"
@@ -82,26 +71,23 @@ export default function CreateFolderModal({ fetchFileList }) {
                     <div className="create-folder-actions">
                         <button
                             type="button"
-                            onClick={() => closeModal("createFolder")}
+                            onClick={closeReNameModal}
                             className="create-folder-cancel-btn"
                         >
                             취소
                         </button>
                         <button
                             type="submit"
-                            disabled={!folderName.trim() || isCreating}
+                            disabled={!changeName.trim() || isCreating || selectedFile.itemName === changeName}
                             className="create-folder-submit-btn"
                         >
                             {isCreating ? (
                                 <>
                                     <div className="create-folder-spinner"></div>
-                                    <span>생성 중...</span>
+                                    <span>변경 중...</span>
                                 </>
                             ) : (
-                                <>
-                                    <Folder className="create-folder-submit-icon" />
-                                    <span onClick={handleCreate}>폴더 만들기</span>
-                                </>
+                                <span onClick={handleRename}>변경</span>
                             )}
                         </button>
                     </div>

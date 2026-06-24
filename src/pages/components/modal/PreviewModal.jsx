@@ -3,6 +3,9 @@ import { useParams } from "react-router-dom";
 
 import * as gateway from "@components/common/gateway/Gateway";
 
+/* Hooks */
+import { useFileControl } from "@hooks/useFileControl"
+
 import "@styles/pages/components/modal/PreviewModal.scss"
 import { X, Download, Share2, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -10,9 +13,11 @@ const baseUrl = process.env.REACT_APP_API_GATEWAY;
 
 const previewCache = new Map();
 
-export default function PreviewModal({ closePreviewModal, selectedFile, file, onClose, onPrevious, onNext, hasPrevious = true, hasNext = true }) {
+export default function PreviewModal({ closePreviewModal, selectedFile, fetchFileList, onPrevious, onNext, hasPrevious = true, hasNext = true }) {
 
     const { folderId } = useParams();
+
+    const { deleteFile } = useFileControl();
 
     const [previewUrl, setPreviewUrl] = useState(null);
     const [previewError, setPreviewError] = useState(null);
@@ -42,6 +47,13 @@ export default function PreviewModal({ closePreviewModal, selectedFile, file, on
 
         fetchPreview();
     }, [selectedFile]);
+
+    const handleDeleteFile = () => {
+        deleteFile(selectedFile, () => {
+            closePreviewModal();
+            fetchFileList();
+        });
+    }
 
     const renderPreview = () => {
         switch (selectedFile.type) {
@@ -153,7 +165,7 @@ export default function PreviewModal({ closePreviewModal, selectedFile, file, on
                 {/*    <Share2 className="file-preview-action-icon" />*/}
                 {/*    <span className="file-preview-action-text">공유</span>*/}
                 {/*</button>*/}
-                <button className="file-preview-action-btn file-preview-action-btn-delete">
+                <button className="file-preview-action-btn file-preview-action-btn-delete" onClick={() => handleDeleteFile()}>
                     <Trash2 className="file-preview-action-icon" />
                     <span className="file-preview-action-text">삭제</span>
                 </button>
