@@ -1,6 +1,5 @@
 import React from 'react';
 import { useOutletContext } from "react-router-dom";
-import { useFileUpload } from "@hooks/useFileUpload";
 
 import FileGrid from '@pages/components/file/FileGrid';
 import MobileNav from '@layout/MobileNav';
@@ -9,8 +8,7 @@ import "@styles/pages/Home.scss"
 
 export default function Main() {
 
-    const { selectedCategory, searchQuery, viewMode, setIsUploadModalOpen } = useOutletContext();
-    const { uploadingFiles } = useFileUpload();
+    const { selectedCategory, searchQuery, viewMode } = useOutletContext();
 
 
     return (
@@ -22,10 +20,7 @@ export default function Main() {
                     viewMode={viewMode}
                 />
 
-                <MobileNav
-                    onUploadClick={() => setIsUploadModalOpen(true)}
-                    uploadingCount={uploadingFiles.length}
-                />
+                <MobileNav />
             </div>
         </div>
     );

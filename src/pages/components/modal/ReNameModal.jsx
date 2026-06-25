@@ -12,7 +12,7 @@ export default function ReNameModal({ selectedFile, handleRenameAfter, closeReNa
     const [changeName, setChangeName] = useState('');
     const [isCreating, setIsCreating] = useState(false);
 
-    const Icon = selectedFile.type === "FOLDER" ? FolderPen : FilePen;
+    const Icon = selectedFile.itemType === "FOLDER" ? FolderPen : FilePen;
 
     useEffect(() => {
         setChangeName(selectedFile.itemName);

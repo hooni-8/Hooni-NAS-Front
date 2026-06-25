@@ -76,7 +76,9 @@ export default function Sidebar ({ selectedCategory, onCategoryChange, onClose }
                     {/*    <HardDrive className="sidebar-logo-icon"/>*/}
                     {/*</div>*/}
                     <div className="sidebar-logo">
-                        <img src={Logo}/>
+                        <img src={Logo}
+                             style={{cursor:"pointer"}}
+                             onClick={() => navigate("/")}/>
                     </div>
                     {/*<div className="sidebar-title-section">*/}
                     {/*    <h1 className="sidebar-title">My Storage</h1>*/}

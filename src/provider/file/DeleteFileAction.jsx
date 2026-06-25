@@ -44,14 +44,14 @@ export const deleteFileAction = ( file, callback, openConfirm, openAlert ) => {
 
     const deleteFileAfter = () =>
         executeDelete("/nas/api/v1/file/delete",{
-                fileId: file.id,
+                fileId: file.itemId,
                 folderId: file.parentId
             }
         );
 
     const deleteFolderAfter = () =>
         executeDelete("/nas/api/v1/folder/delete",{
-                folderId: file.id,
+                folderId: file.itemId,
                 parentFolderId: file.parentId
             }
         );
@@ -59,8 +59,8 @@ export const deleteFileAction = ( file, callback, openConfirm, openAlert ) => {
     openConfirm({
         type: "error",
         title: DELETE_MESSAGE.title,
-        message: file.type === "FOLDER" ? DELETE_MESSAGE.folder : DELETE_MESSAGE.file,
+        message: file.itemType === "FOLDER" ? DELETE_MESSAGE.folder : DELETE_MESSAGE.file,
         confirmBtn: DELETE_MESSAGE.confirmBtn,
-        onConfirm: file.type === "FOLDER" ? deleteFolderAfter : deleteFileAfter
+        onConfirm: file.itemType === "FOLDER" ? deleteFolderAfter : deleteFileAfter
     });
 };

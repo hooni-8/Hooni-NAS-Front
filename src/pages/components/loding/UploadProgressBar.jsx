@@ -1,18 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { X, ChevronDown, ChevronUp, CheckCircle2, AlertCircle, File as FileIcon } from 'lucide-react';
 import "@styles/pages/components/loding/UploadProgressBar.scss";
-import { useFileUpload } from "@hooks/useFileUpload";
 
-export default function UploadProgressBar({ onCancel, onClose, forceExpanded }) {
+import { useFileUpload } from "@hooks/useFileUpload";
+import { useModal } from "@hooks/useModal";
+
+export default function UploadProgressBar() {
     const [isExpanded, setIsExpanded] = useState(true);
     const { files, successFiles } = useFileUpload();
-
-    // forceExpanded가 true로 변경되면 펼침
-    useEffect(() => {
-        if (forceExpanded) {
-            setIsExpanded(true);
-        }
-    }, [forceExpanded]);
+    const { closeModal } = useModal();
 
     if (!files || files.length === 0) return null;
 
@@ -46,15 +42,14 @@ export default function UploadProgressBar({ onCancel, onClose, forceExpanded }) 
                     ) : (
                         <ChevronUp className="chevron-icon" />
                     )}
-                    {allComplete && onClose && (
+                    {allComplete && (
                         <button
                             onClick={(e) => {
                                 e.stopPropagation();
-                                onClose();
                             }}
                             className="close-progress-button"
                         >
-                            <X className="close-icon" />
+                            <X className="close-icon" onClick={() => closeModal("progressBarOpen")} />
                         </button>
                     )}
                 </div>
@@ -83,9 +78,8 @@ export default function UploadProgressBar({ onCancel, onClose, forceExpanded }) 
                                 <div className="progress-file-info">
                                     <div className="progress-file-header">
                                         <p className="progress-file-name">{file.name}</p>
-                                        {file.status === 'UPLOADING' && onCancel && (
+                                        {file.status === 'UPLOADING' && (
                                             <button
-                                                onClick={() => onCancel(file.id)}
                                                 className="cancel-upload-button"
                                             >
                                                 <X className="cancel-icon" />

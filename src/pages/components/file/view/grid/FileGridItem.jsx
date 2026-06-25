@@ -23,19 +23,19 @@ const FileGridItem = React.memo(({
     const [thumbError, setThumbError] = useState(false);
 
     useEffect(() => {
-        if (file.type !== "image" && file.type !== "video") return;
+        if (file.itemType !== "image" && file.itemType !== "video") return;
 
-        if (thumbnailCache.has(file.id)) {
-            setThumbUrl(thumbnailCache.get(file.id));
+        if (thumbnailCache.has(file.itemId)) {
+            setThumbUrl(thumbnailCache.get(file.itemId));
             return;
         }
 
         const fetchThumbnail = async () => {
             try {
-                const response = await gateway.getBlob( `/nas/api/v1/file/thumbnail/${file.id}`, {folderId: folderInfo.folderId} );
+                const response = await gateway.getBlob( `/nas/api/v1/file/thumbnail/${file.itemId}`, {folderId: folderInfo.folderId} );
 
                 const url = URL.createObjectURL(response.data);
-                thumbnailCache.set(file.id, url);
+                thumbnailCache.set(file.itemId, url);
                 setThumbUrl(url);
             } catch (e) {
                 setThumbError(true);
@@ -43,15 +43,15 @@ const FileGridItem = React.memo(({
         };
 
         fetchThumbnail();
-    }, [file.id]);
+    }, [file.itemId]);
 
     return (
         <div className="file-card-wrapper group">
             <div className="file-card" onDoubleClick={() => showPreviewModal(file)} >
                 <div className="file-card-relative">
                     <div className={`file-card-icon-container ${format.getFileColor(file)}`}>
-                        {(file.type === "image" || file.type === "video") && thumbUrl && !thumbError ? (
-                            <img src={thumbUrl} alt={file.name} loading="lazy" />
+                        {(file.itemType === "image" || file.itemType === "video") && thumbUrl && !thumbError ? (
+                            <img src={thumbUrl} alt={file.itemName} loading="lazy" />
                         ) : (
                             format.getFileIcon(file)
                         )}
@@ -77,12 +77,10 @@ const FileGridItem = React.memo(({
 
                 </div>
                 <div className="file-card-info">
-                    <h3 className="file-card-name">{file.name}</h3>
+                    <h3 className="file-card-name">{file.itemName}</h3>
                     <div className="file-card-meta">
-                        <span>{file.size}</span>
-                        <span className="file-card-date">
-                            {file.dateText}
-                        </span>
+                        <span>{file.itemSize}</span>
+                        <span>{file.itemDate}</span>
                     </div>
                 </div>
             </div>

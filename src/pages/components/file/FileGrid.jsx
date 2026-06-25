@@ -35,7 +35,7 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
 
     // 미리보기 및 폴더 이동
     const showPreviewModal = (file) => {
-        if (file.type === "FOLDER") {
+        if (file.itemType === "FOLDER") {
             navigate(`/main/${file.itemId}`);
         } else {
             setSelectedFile(file);
@@ -65,7 +65,7 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
     const handleRenameAfter = (fileId, changeName) => {
         setFileList(prev =>
             prev.map(item =>
-                item.id === fileId ? { ...item, name: changeName } : item
+                item.itemId === fileId ? { ...item, itemName: changeName } : item
             )
         );
     };
@@ -110,13 +110,11 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
             const response = await gateway.post("/nas/api/v1/file/list", { folderId: folderId });
 
             if (response.status === 200 && response.code === "0000") {
-                const convertedFiles = response.data.file.map(file => ({
-                    ...file,
-                    id: file.itemId,
-                    name: file.itemName,
-                    size: file.itemType !== 'FOLDER' && format.formatBytes(file.itemSize),
-                    type: file.itemType === 'FOLDER' ? 'FOLDER' : format.getFileType(file.extension),
-                    dateText: new Date(file.lastModifiedAt).toLocaleDateString('ko-KR'),
+                const convertedFiles = response.data.file.map(item => ({
+                    ...item,
+                    itemSize: item.itemType !== 'FOLDER' && format.formatBytes(item.itemSize),
+                    itemType: item.itemType === 'FOLDER' ? 'FOLDER' : format.getFileType(item.extension),
+                    itemDate: format.formatDate(item.lastModifiedAt),
                 }));
 
                 setFolderInfo(response.data.folderInfo);
@@ -130,7 +128,7 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
     };
 
     const filteredFiles = fileList.filter(file => {
-        const matchesSearch = file.name.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesSearch = file.itemName.toLowerCase().includes(searchQuery.toLowerCase());
         return format.matchesCategory(matchesSearch, selectedCategory, file);
     });
 

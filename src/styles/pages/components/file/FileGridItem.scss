@@ -290,14 +290,3 @@
     font-size: 0.875rem;
   }
 }
-
-/* File Card Date */
-.file-card-date {
-  display: none;
-}
-
-@media (min-width: 640px) {
-  .file-card-date {
-    display: inline;
-  }
-}

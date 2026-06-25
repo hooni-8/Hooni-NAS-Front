@@ -25,20 +25,20 @@ export default function PreviewModal({ closePreviewModal, selectedFile, fetchFil
     // 여기에서 미리보기 가져오기
     useEffect(() => {
 
-        if (previewCache.has(selectedFile.id)) {
-            setPreviewUrl(previewCache.get(selectedFile.id));
+        if (previewCache.has(selectedFile.itemId)) {
+            setPreviewUrl(previewCache.get(selectedFile.itemId));
             return;
         }
 
         const fetchPreview = async () => {
             try {
-                if (selectedFile.type === 'video') {
-                    const response = await gateway.get(`/video-entry/${selectedFile.id}`);
+                if (selectedFile.itemType === 'video') {
+                    const response = await gateway.get(`/video-entry/${selectedFile.itemId}`);
 
                     setPreviewUrl(baseUrl + response.url + `&folderId=${folderId}`);
 
                 } else {
-                    setPreviewUrl(baseUrl + `/nas/api/v1/file/preview/${selectedFile.id}?folderId=${folderId}`);
+                    setPreviewUrl(baseUrl + `/nas/api/v1/file/preview/${selectedFile.itemId}?folderId=${folderId}`);
                 }
             } catch {
                 setPreviewError(true);
@@ -56,13 +56,13 @@ export default function PreviewModal({ closePreviewModal, selectedFile, fetchFil
     }
 
     const renderPreview = () => {
-        switch (selectedFile.type) {
+        switch (selectedFile.itemType) {
             case 'image':
                 return (
                     <div className="file-preview-container">
                         <img
                             src={previewUrl}
-                            alt={selectedFile.name}
+                            alt={selectedFile.itemName}
                             className="file-preview"
                         />
                     </div>
@@ -72,7 +72,7 @@ export default function PreviewModal({ closePreviewModal, selectedFile, fetchFil
                     <div className="file-preview-container">
                         <video
                             src={previewUrl}
-                            alt={selectedFile.name}
+                            alt={selectedFile.itemName}
                             controls
                             autoPlay
                             className="file-preview"
@@ -116,10 +116,10 @@ export default function PreviewModal({ closePreviewModal, selectedFile, fetchFil
             {/* Header */}
             <div className="file-preview-modal-header">
                 <div className="file-preview-modal-info">
-                    <h3 className="file-preview-modal-title">{selectedFile.name}</h3>
-                    {selectedFile.size && selectedFile.lastModifiedAt && (
+                    <h3 className="file-preview-modal-title">{selectedFile.itemName}</h3>
+                    {selectedFile.itemSize && selectedFile.lastModifiedAt && (
                         <p className="file-preview-modal-meta">
-                            {selectedFile.size} • {selectedFile.lastModifiedAt}
+                            {selectedFile.itemSize} • {selectedFile.lastModifiedAt}
                         </p>
                     )}
                 </div>

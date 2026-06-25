@@ -97,10 +97,7 @@ export default function UploadModal({ closeUploadModal, handleUpload, pendingFil
                             <div className="upload-files">
                                 {pendingFiles.map(file => (
                                     <div key={file.id} className="upload-file-item">
-                                        <FileIcon className="upload-file-item-icon" />
-                                        <ImageIcon className="upload-file-item-icon" />
-                                        <VideoIcon className="upload-file-item-icon" />
-                                        <FileAudioIcon className="upload-file-item-icon" />
+                                        {format.getUploadFileIcon(file)}
                                         <div className="upload-file-item-info">
                                             <p className="upload-file-item-name">{file.name}</p>
                                             <p className="upload-file-item-size">{file.size}</p>

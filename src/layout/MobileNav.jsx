@@ -1,9 +1,16 @@
 import { Home, Search, Upload, User, List } from 'lucide-react';
 
+import { useFileUpload } from "@hooks/useFileUpload";
+import { useModal } from "@hooks/useModal";
+
 import "@styles/pages/layout/MobileNav.scss";
 
 export default function MobileNav({ onUploadClick, progressBarOpen, uploadingCount }) {
-    const hasUploading = uploadingCount > 0;
+
+    const { openModal } = useModal();
+    const { uploadingFiles } = useFileUpload();
+
+    const hasUploading = uploadingFiles.length > 0;
 
     return (
         <nav className="mobile-nav">
@@ -19,7 +26,7 @@ export default function MobileNav({ onUploadClick, progressBarOpen, uploadingCou
                 </button>
 
                 <button
-                    onClick={onUploadClick}
+                    onClick={() => openModal("uploadOpen")}
                     className="mobile-nav-upload-button"
                 >
                     <div className="mobile-nav-upload-circle">
@@ -33,7 +40,7 @@ export default function MobileNav({ onUploadClick, progressBarOpen, uploadingCou
                 </button>
 
                 <button
-                    onClick={progressBarOpen}
+                    onClick={() => openModal("progressBarOpen")}
                     className="mobile-nav-item"
                 >
                     <List className="mobile-nav-icon"/>

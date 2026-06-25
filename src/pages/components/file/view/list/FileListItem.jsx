@@ -23,23 +23,27 @@ const FileListItem = memo(({
                         {format.getListFileIcon(file)}
                     </div>
                     <div className="file-name-info">
-                        <span className="file-name">{file.name}</span>
+                        <span className="file-name">{file.itemName}</span>
                         <div className="file-meta-mobile">
-                            <span>{file.size}</span>
-                            <span>•</span>
+                            {file.itemSize && (
+                                <>
+                                    <span>{file.itemSize}</span>
+                                    <span>•</span>
+                                </>
+                                )}
                             <span>
-                                {file.dateText}
+                                {file.itemDate}
                             </span>
                         </div>
                     </div>
                 </div>
 
                 <div className="file-item-size">
-                    {file.size}
+                    {file.itemSize}
                 </div>
 
                 <div className="file-item-date">
-                    {file.dateText}
+                    {file.itemDate}
                 </div>
 
                 <div className="file-item-action">

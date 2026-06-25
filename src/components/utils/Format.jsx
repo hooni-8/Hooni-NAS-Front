@@ -1,5 +1,15 @@
 import React from "react";
-import {FileText, Folder, Image, Music, Video} from "lucide-react";
+import {
+    File as FileIcon,
+    FileText,
+    Folder,
+    Image,
+    ImageIcon,
+    Music,
+    Video,
+    VideoIcon,
+    MusicIcon
+} from "lucide-react";
 
 // 용량 포맷 유틸 함수 (JavaScript)
 export const formatBytes = (bytes) => {
@@ -21,8 +31,9 @@ export const usedPercent = (total, usable) => {
 }
 
 // 타입 구분
-export const getFileType = (filename) => {
-    const ext = filename.split('.').pop()?.toLowerCase();
+export const getFileType = (extension) => {
+    const ext = extension.split('.').pop()?.toLowerCase();
+
     if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext || '')) return 'image';
     if (['mp4', 'avi', 'mov', 'wmv'].includes(ext || '')) return 'video';
     if (['mp3', 'wav', 'ogg', 'm4a'].includes(ext || '')) return 'audio';
@@ -32,7 +43,7 @@ export const getFileType = (filename) => {
 
 // 파일 컬러
 export const getFileColor = (file) => {
-    switch (file.type) {
+    switch (file.itemType) {
         case 'FOLDER': return 'file-card-bg-folder';
         case 'document': return 'file-card-bg-document';
         case 'image': return 'file-card-bg-image';
@@ -44,7 +55,7 @@ export const getFileColor = (file) => {
 
 // 파일 아이콘
 export const getFileIcon = (file) => {
-    switch (file.type) {
+    switch (file.itemType) {
         case 'FOLDER': return <Folder className="card-icon folder-icon" />;
         case 'document': return <FileText className="card-icon document-icon" />;
         case 'image': return <Image className="card-icon image-icon" />;
@@ -54,20 +65,31 @@ export const getFileIcon = (file) => {
     }
 };
 
+export const getUploadFileIcon = (file) => {
+    switch (file.type) {
+        case 'document': return <FileIcon className="upload-file-item-icon" />;
+        case 'image': return <ImageIcon className="upload-file-item-icon" />;
+        case 'video': return <VideoIcon className="upload-file-item-icon" />;
+        case 'audio': return <MusicIcon className="upload-file-item-icon" />;
+
+        default: return <FileText className="upload-file-item-icon" />;
+    }
+}
+
 export const matchesCategory = (matchesSearch, selectedCategory, file) => {
     const matchesCategory =
         selectedCategory === 'all' ||
-        (selectedCategory === 'folders' && file.type === 'folder') ||
-        (selectedCategory === 'images' && file.type === 'image') ||
-        (selectedCategory === 'documents' && file.type === 'document') ||
-        (selectedCategory === 'videos' && file.type === 'video') ||
-        (selectedCategory === 'audio' && file.type === 'audio');
+        (selectedCategory === 'folders' && file.itemType === 'FOLDER') ||
+        (selectedCategory === 'images' && file.itemType === 'image') ||
+        (selectedCategory === 'documents' && file.itemType === 'document') ||
+        (selectedCategory === 'videos' && file.itemType === 'video') ||
+        (selectedCategory === 'audio' && file.itemType === 'audio');
 
     return matchesSearch && matchesCategory;
 }
 
 const getColorClass = (file) => {
-    switch (file.type) {
+    switch (file.itemType) {
         case 'FOLDER': return { color: '#3b82f6' };
         case 'document': return { color: '#f97316' };
         case 'image': return { color: '#22c55e' };
@@ -84,7 +106,7 @@ export const getListFileIcon = (file) => {
         style: getColorClass(file)
     };
 
-    switch (file.type) {
+    switch (file.itemType) {
         case 'FOLDER': return <Folder {...iconProps} />;
         case 'document': return <FileText {...iconProps} />;
         case 'image': return <Image {...iconProps} />;
@@ -93,3 +115,12 @@ export const getListFileIcon = (file) => {
         default: return <FileText {...iconProps} />;
     }
 };
+
+// 날짜 Format (2026.06.25)
+export const formatDate = (dateString) => {
+    const date = new Date(dateString);
+
+    return `${date.getFullYear()}.` +
+        `${String(date.getMonth() + 1).padStart(2, '0')}.` +
+        `${String(date.getDate()).padStart(2, '0')}`;
+}

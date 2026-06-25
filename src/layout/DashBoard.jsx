@@ -24,7 +24,7 @@ export default function DashBoard() {
                 <div className="hidden lg:block">
                     <Sidebar
                         selectedCategory={selectedCategory}
-                        onCategoryChange={setSelectedCategory}
+                        onCategoryChange={(c) => setSelectedCategory(c)}
                     />
                 </div>
 
