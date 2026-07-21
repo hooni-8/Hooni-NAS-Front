@@ -8,7 +8,8 @@ import {
     Music,
     Video,
     VideoIcon,
-    MusicIcon
+    MusicIcon,
+    FileArchive
 } from "lucide-react";
 
 // 용량 포맷 유틸 함수 (JavaScript)
@@ -38,6 +39,7 @@ export const getFileType = (extension) => {
     if (['mp4', 'avi', 'mov', 'wmv'].includes(ext || '')) return 'video';
     if (['mp3', 'wav', 'ogg', 'm4a'].includes(ext || '')) return 'audio';
     if (['pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx'].includes(ext || '')) return 'document';
+    if (['zip', 'tar', '7z'].includes(ext || '')) return 'zip';
     return 'document';
 };
 
@@ -49,6 +51,7 @@ export const getFileColor = (file) => {
         case 'image': return 'file-card-bg-image';
         case 'video': return 'file-card-bg-video';
         case 'audio': return 'file-card-bg-audio';
+        case 'zip': return 'file-card-bg-zip'
         default: return 'file-card-bg-default';
     }
 };
@@ -61,6 +64,7 @@ export const getFileIcon = (file) => {
         case 'image': return <Image className="card-icon image-icon" />;
         case 'video': return <Video className="card-icon video-icon" />;
         case 'audio': return <Music className="card-icon audio-icon" />;
+        case 'zip': return <FileArchive className="card-icon zip-icon" />;
         default: return <FileText className="card-icon default-icon" />;
     }
 };
@@ -71,7 +75,7 @@ export const getUploadFileIcon = (file) => {
         case 'image': return <ImageIcon className="upload-file-item-icon" />;
         case 'video': return <VideoIcon className="upload-file-item-icon" />;
         case 'audio': return <MusicIcon className="upload-file-item-icon" />;
-
+        case 'zip': return <FileArchive className="upload-file-item-icon" />;
         default: return <FileText className="upload-file-item-icon" />;
     }
 }
@@ -95,6 +99,7 @@ const getColorClass = (file) => {
         case 'image': return { color: '#22c55e' };
         case 'video': return { color: '#a855f7' };
         case 'audio': return { color: '#ec4899' };
+        case 'zip': return {color: '#F59E0B'};
         default: return { color: '#6b7280' };
     }
 }
@@ -112,6 +117,7 @@ export const getListFileIcon = (file) => {
         case 'image': return <Image {...iconProps} />;
         case 'video': return <Video {...iconProps} />;
         case 'audio': return <Music {...iconProps} />;
+        case 'zip': return <FileArchive {...iconProps} />;
         default: return <FileText {...iconProps} />;
     }
 };
