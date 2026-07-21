@@ -1,12 +1,14 @@
 import React from "react";
 
-import { useFileControl } from "@hooks/useFileControl"
+import { useFileControl } from "@hooks/useFileControl";
+import { useFileDownload } from "@hooks/useFileDownload";
 
 import {Download, Share2, Star, Trash2, FilePen} from "lucide-react";
 
 export default function MenuDropdown({ file, setShowMenu, showReNameModal, fetchFileList }) {
 
     const { deleteFile } = useFileControl();
+    const { singleDownload } = useFileDownload();
 
     const handleDeleteFile = (file) => {
         deleteFile(file, fetchFileList);
@@ -21,6 +23,7 @@ export default function MenuDropdown({ file, setShowMenu, showReNameModal, fetch
     }
 
     const handleDownload = (file) => {
+        singleDownload(file);
 
         setShowMenu(false);
     }

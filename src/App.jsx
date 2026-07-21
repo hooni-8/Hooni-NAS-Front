@@ -7,6 +7,7 @@ import { FileUploadProvider } from "@provider/FileUploadProvider";
 import { AuthProvider } from "@provider/AuthProvider";
 import { ModalProvider } from "@provider/ModalProvider";
 import { FileControlProvider } from "@provider/FileControlProvider";
+import { FileDownloadProvider } from "@provider/FileDownloadProvider";
 
 import CustomAlert from "@components/common/modal/CustomAlert";
 import CustomConfirm from "@components/common/modal/CustomConfirm";
@@ -18,11 +19,13 @@ function App() {
             <ModalProvider>
                 <AuthProvider>
                     <FileUploadProvider>
-                        <FileControlProvider>
-                            <Router />
-                            <CustomAlert />
-                            <CustomConfirm />
-                        </FileControlProvider>
+                        <FileDownloadProvider>
+                            <FileControlProvider>
+                                <Router />
+                                <CustomAlert />
+                                <CustomConfirm />
+                            </FileControlProvider>
+                        </FileDownloadProvider>
                     </FileUploadProvider>
                 </AuthProvider>
             </ModalProvider>

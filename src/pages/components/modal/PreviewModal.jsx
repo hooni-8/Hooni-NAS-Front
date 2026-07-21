@@ -5,6 +5,7 @@ import * as gateway from "@components/common/gateway/Gateway";
 
 /* Hooks */
 import { useFileControl } from "@hooks/useFileControl"
+import { useFileDownload } from "@hooks/useFileDownload";
 
 import "@styles/pages/components/modal/PreviewModal.scss"
 import { X, Download, Share2, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -18,6 +19,7 @@ export default function PreviewModal({ closePreviewModal, selectedFile, fetchFil
     const { folderId } = useParams();
 
     const { deleteFile } = useFileControl();
+    const { singleDownload } = useFileDownload();
 
     const [previewUrl, setPreviewUrl] = useState(null);
     const [previewError, setPreviewError] = useState(null);
@@ -53,6 +55,10 @@ export default function PreviewModal({ closePreviewModal, selectedFile, fetchFil
             closePreviewModal();
             fetchFileList();
         });
+    }
+
+    const handleDownloadFile = () => {
+        singleDownload(selectedFile);
     }
 
     const renderPreview = () => {
@@ -157,7 +163,7 @@ export default function PreviewModal({ closePreviewModal, selectedFile, fetchFil
 
             {/* Footer Actions */}
             <div className="file-preview-modal-footer">
-                <button className="file-preview-action-btn">
+                <button className="file-preview-action-btn" onClick={() => handleDownloadFile()}>
                     <Download className="file-preview-action-icon" />
                     <span className="file-preview-action-text">다운로드</span>
                 </button>
