@@ -4,11 +4,15 @@ import {X, Upload, File as FileIcon, CheckCircle2, ImageIcon, VideoIcon, FileAud
 import "@styles/pages/components/modal/UploadModal.scss";
 import * as format from "@components/utils/Format";
 import { useFileUpload } from "@hooks/useFileUpload";
+import { useModal } from "@hooks/useModal";
+
+const MAX_UPLOAD_FILE_SIZE = 5 * 1024 * 1024 * 1024;
 
 export default function UploadModal({ closeUploadModal, handleUpload, pendingFiles}) {
     const [isDragging, setIsDragging] = useState(false);
 
     const { addFiles } = useFileUpload();
+    const { openAlert } = useModal();
 
     const handleDragOver = (e) => {
         e.preventDefault();
@@ -29,11 +33,28 @@ export default function UploadModal({ closeUploadModal, handleUpload, pendingFil
         if (e.target.files) {
             handleFiles(e.target.files);
         }
+
+        // 같은 파일을 다시 선택해도 change 이벤트가 발생하도록 초기화한다.
+        e.target.value = '';
     };
 
     const handleFiles = (fileList) => {
         const files = Array.from(fileList);
-        const newFiles = files.map(file => ({
+        const rejectedFiles = files.filter(file => file.size > MAX_UPLOAD_FILE_SIZE);
+        const uploadableFiles = files.filter(file => file.size <= MAX_UPLOAD_FILE_SIZE);
+
+        if (rejectedFiles.length > 0) {
+            const fileNames = rejectedFiles.slice(0, 3).map(file => file.name).join(', ');
+            const remainingCount = rejectedFiles.length - 3;
+
+            openAlert({
+                type: 'warning',
+                title: '파일 크기 제한 초과',
+                message: `${fileNames}${remainingCount > 0 ? ` 외 ${remainingCount}개` : ''} 파일은 업로드할 수 없습니다. 파일당 최대 크기는 5GB입니다.`
+            });
+        }
+
+        const newFiles = uploadableFiles.map(file => ({
             id: Math.random().toString(36).substr(2, 9),
             file: file,
             name: file.name,
@@ -44,7 +65,9 @@ export default function UploadModal({ closeUploadModal, handleUpload, pendingFil
             progress: 0
         }));
 
-        addFiles(newFiles);
+        if (newFiles.length > 0) {
+            addFiles(newFiles);
+        }
     };
 
     return (

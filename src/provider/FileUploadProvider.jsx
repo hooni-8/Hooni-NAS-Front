@@ -59,7 +59,9 @@ export const FileUploadProvider = ({ children }) => {
         try {
             const response = await gateway.post("/nas/api/v1/upload/progress", formData, {
                 onUploadProgress: (e) => {
-                    const percent = e.total ? Math.round((e.loaded * 100) / e.total) : 0;
+                    // 브라우저 전송 완료와 서버의 파일 이동·DB 저장 완료는 다르다.
+                    // 서버 성공 응답을 받기 전까지는 99%까지만 표시한다.
+                    const percent = e.total ? Math.min(Math.round((e.loaded * 100) / e.total), 99) : 0;
 
                     // 파일별 퍼센트 업데이트
                     updateFile(fileItem.id, { progress: percent });

@@ -78,7 +78,7 @@ export default function Sidebar ({ selectedCategory, onCategoryChange, onClose }
                     <div className="sidebar-logo">
                         <img src={Logo}
                              style={{cursor:"pointer"}}
-                             onClick={() => navigate("/")}/>
+                             onClick={() => navigate("/main")}/>
                     </div>
                     {/*<div className="sidebar-title-section">*/}
                     {/*    <h1 className="sidebar-title">My Storage</h1>*/}

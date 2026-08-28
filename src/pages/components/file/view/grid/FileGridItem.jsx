@@ -7,8 +7,6 @@ import MenuDropdown from "@pages/components/file/MenuDropdown";
 import "@styles/pages/components/file/FileGridItem.scss"
 import { MoreVertical } from 'lucide-react';
 
-const thumbnailCache = new Map();
-
 const FileGridItem = React.memo(({
                                      file,
                                      folderInfo,
@@ -23,27 +21,47 @@ const FileGridItem = React.memo(({
     const [thumbError, setThumbError] = useState(false);
 
     useEffect(() => {
-        if (file.itemType !== "image" && file.itemType !== "video") return;
-
-        if (thumbnailCache.has(file.itemId)) {
-            setThumbUrl(thumbnailCache.get(file.itemId));
-            return;
+        if (file.itemType !== "image" && file.itemType !== "video") {
+            setThumbUrl(null);
+            setThumbError(false);
+            return undefined;
         }
+
+        let objectUrl = null;
+        let disposed = false;
+        setThumbUrl(null);
+        setThumbError(false);
 
         const fetchThumbnail = async () => {
             try {
                 const response = await gateway.getBlob( `/nas/api/v1/file/thumbnail/${file.itemId}`, {folderId: folderInfo.folderId} );
+                if (!response?.data) {
+                    throw new Error("Thumbnail response is empty");
+                }
 
-                const url = URL.createObjectURL(response.data);
-                thumbnailCache.set(file.itemId, url);
-                setThumbUrl(url);
+                objectUrl = URL.createObjectURL(response.data);
+                if (disposed) {
+                    URL.revokeObjectURL(objectUrl);
+                    return;
+                }
+
+                setThumbUrl(objectUrl);
             } catch (e) {
-                setThumbError(true);
+                if (!disposed) {
+                    setThumbError(true);
+                }
             }
         };
 
         fetchThumbnail();
-    }, [file.itemId]);
+
+        return () => {
+            disposed = true;
+            if (objectUrl) {
+                URL.revokeObjectURL(objectUrl);
+            }
+        };
+    }, [file.itemId, file.itemType, folderInfo.folderId]);
 
     return (
         <div className="file-card-wrapper group">

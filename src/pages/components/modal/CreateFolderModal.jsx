@@ -16,13 +16,17 @@ export default function CreateFolderModal({ fetchFileList }) {
 
     const [folderName, setFolderName] = useState('');
     const [isCreating, setIsCreating] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
-    const handleCreate = async () => {
+    const handleCreate = async (event) => {
+        event?.preventDefault();
+
         if (!folderName.trim()) {
-            alert("폴더명을 입력해주세요");
+            setErrorMessage("폴더 이름을 입력해주세요.");
             return;
         }
 
+        setErrorMessage('');
         setIsCreating(true);
 
         const payload = {
@@ -36,9 +40,12 @@ export default function CreateFolderModal({ fetchFileList }) {
             if (response.status === 200 && response.code === "0000") {
                 closeModal("createFolder");
                 fetchFileList();
+            } else {
+                setErrorMessage("폴더를 만들지 못했습니다. 잠시 후 다시 시도해주세요.");
             }
         } catch (e) {
             console.error(e);
+            setErrorMessage("폴더를 만들지 못했습니다. 네트워크 상태를 확인해주세요.");
         } finally {
             setIsCreating(false);
         }
@@ -57,26 +64,28 @@ export default function CreateFolderModal({ fetchFileList }) {
                     </button>
                 </div>
 
-                <div className="create-folder-content">
+                <form className="create-folder-content" onSubmit={handleCreate}>
                     <div className="create-folder-field">
+                        <label className="create-folder-label" htmlFor="folderName">폴더 이름</label>
                         <div className="create-folder-input-wrapper">
                             <Folder className="create-folder-input-icon" />
                             <input
                                 id="folderName"
                                 type="text"
                                 value={folderName}
-                                onChange={(e) => setFolderName(e.target.value)}
-                                onKeyDown={(e) => {
-                                    if (e.key === "Enter") {
-                                        handleCreate();
-                                    }
+                                onChange={(e) => {
+                                    setFolderName(e.target.value);
+                                    if (errorMessage) setErrorMessage('');
                                 }}
                                 placeholder="폴더 이름을 입력하세요"
                                 autoFocus
                                 required
                                 className="create-folder-input"
+                                aria-invalid={Boolean(errorMessage)}
+                                aria-describedby={errorMessage ? "folder-name-error" : undefined}
                             />
                         </div>
+                        {errorMessage && <p id="folder-name-error" className="create-folder-error" role="alert">{errorMessage}</p>}
                     </div>
 
                     <div className="create-folder-actions">
@@ -100,12 +109,12 @@ export default function CreateFolderModal({ fetchFileList }) {
                             ) : (
                                 <>
                                     <Folder className="create-folder-submit-icon" />
-                                    <span onClick={handleCreate}>폴더 만들기</span>
+                                    <span>폴더 만들기</span>
                                 </>
                             )}
                         </button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     );

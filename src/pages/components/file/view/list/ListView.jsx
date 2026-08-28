@@ -12,7 +12,10 @@ export default function ListView({
                                      showPreviewModal,
                                      showReNameModal,
                                      fetchFileList,
-                                     handleBackFolder
+                                     handleBackFolder,
+                                     hasFiles,
+                                     onUpload,
+                                     onCreateFolder
 }) {
 
     const data = folderInfo && folderInfo.folderId !== folderInfo.parentFolderId ? [{ type: "back" }, ...filteredFiles] : filteredFiles;
@@ -30,6 +33,10 @@ export default function ListView({
                 {filteredFiles.length === 0 ? (
                     <EmptyListView
                         handleBackFolder={handleBackFolder}
+                        canGoBack={folderInfo && folderInfo.folderId !== folderInfo.parentFolderId}
+                        isFiltered={hasFiles}
+                        onUpload={onUpload}
+                        onCreateFolder={onCreateFolder}
                     />
                 ) : (
                     <Virtuoso

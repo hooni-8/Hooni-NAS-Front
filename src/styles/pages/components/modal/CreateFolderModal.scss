@@ -14,7 +14,8 @@
 /* Modal */
 .create-folder-modal {
   background-color: white;
-  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   width: 100%;
   max-width: 28rem;
@@ -38,7 +39,7 @@
 .create-folder-title {
   font-size: 1.125rem;
   color: #111827;
-  font-weight: 500;
+  font-weight: 700;
 }
 
 @media (min-width: 768px) {
@@ -126,6 +127,13 @@
   ring-color: #3b82f6;
   box-shadow: 0 0 0 3px #eff6ff;
   border-color: transparent;
+}
+
+.create-folder-error {
+  margin: 0.55rem 0 0;
+  color: #dc2626;
+  font-size: 0.8rem;
+  line-height: 1.4;
 }
 
 /* Actions */

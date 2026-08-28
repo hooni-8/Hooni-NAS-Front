@@ -10,6 +10,7 @@ import { useModal } from "@hooks/useModal";
 
 import GridView from '@pages/components/file/view/grid/GridView';
 import ListView from '@pages/components/file/view/list/ListView';
+import FolderNotFoundView from '@pages/components/file/FolderNotFoundView';
 
 import PreviewModal from '@pages/components/modal/PreviewModal';
 import ReNameModal from '@pages/components/modal/ReNameModal';
@@ -30,6 +31,7 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
 
     const [folderInfo, setFolderInfo] = useState('');
     const [fileList, setFileList] = useState([]);
+    const [folderNotFound, setFolderNotFound] = useState(false);
 
     const [selectedFile, setSelectedFile] = useState({});
 
@@ -109,15 +111,31 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
         try {
             const response = await gateway.post("/nas/api/v1/file/list", { folderId: folderId });
 
+            if (response.status === 404) {
+                setFolderNotFound(true);
+                setFolderInfo('');
+                setFileList([]);
+                return;
+            }
+
             if (response.status === 200 && response.code === "0000") {
-                const convertedFiles = response.data.file.map(item => ({
+                const folder = response.data?.folderInfo;
+                if (!folder) {
+                    setFolderNotFound(true);
+                    setFolderInfo('');
+                    setFileList([]);
+                    return;
+                }
+
+                const convertedFiles = (response.data.file ?? []).map(item => ({
                     ...item,
                     itemSize: item.itemType !== 'FOLDER' && format.formatBytes(item.itemSize),
                     itemType: item.itemType === 'FOLDER' ? 'FOLDER' : format.getFileType(item.extension),
                     itemDate: format.formatDate(item.lastModifiedAt),
                 }));
 
-                setFolderInfo(response.data.folderInfo);
+                setFolderNotFound(false);
+                setFolderInfo(folder);
                 setFileList(convertedFiles);
             }
         } catch (e) {
@@ -138,23 +156,34 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
 
     return (
         <>
-            {viewMode === 'list' ? (
+            {folderNotFound ? (
+                <FolderNotFoundView
+                    onGoToRoot={() => navigate("/main", { replace: true })}
+                    onGoBack={() => navigate(-1)}
+                />
+            ) : viewMode === 'list' ? (
                 <ListView
                     filteredFiles={filteredFiles}
+                    hasFiles={fileList.length > 0}
                     showPreviewModal={showPreviewModal}
                     showReNameModal={showReNameModal}
                     fetchFileList={fetchFileList}
                     handleBackFolder={handleBackFolder}
                     folderInfo={folderInfo}
+                    onUpload={() => openModal("uploadOpen")}
+                    onCreateFolder={() => openModal("createFolder")}
                 />
             ) : (
                 <GridView
                     filteredFiles={filteredFiles}
+                    hasFiles={fileList.length > 0}
                     showPreviewModal={showPreviewModal}
                     showReNameModal={showReNameModal}
                     fetchFileList={fetchFileList}
                     handleBackFolder={handleBackFolder}
                     folderInfo={folderInfo}
+                    onUpload={() => openModal("uploadOpen")}
+                    onCreateFolder={() => openModal("createFolder")}
                 />
             )}
 

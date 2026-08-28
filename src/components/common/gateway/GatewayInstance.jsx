@@ -36,6 +36,14 @@ api.interceptors.response.use(
 
         const original = error.config;
 
+        const redirectToLogin = () => {
+            // 로그인 화면에서 다시 replace하면 AuthProvider의 세션 확인이 반복되어
+            // refresh token이 없는 경우 무한 새로고침이 발생한다.
+            if (window.location.pathname !== "/") {
+                window.location.replace("/");
+            }
+        };
+
         if (!error.response) return Promise.reject(error);
 
         if (error.response.status !== 401)
@@ -49,13 +57,13 @@ api.interceptors.response.use(
                 await refreshApi.post("/auth/refresh");
                 return api(original);
             } catch (e) {
-                window.location.replace("/");
+                redirectToLogin();
                 return Promise.reject(e);
             }
         }
 
         // 2. retry 실패 fallback
-        window.location.replace("/");
+        redirectToLogin();
         return Promise.reject(error);
     }
 );

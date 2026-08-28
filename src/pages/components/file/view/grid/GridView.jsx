@@ -13,7 +13,10 @@ export default function GridView({
                                      showPreviewModal,
                                      showReNameModal,
                                      fetchFileList,
-                                     handleBackFolder
+                                     handleBackFolder,
+                                     hasFiles,
+                                     onUpload,
+                                     onCreateFolder
 }) {
 
     const data = folderInfo && folderInfo.folderId !== folderInfo.parentFolderId ? [{ type: "back" }, ...filteredFiles] : filteredFiles;
@@ -23,6 +26,10 @@ export default function GridView({
             { filteredFiles.length === 0 ? (
                 <EmptyGridView
                     handleBackFolder={handleBackFolder}
+                    canGoBack={folderInfo && folderInfo.folderId !== folderInfo.parentFolderId}
+                    isFiltered={hasFiles}
+                    onUpload={onUpload}
+                    onCreateFolder={onCreateFolder}
                 />
             ) : (
                 <VirtuosoGrid

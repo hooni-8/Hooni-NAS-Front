@@ -47,14 +47,11 @@
 
 /* Header */
 .progress-bar-header {
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem;
   border-bottom: 1px solid #e5e7eb;
   background: linear-gradient(to right, #eff6ff, #faf5ff, #fdf2f8);
-  cursor: pointer;
   transition: all 0.2s;
 }
 
@@ -68,16 +65,30 @@
   }
 }
 
-.progress-bar-header-left {
+.progress-bar-toggle {
+  flex: 1;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  min-width: 0;
+  padding: 0.75rem;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+@media (min-width: 640px) {
+  .progress-bar-toggle {
+    padding: 1rem;
+  }
 }
 
 .progress-bar-header-right {
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  padding-right: 0.75rem;
 }
 
 /* Progress Indicator (Ping) */
@@ -110,7 +121,9 @@
 
 /* Title */
 .progress-bar-title {
+  flex: 1;
   font-size: 0.875rem;
+  font-weight: 700;
   color: #111827;
 }
 
@@ -233,26 +246,6 @@
   margin: 0;
 }
 
-.cancel-upload-button {
-  padding: 0.25rem;
-  background: none;
-  border: none;
-  border-radius: 0.25rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  flex-shrink: 0;
-}
-
-.cancel-upload-button:hover {
-  background-color: #e5e7eb;
-}
-
-.cancel-icon {
-  width: 0.875rem;
-  height: 0.875rem;
-  color: #6b7280;
-}
-
 /* Progress Bar Wrapper */
 .progress-bar-wrapper {
   margin-bottom: 0.375rem;
@@ -296,7 +289,7 @@
   color: #6b7280;
 }
 
-.status-with {
+.status-waiting {
   color: #6b7280;
 }
 
@@ -310,4 +303,23 @@
 
 .status-success {
   color: #059669;
+}
+
+.progress-summary {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem;
+  border-top: 1px solid #eef2f7;
+  background: #f8fafc;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.progress-summary-success {
+  color: #059669;
+}
+
+.progress-summary-error {
+  color: #dc2626;
 }

@@ -1,22 +1,48 @@
 import React from "react";
+import { ArrowLeft, FileSearch, FolderOpen, FolderPlus, Upload } from "lucide-react";
 
-export default function EmptyGridView({handleBackFolder, rootFolderFlag}) {
+export default function EmptyGridView({ handleBackFolder, canGoBack, isFiltered, onUpload, onCreateFolder }) {
+
+    const title = isFiltered ? "조건에 맞는 항목이 없어요" : "이 폴더는 비어 있어요";
+    const description = isFiltered
+        ? "검색어를 바꾸거나 다른 카테고리를 선택해보세요."
+        : "파일을 올리거나 새 폴더를 만들어 정리해보세요.";
 
     return (
         <div className="file-grid-empty">
             <div className="empty-content">
-                <div className="empty-icon-wrapper">
-                    <svg className="empty-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                              d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-                    </svg>
+                <div className="empty-illustration" aria-hidden="true">
+                    <span className="empty-orbit empty-orbit-left"></span>
+                    <span className="empty-orbit empty-orbit-right"></span>
+                    <div className="empty-icon-wrapper">
+                        {isFiltered ? <FileSearch className="empty-icon" /> : <FolderOpen className="empty-icon" />}
+                    </div>
                 </div>
-                <h3 className="empty-title">파일이 없습니다</h3>
-                <p className="empty-description">파일을 업로드하거나 다른 카테고리를 선택해보세요</p>
+                <span className="empty-eyebrow">MY STORAGE</span>
+                <h3 className="empty-title">{title}</h3>
+                <p className="empty-description">{description}</p>
 
-                { !rootFolderFlag &&
-                    <button onClick={handleBackFolder}>뒤로가기</button>
-                }
+                <div className="empty-actions">
+                    {!isFiltered && (
+                        <>
+                            <button type="button" className="empty-primary-button" onClick={onUpload}>
+                                <Upload size={17} />
+                                파일 업로드
+                            </button>
+                            <button type="button" className="empty-secondary-button" onClick={onCreateFolder}>
+                                <FolderPlus size={17} />
+                                폴더 만들기
+                            </button>
+                        </>
+                    )}
+
+                    {canGoBack && (
+                        <button type="button" className="empty-back-button" onClick={handleBackFolder}>
+                            <ArrowLeft size={16} />
+                            상위 폴더로
+                        </button>
+                    )}
+                </div>
             </div>
         </div>
     )
