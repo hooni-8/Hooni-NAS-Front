@@ -15,9 +15,29 @@ const FileListItem = memo(({
 }) => {
     const [showMenu, setShowMenu] = useState(false);
 
+    const handleOpenFile = () => {
+        showPreviewModal(file);
+    };
+
+    const handleItemKeyDown = (event) => {
+        if (event.target !== event.currentTarget || (event.key !== "Enter" && event.key !== " ")) {
+            return;
+        }
+
+        event.preventDefault();
+        handleOpenFile();
+    };
+
     return (
         <div className="file-list-item group">
-            <div className="file-item-content" onDoubleClick={() => showPreviewModal(file)}>
+            <div
+                className="file-item-content"
+                role="button"
+                tabIndex={0}
+                aria-label={`${file.itemName} 열기`}
+                onClick={handleOpenFile}
+                onKeyDown={handleItemKeyDown}
+            >
                 <div className="file-item-name-section">
                     <div className="file-icon-wrapper">
                         {format.getListFileIcon(file)}

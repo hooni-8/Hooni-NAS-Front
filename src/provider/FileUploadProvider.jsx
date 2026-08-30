@@ -10,7 +10,7 @@ const MAX_CONCURRENCY = 3;
 export const FileUploadProvider = ({ children }) => {
 
     const [files, setFiles] = useState([]);
-    const [queue, setQueue] = useState([]);
+    const [, setQueue] = useState([]);
     const [uploadDoneAt, setUploadDoneAt] = useState('');
 
     const pendingFiles = files.filter(f => f.status === "PENDING");

@@ -126,3 +126,55 @@
     opacity: 0;
   }
 }
+
+/* Refreshed mobile navigation */
+.mobile-nav {
+  border-top-color: #e9e9ef;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 -8px 24px rgba(32, 35, 49, 0.07);
+  backdrop-filter: blur(14px);
+}
+
+.mobile-nav-content {
+  max-width: 31rem;
+  margin: 0 auto;
+  padding: 0.65rem 1rem max(0.65rem, env(safe-area-inset-bottom));
+}
+
+.mobile-nav-item {
+  min-width: 3.25rem;
+  padding: 0.25rem;
+  color: #777b8c;
+}
+
+.mobile-nav-item.active,
+.mobile-nav-item:hover {
+  color: #7469bc;
+}
+
+.mobile-nav-icon {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.mobile-nav-label {
+  font-size: 0.66rem;
+  font-weight: 650;
+}
+
+.mobile-nav-upload-button {
+  margin-top: -1.75rem;
+}
+
+.mobile-nav-upload-circle {
+  width: 3.65rem;
+  height: 3.65rem;
+  border: 4px solid #f8f8fc;
+  background: #7469bc;
+  box-shadow: 0 8px 18px rgba(116, 105, 188, 0.32);
+}
+
+.upload-badge-dot,
+.upload-badge-ping {
+  background-color: #43ae79;
+}

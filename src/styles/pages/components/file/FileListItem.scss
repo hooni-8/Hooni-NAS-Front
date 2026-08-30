@@ -235,3 +235,46 @@
   margin-top: 0.25rem;
   margin-bottom: 0.25rem;
 }
+
+.file-list-back-label {
+  color: #7469bc;
+  font-weight: 700;
+}
+
+/* Refreshed list rows */
+.file-item-content {
+  border-bottom-color: #eeeeF3;
+}
+
+.file-item-content:hover {
+  background: #fafafd;
+}
+
+.file-name {
+  color: #4a4e5f;
+  font-weight: 550;
+}
+
+.file-meta-mobile,
+.file-item-size,
+.file-item-date {
+  color: #8c91a0;
+}
+
+.menu-button {
+  border: 1px solid transparent;
+  border-radius: 0.55rem;
+}
+
+.menu-button:hover {
+  border-color: #e6e5ed;
+  background: #f3f2f9;
+}
+
+.menu-dropdown {
+  border-color: #e7e7ee;
+  border-radius: 0.7rem;
+  box-shadow: 0 12px 24px rgba(39, 42, 58, 0.13);
+}
+
+.menu-item:hover { background: #f6f5fb; }

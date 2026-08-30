@@ -4,7 +4,7 @@ import { useModal } from "@hooks/useModal";
 
 import HeaderDropdown from "@layout/components/HeaderDropdown";
 
-import { Search, Upload, Grid3x3, List, User, Menu, FolderPlus, ChevronDown } from 'lucide-react';
+import { Search, Upload, Grid3x3, List, User, Menu, FolderPlus, ChevronDown, HardDrive } from 'lucide-react';
 import "@styles/pages/layout/Header.scss"
 
 export default function Header({
@@ -44,6 +44,13 @@ export default function Header({
                 </button>
 
                 <div className="header-search-section">
+                    <div className="header-page-context">
+                        <div className="header-page-icon"><HardDrive /></div>
+                        <div>
+                            <span>MY STORAGE</span>
+                            <strong>내 파일</strong>
+                        </div>
+                    </div>
                     <div className="header-search-wrapper">
                         <Search className="header-search-icon"/>
                         <input
@@ -99,12 +106,6 @@ export default function Header({
                         <span>폴더 생성</span>
                     </button>
 
-                    <button
-                        onClick={() => openModal("createFolder")}
-                        className="header-mobile-folder-btn"
-                    >
-                        <FolderPlus className="header-mobile-icon"/>
-                    </button>
                     {/*---------------Create Folder Button---------------*/}
 
                     {/*---------------Upload Button---------------*/}
@@ -116,12 +117,6 @@ export default function Header({
                         <span>업로드</span>
                     </button>
 
-                    <button
-                        onClick={() => openModal("uploadOpen")}
-                        className="header-mobile-upload-btn"
-                    >
-                        <Upload className="header-mobile-icon"/>
-                    </button>
                     {/*---------------Upload Button---------------*/}
 
                     {/* Desktop User Menu */}

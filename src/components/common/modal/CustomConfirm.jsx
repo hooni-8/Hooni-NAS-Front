@@ -74,30 +74,30 @@ export default function CustomConfirm() {
     const Icon = config.icon;
 
     return (
-        <div className="confirm-overlay">
-            <div className="confirm-modal">
+        <div className="confirm-overlay" role="presentation">
+            <section className="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+                <button
+                    type="button"
+                    onClick={handleClose}
+                    className="confirm-close-button"
+                    aria-label="확인 창 닫기"
+                >
+                    <X className="confirm-close-icon" aria-hidden="true" />
+                </button>
                 <div className="confirm-content">
-                    <div className="confirm-header">
-                        <div className={`confirm-icon-wrapper ${config.iconBgClass}`}>
-                            <Icon className={`confirm-icon ${config.iconColorClass}`} />
-                        </div>
+                    <div className={`confirm-icon-wrapper ${config.iconBgClass}`}>
+                        <Icon className={`confirm-icon ${config.iconColorClass}`} aria-hidden="true" />
+                    </div>
 
-                        <div className="confirm-text-content">
-                            <h3 className="confirm-title">{title}</h3>
-                            <p className="confirm-message">{message}</p>
-                        </div>
-
-                        <button
-                            onClick={handleClose}
-                            className="confirm-close-button"
-                        >
-                            <X className="confirm-close-icon" />
-                        </button>
+                    <div className="confirm-text-content">
+                        <h3 id="confirm-title" className="confirm-title">{title}</h3>
+                        <p className="confirm-message">{message}</p>
                     </div>
                 </div>
 
                 <div className="confirm-footer">
                     <button
+                        type="button"
                         onClick={handleClose}
                         className="confirm-cancel-button"
                     >
@@ -105,13 +105,14 @@ export default function CustomConfirm() {
                     </button>
 
                     <button
+                        type="button"
                         onClick={handleConfirm}
                         className={`confirm-confirm-button ${config.confirmButtonClass}`}
                     >
                         {confirmBtn}
                     </button>
                 </div>
-            </div>
+            </section>
         </div>
     );
 }

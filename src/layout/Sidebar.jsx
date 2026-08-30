@@ -8,15 +8,14 @@ import { useAuth } from "@hooks/useAuth";
 import "@styles/pages/layout/Sidebar.scss";
 
 import Logo from "@assets/imgs/Hooni_logo.png";
-import { HardDrive, Folder, Image, FileText, Video, Music, Star, Trash2, Clock, X, LogOut } from 'lucide-react';
+import { HardDrive, Folder, Image, FileText, Video, Music, X, LogOut, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 
-export default function Sidebar ({ selectedCategory, onCategoryChange, onClose }) {
+export default function Sidebar ({ selectedCategory, onCategoryChange, onClose, isCollapsed = false, onToggleCollapse }) {
 
     const { logout } = useAuth();
     const navigate = useNavigate();
 
     const [totalVolume, setTotalVolume] = useState(0);
-    const [freeVolume, setFreeVolume] = useState(0);
     const [usableVolume, setUsableVolume] = useState(0);
     const [usedPercent, setUsedPercent] = useState();
 
@@ -29,13 +28,6 @@ export default function Sidebar ({ selectedCategory, onCategoryChange, onClose }
         { id: 'videos', name: '비디오', icon: Video, color: '#a855f7' },
         { id: 'audio', name: '오디오', icon: Music, color: '#ec4899' },
     ];
-
-    const quickAccess = [
-        { id: 'recent', name: '최근 파일', icon: Clock },
-        { id: 'starred', name: '즐겨찾기', icon: Star },
-        { id: 'trash', name: '휴지통', icon: Trash2 },
-    ];
-
 
     const handleLogout = async () => {
        await logout();
@@ -50,10 +42,9 @@ export default function Sidebar ({ selectedCategory, onCategoryChange, onClose }
                 const response = await gateway.post("/nas/api/v1/volume/disk");
 
                 if (response.status === 200 && response.code === "0000") {
-                    const { total, free, usable } = response.data;
+                    const { total, usable } = response.data;
 
                     setTotalVolume(total);
-                    setFreeVolume(free);
                     setUsableVolume(usable);
 
                     setUsedPercent(format.usedPercent(total, usable));
@@ -69,22 +60,35 @@ export default function Sidebar ({ selectedCategory, onCategoryChange, onClose }
     }, []);
 
     return (
-        <div className="sidebar">
+        <div className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
             <div className="sidebar-header">
                 <div className="sidebar-logo-section">
-                    {/*<div className="sidebar-logo">*/}
-                    {/*    <HardDrive className="sidebar-logo-icon"/>*/}
-                    {/*</div>*/}
                     <div className="sidebar-logo">
-                        <img src={Logo}
-                             style={{cursor:"pointer"}}
-                             onClick={() => navigate("/main")}/>
+                        {isCollapsed ? (
+                            <HardDrive
+                                className="sidebar-collapsed-logo"
+                                aria-label="Hooni NAS 홈"
+                                onClick={() => navigate("/main")}
+                            />
+                        ) : (
+                            <img src={Logo}
+                                 alt="Hooni NAS 홈"
+                                 style={{cursor:"pointer"}}
+                                 onClick={() => navigate("/main")}/>
+                        )}
                     </div>
-                    {/*<div className="sidebar-title-section">*/}
-                    {/*    <h1 className="sidebar-title">My Storage</h1>*/}
-                    {/*    <p className="sidebar-subtitle">개인 저장소</p>*/}
-                    {/*</div>*/}
                 </div>
+                {onToggleCollapse && (
+                    <button
+                        type="button"
+                        onClick={onToggleCollapse}
+                        className="sidebar-collapse-btn"
+                        aria-label={isCollapsed ? "사이드바 펼치기" : "사이드바 접기"}
+                        title={isCollapsed ? "사이드바 펼치기" : "사이드바 접기"}
+                    >
+                        {isCollapsed ? <PanelLeftOpen /> : <PanelLeftClose />}
+                    </button>
+                )}
                 {onClose && (
                     <button
                         onClick={onClose}
@@ -121,6 +125,7 @@ export default function Sidebar ({ selectedCategory, onCategoryChange, onClose }
                                 key={category.id}
                                 onClick={() => onCategoryChange(category.id)}
                                 className={`sidebar-nav-item ${isActive ? 'active' : ''}`}
+                                title={isCollapsed ? category.name : undefined}
                             >
                                 <Icon
                                     className="sidebar-nav-icon"
@@ -133,22 +138,6 @@ export default function Sidebar ({ selectedCategory, onCategoryChange, onClose }
                         );
                     })}
                 </div>
-
-                <div className="sidebar-section">
-                    <p className="sidebar-section-title">빠른 접근</p>
-                    {quickAccess.map(item => {
-                        const Icon = item.icon;
-                        return (
-                            <button
-                                key={item.id}
-                                className="sidebar-nav-item"
-                            >
-                                <Icon className="sidebar-nav-icon" style={{color: '#4b5563'}}/>
-                                <span>{item.name}</span>
-                            </button>
-                        );
-                    })}
-                </div>
             </nav>
 
             {/* 로그아웃 버튼 */}
@@ -156,6 +145,7 @@ export default function Sidebar ({ selectedCategory, onCategoryChange, onClose }
                 <button
                     onClick={handleLogout}
                     className="sidebar-logout-btn"
+                    title={isCollapsed ? "로그아웃" : undefined}
                 >
                     <LogOut className="sidebar-logout-icon"/>
                     <span>로그아웃</span>

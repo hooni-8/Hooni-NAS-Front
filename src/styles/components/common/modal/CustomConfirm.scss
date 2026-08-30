@@ -193,3 +193,118 @@
     transform: scale(1);
   }
 }
+
+/* Refreshed confirm dialog */
+.confirm-overlay {
+  z-index: 80;
+  background: rgba(32, 35, 49, 0.3);
+  backdrop-filter: blur(8px);
+}
+
+.confirm-modal {
+  position: relative;
+  max-width: 23rem;
+  border: 1px solid #e8e8ef;
+  border-radius: 1.1rem;
+  box-shadow: 0 24px 60px rgba(30, 34, 51, 0.22);
+}
+
+.confirm-content {
+  padding: 2rem 1.75rem 1.45rem;
+  text-align: center;
+}
+
+.confirm-header {
+  display: block;
+}
+
+.confirm-icon-wrapper {
+  display: grid;
+  width: 3.8rem;
+  height: 3.8rem;
+  place-items: center;
+  margin: 0 auto 1rem;
+  border-radius: 1.15rem;
+}
+
+.confirm-icon {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.confirm-icon-bg-success { background: #e9f8ef; }
+.confirm-icon-bg-error { background: #fff0f1; }
+.confirm-icon-bg-warning { background: #fff7e8; }
+.confirm-icon-bg-info { background: #f0eff9; }
+.confirm-icon-color-success { color: #31a264; }
+.confirm-icon-color-error { color: #db5965; }
+.confirm-icon-color-warning { color: #d88d2c; }
+.confirm-icon-color-info { color: #7469bc; }
+
+.confirm-title {
+  margin: 0;
+  color: #333647;
+  font-size: 1.05rem;
+  font-weight: 750;
+  letter-spacing: -0.03em;
+}
+
+.confirm-message {
+  margin: 0.55rem auto 0;
+  color: #858a99;
+  font-size: 0.84rem;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.confirm-close-button {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  padding: 0;
+  border: 1px solid #ececf2;
+  border-radius: 0.6rem;
+  line-height: 0;
+}
+
+.confirm-close-icon {
+  display: block;
+  margin: 0;
+  width: 1rem;
+  height: 1rem;
+}
+
+.confirm-footer {
+  justify-content: center;
+  padding: 0 1.75rem 1.65rem;
+}
+
+.confirm-cancel-button,
+.confirm-confirm-button {
+  min-width: 6.5rem;
+  border-radius: 0.65rem;
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.confirm-cancel-button {
+  border: 1px solid #e6e6ec;
+  background: #fff;
+}
+
+.confirm-confirm-button {
+  background: #7469bc;
+  box-shadow: 0 5px 12px rgba(116, 105, 188, 0.2);
+}
+
+.confirm-confirm-button:hover,
+.confirm-button-success:hover,
+.confirm-button-error:hover,
+.confirm-button-warning:hover,
+.confirm-button-info:hover {
+  background: #655aae;
+}

@@ -12,7 +12,7 @@ export default function Main() {
 
 
     return (
-        <div className="storage-layout">
+        <div className="storage-layout nas-home-layout">
             <div className="storage-main-content">
                 <FileGrid
                     selectedCategory={selectedCategory}

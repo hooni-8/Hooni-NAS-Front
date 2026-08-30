@@ -225,3 +225,153 @@
     transform: rotate(360deg);
   }
 }
+
+/* Refreshed folder dialog */
+.create-folder-modal-overlay {
+  z-index: 70;
+  background: rgba(32, 35, 49, 0.28);
+  backdrop-filter: blur(8px);
+}
+
+.create-folder-modal {
+  max-width: 25.5rem;
+  border-color: #e8e8ef;
+  border-radius: 1.1rem;
+  box-shadow: 0 24px 60px rgba(30, 34, 51, 0.2);
+}
+
+.create-folder-header {
+  padding: 1.25rem 1.35rem;
+  border-bottom-color: #eeeeF3;
+}
+
+.create-folder-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.create-folder-heading-icon {
+  display: grid;
+  width: 2.55rem;
+  height: 2.55rem;
+  place-items: center;
+  border-radius: 0.8rem;
+  background: #f0eff9;
+  color: #7469bc;
+}
+
+.create-folder-heading-icon svg {
+  width: 1.28rem;
+  height: 1.28rem;
+}
+
+.create-folder-eyebrow {
+  display: block;
+  margin-bottom: 0.18rem;
+  color: #887dca;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.create-folder-title {
+  margin: 0;
+  color: #303344;
+  font-size: 1.05rem;
+  font-weight: 750;
+  letter-spacing: -0.03em;
+}
+
+.create-folder-heading p {
+  margin: 0.28rem 0 0;
+  color: #9296a5;
+  font-size: 0.74rem;
+}
+
+.create-folder-close-btn {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  flex: 0 0 auto;
+  place-items: center;
+  line-height: 0;
+  border: 1px solid #ececf2;
+  border-radius: 0.6rem;
+}
+
+.create-folder-close-icon {
+  display: block;
+  margin: 0;
+}
+
+.create-folder-content {
+  padding: 1.35rem;
+}
+
+.create-folder-label {
+  color: #565a6c;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.create-folder-input {
+  box-sizing: border-box;
+  border-color: #e3e4eb;
+  border-radius: 0.7rem;
+  background: #fafbfe;
+}
+
+.create-folder-input:focus {
+  border-color: #9186d6;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(116, 105, 188, 0.12);
+}
+
+.create-folder-input-icon {
+  color: #8b80ca;
+}
+
+.create-folder-error {
+  padding: 0.55rem 0.65rem;
+  border-radius: 0.5rem;
+  background: #fff3f3;
+  color: #c34d57;
+}
+
+.create-folder-actions {
+  gap: 0.65rem;
+}
+
+.create-folder-cancel-btn {
+  border: 1px solid #e6e6ec;
+  border-radius: 0.65rem;
+  background: #fff;
+}
+
+.create-folder-cancel-btn:hover {
+  background: #f7f7fa;
+}
+
+.create-folder-submit-btn {
+  border-radius: 0.65rem;
+  background: #7469bc;
+  box-shadow: 0 5px 12px rgba(116, 105, 188, 0.2);
+}
+
+.create-folder-submit-btn:hover:not(:disabled) {
+  background: #655aae;
+}
+
+@media (max-width: 480px) {
+  .create-folder-header,
+  .create-folder-content {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .create-folder-heading p {
+    display: none;
+  }
+}

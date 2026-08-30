@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import { Outlet } from "react-router-dom";
 
 import Header from "@layout/Header";
@@ -10,6 +10,7 @@ export default function DashBoard() {
     const [searchQuery, setSearchQuery] = useState('');
     const [viewMode, setViewMode] = useState(() => localStorage.getItem("viewMode") || 'grid');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
     const changeViewMode = (type) => {
         setViewMode(type);
@@ -18,13 +19,15 @@ export default function DashBoard() {
 
     return (
         <>
-            <div className="flex h-screen bg-gray-50">
+            <div className="nas-dashboard">
 
                 {/* Desktop Sidebar */}
                 <div className="hidden lg:block">
                     <Sidebar
                         selectedCategory={selectedCategory}
                         onCategoryChange={(c) => setSelectedCategory(c)}
+                        isCollapsed={isSidebarCollapsed}
+                        onToggleCollapse={() => setIsSidebarCollapsed((current) => !current)}
                     />
                 </div>
 
@@ -48,7 +51,7 @@ export default function DashBoard() {
                     </>
                 )}
 
-                <div className="flex-1 flex flex-col overflow-hidden">
+                <div className="nas-dashboard-content">
 
                     <Header
                         searchQuery={searchQuery}

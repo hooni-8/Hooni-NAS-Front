@@ -5,7 +5,7 @@ import { useModal } from "@hooks/useModal";
 
 import * as gateway from "@components/common/gateway/Gateway";
 
-import { X, Folder } from 'lucide-react';
+import { X, Folder, FolderPlus } from 'lucide-react';
 import "@styles/pages/components/modal/CreateFolderModal.scss"
 
 export default function CreateFolderModal({ fetchFileList }) {
@@ -55,12 +55,21 @@ export default function CreateFolderModal({ fetchFileList }) {
         <div className="create-folder-modal-overlay">
             <div className="create-folder-modal">
                 <div className="create-folder-header">
-                    <h2 className="create-folder-title">새 폴더 만들기</h2>
+                    <div className="create-folder-heading">
+                        <div className="create-folder-heading-icon"><FolderPlus aria-hidden="true" /></div>
+                        <div>
+                            <span className="create-folder-eyebrow">NEW FOLDER</span>
+                            <h2 className="create-folder-title">새 폴더 만들기</h2>
+                            <p>현재 위치에 새 폴더를 추가합니다.</p>
+                        </div>
+                    </div>
                     <button
+                        type="button"
                         onClick={() => closeModal("createFolder")}
                         className="create-folder-close-btn"
+                        aria-label="폴더 생성 창 닫기"
                     >
-                        <X className="create-folder-close-icon" />
+                        <X className="create-folder-close-icon" aria-hidden="true" />
                     </button>
                 </div>
 

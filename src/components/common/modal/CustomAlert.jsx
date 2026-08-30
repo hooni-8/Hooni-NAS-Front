@@ -65,37 +65,37 @@ export default function CustomAlert() {
     const Icon = config.icon;
 
     return (
-        <div className="alert-overlay">
-            <div className="alert-modal">
+        <div className="alert-overlay" role="presentation">
+            <section className="alert-modal" role="alertdialog" aria-modal="true" aria-labelledby="alert-title">
+                <button
+                    type="button"
+                    onClick={handleClose}
+                    className="alert-close-button"
+                    aria-label="알림 닫기"
+                >
+                    <X className="alert-close-icon" aria-hidden="true" />
+                </button>
                 <div className="alert-content">
-                    <div className="alert-header">
-                        <div className={`alert-icon-wrapper ${config.iconBgClass}`}>
-                            <Icon className={`alert-icon ${config.iconColorClass}`} />
-                        </div>
+                    <div className={`alert-icon-wrapper ${config.iconBgClass}`}>
+                        <Icon className={`alert-icon ${config.iconColorClass}`} aria-hidden="true" />
+                    </div>
 
-                        <div className="alert-text-content">
-                            <h3 className="alert-title">{title}</h3>
-                            <p className="alert-message">{message}</p>
-                        </div>
-
-                        <button
-                            onClick={handleClose}
-                            className="alert-close-button"
-                        >
-                            <X className="alert-close-icon" />
-                        </button>
+                    <div className="alert-text-content">
+                        <h3 id="alert-title" className="alert-title">{title}</h3>
+                        <p className="alert-message">{message}</p>
                     </div>
                 </div>
 
                 <div className="alert-footer">
                     <button
+                        type="button"
                         onClick={handleClose}
                         className={`alert-confirm-button ${config.confirmButtonClass}`}
                     >
                         확인
                     </button>
                 </div>
-            </div>
+            </section>
         </div>
     );
 }

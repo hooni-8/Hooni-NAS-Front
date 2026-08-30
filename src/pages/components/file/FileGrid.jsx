@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useNavigate, useParams} from "react-router-dom";
 
 import * as gateway from "@components/common/gateway/Gateway";
@@ -17,6 +17,8 @@ import ReNameModal from '@pages/components/modal/ReNameModal';
 import CreateFolderModal from "@pages/components/modal/CreateFolderModal";
 import UploadModal from '@pages/components/modal/UploadModal';
 import UploadProgressBar from "@pages/components/loding/UploadProgressBar";
+import FileLoadErrorView from "@pages/components/file/FileLoadErrorView";
+import { FolderOpen, Files } from "lucide-react";
 
 import "@styles/pages/components/file/FileGrid.scss"
 
@@ -32,6 +34,7 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
     const [folderInfo, setFolderInfo] = useState('');
     const [fileList, setFileList] = useState([]);
     const [folderNotFound, setFolderNotFound] = useState(false);
+    const [fileLoadError, setFileLoadError] = useState(false);
 
     const [selectedFile, setSelectedFile] = useState({});
 
@@ -95,24 +98,16 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
             processQueue(folderId);
             closeModal("rendering");
         }
-    }, [readyFiles, modal.rendering]);
+    }, [closeModal, folderId, modal.rendering, processQueue, readyFiles]);
 
-
-    useEffect(() => {
-        if (folderId) {
-            fetchFileList();
-        } else {
-            rootFolder();
-        }
-    }, [uploadDoneAt, folderId]);
-
-    const fetchFileList = async () => {
+    const fetchFileList = useCallback(async () => {
 
         try {
             const response = await gateway.post("/nas/api/v1/file/list", { folderId: folderId });
 
             if (response.status === 404) {
                 setFolderNotFound(true);
+                setFileLoadError(false);
                 setFolderInfo('');
                 setFileList([]);
                 return;
@@ -122,6 +117,7 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
                 const folder = response.data?.folderInfo;
                 if (!folder) {
                     setFolderNotFound(true);
+                    setFileLoadError(false);
                     setFolderInfo('');
                     setFileList([]);
                     return;
@@ -135,20 +131,58 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
                 }));
 
                 setFolderNotFound(false);
+                setFileLoadError(false);
                 setFolderInfo(folder);
                 setFileList(convertedFiles);
+                return;
             }
+
+            setFolderNotFound(false);
+            setFileLoadError(true);
+            setFolderInfo('');
+            setFileList([]);
         } catch (e) {
             console.error(e);
-        } finally {
-            setUploadDoneAt("");
+            setFolderNotFound(false);
+            setFileLoadError(true);
+            setFolderInfo('');
+            setFileList([]);
         }
-    };
+    }, [folderId]);
+
+    const retryLoad = useCallback(async () => {
+        setFileLoadError(false);
+
+        if (folderId) {
+            await fetchFileList();
+            return;
+        }
+
+        const hasRootFolder = await rootFolder();
+        if (!hasRootFolder) {
+            setFileLoadError(true);
+        }
+    }, [fetchFileList, folderId, rootFolder]);
+
+    useEffect(() => {
+        retryLoad();
+    }, [retryLoad]);
+
+    useEffect(() => {
+        if (!uploadDoneAt) {
+            return;
+        }
+
+        fetchFileList();
+        setUploadDoneAt("");
+    }, [fetchFileList, setUploadDoneAt, uploadDoneAt]);
 
     const filteredFiles = fileList.filter(file => {
         const matchesSearch = file.itemName.toLowerCase().includes(searchQuery.toLowerCase());
         return format.matchesCategory(matchesSearch, selectedCategory, file);
     });
+
+    const isRootFolder = !folderInfo || folderInfo.folderId === folderInfo.parentFolderId;
 
     const handleBackFolder = () => {
         navigate(`/main/${folderInfo.parentFolderId}`);
@@ -156,7 +190,29 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
 
     return (
         <>
-            {folderNotFound ? (
+            {!folderNotFound && !fileLoadError && (
+                <section className="nas-file-heading" aria-label="현재 폴더 정보">
+                    <div className="nas-file-heading-copy">
+                        <span className="nas-file-heading-eyebrow">MY STORAGE</span>
+                        <h1>
+                            <FolderOpen aria-hidden="true" />
+                            {isRootFolder ? "내 파일" : folderInfo.folderName}
+                        </h1>
+                        <p>파일을 정리하고 필요한 순간에 빠르게 꺼내보세요.</p>
+                    </div>
+                    <div className="nas-file-count">
+                        <Files aria-hidden="true" />
+                        <strong>{fileList.length}</strong>개 항목
+                    </div>
+                </section>
+            )}
+
+            {fileLoadError ? (
+                <FileLoadErrorView
+                    onRetry={retryLoad}
+                    onGoToRoot={() => navigate("/main", { replace: true })}
+                />
+            ) : folderNotFound ? (
                 <FolderNotFoundView
                     onGoToRoot={() => navigate("/main", { replace: true })}
                     onGoBack={() => navigate(-1)}

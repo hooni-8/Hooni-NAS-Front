@@ -115,6 +115,106 @@
   background: #fffaf5;
 }
 
+.file-load-error {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 2rem 1rem 5rem;
+}
+
+.file-load-error-card {
+  width: min(100%, 31rem);
+  padding: 2.5rem 2rem;
+  border: 1px solid #cfd5f2;
+  border-radius: 1.2rem;
+  background: radial-gradient(circle at 50% 0%, rgba(224, 221, 247, 0.9), transparent 52%), #fff;
+  box-shadow: 0 12px 30px rgba(57, 54, 105, 0.08);
+  text-align: center;
+}
+
+.file-load-error-icon {
+  display: grid;
+  width: 4.5rem;
+  height: 4.5rem;
+  place-items: center;
+  margin: 0 auto 0.95rem;
+  border: 1px solid #d7d2f1;
+  border-radius: 1.25rem;
+  background: #f4f2fc;
+  color: #7469bc;
+}
+
+.file-load-error-icon svg {
+  width: 2.1rem;
+  height: 2.1rem;
+}
+
+.file-load-error-code {
+  color: #7469bc;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.file-load-error-card h2 {
+  margin: 0.55rem 0 0;
+  color: #343746;
+  font-size: 1.3rem;
+  letter-spacing: -0.03em;
+}
+
+.file-load-error-card p {
+  max-width: 22rem;
+  margin: 0.7rem auto 0;
+  color: #787d8d;
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.file-load-error-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.65rem;
+  margin-top: 1.5rem;
+}
+
+.file-load-error-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.5rem;
+  padding: 0.6rem 0.95rem;
+  border-radius: 0.65rem;
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.file-load-error-retry {
+  border: 1px solid #7469bc;
+  background: #7469bc;
+  color: #fff;
+}
+
+.file-load-error-retry:hover { background: #655aae; }
+
+.file-load-error-retry svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.file-load-error-root {
+  border: 1px solid #dfdfea;
+  background: #fff;
+  color: #56596b;
+}
+
+.file-load-error-root:hover { background: #f8f8fc; }
+
 @media (min-width: 1024px) {
   .file-grid-empty {
     padding-bottom: 0;
@@ -331,6 +431,91 @@
 
 .list-header-action {
   width: 2.5rem;
+}
+
+.nas-file-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.7rem 1rem 0;
+}
+
+.nas-file-heading-eyebrow {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #867bc8;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.nas-file-heading h1 {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0;
+  color: #2c3040;
+  font-size: 1.55rem;
+  font-weight: 750;
+  letter-spacing: -0.045em;
+}
+
+.nas-file-heading h1 svg {
+  width: 1.45rem;
+  height: 1.45rem;
+  color: #766abe;
+}
+
+.nas-file-heading p {
+  margin: 0.45rem 0 0;
+  color: #8c91a0;
+  font-size: 0.82rem;
+}
+
+.nas-file-count {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.68rem;
+  border: 1px solid #e7e7ee;
+  border-radius: 0.65rem;
+  background: #fff;
+  color: #8a8e9c;
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.nas-file-count svg {
+  width: 0.9rem;
+  height: 0.9rem;
+  color: #8b80ca;
+}
+
+.nas-file-count strong {
+  color: #55596a;
+}
+
+@media (min-width: 1024px) {
+  .nas-file-heading {
+    padding: 1.8rem 2rem 0;
+  }
+}
+
+@media (max-width: 639px) {
+  .nas-file-heading {
+    align-items: flex-start;
+    padding-top: 1.25rem;
+  }
+
+  .nas-file-heading p,
+  .nas-file-count {
+    display: none;
+  }
+
+  .nas-file-heading h1 {
+    font-size: 1.28rem;
+  }
 }
 
 .file-list-empty {

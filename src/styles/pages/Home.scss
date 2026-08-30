@@ -1,7 +1,8 @@
 /* Storage Layout */
 .storage-layout {
   display: flex;
-  height: 100vh;
+  flex: 1;
+  min-height: 0;
   background-color: #f9fafb;
   overflow: hidden;
 }
@@ -53,4 +54,24 @@
   flex-direction: column;
   overflow: hidden;
   min-height: 0;
+}
+
+.nas-home-layout {
+  background: #f7f8fc;
+}
+
+.nas-dashboard {
+  display: flex;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: #f7f8fc;
+}
+
+.nas-dashboard-content {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
 }

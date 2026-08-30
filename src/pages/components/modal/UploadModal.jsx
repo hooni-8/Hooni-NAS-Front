@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {X, Upload, File as FileIcon, CheckCircle2, ImageIcon, VideoIcon, FileAudioIcon} from 'lucide-react';
+import { X, Upload, FileUp, CheckCircle2, Files } from 'lucide-react';
 
 import "@styles/pages/components/modal/UploadModal.scss";
 import * as format from "@components/utils/Format";
@@ -74,12 +74,21 @@ export default function UploadModal({ closeUploadModal, handleUpload, pendingFil
         <div className="upload-modal-overlay">
             <div className="upload-modal">
                 <div className="upload-modal-header">
-                    <h2 className="upload-modal-title">파일 업로드</h2>
+                    <div className="upload-modal-heading">
+                        <div className="upload-modal-heading-icon"><FileUp aria-hidden="true" /></div>
+                        <div>
+                            <span className="upload-modal-eyebrow">NEW UPLOAD</span>
+                            <h2 className="upload-modal-title">파일 업로드</h2>
+                            <p className="upload-modal-description">파일을 선택하면 업로드 목록에 바로 추가됩니다.</p>
+                        </div>
+                    </div>
                     <button
+                        type="button"
                         onClick={() => closeUploadModal("CANCEL")}
                         className="upload-modal-close-btn"
+                        aria-label="업로드 창 닫기"
                     >
-                        <X className="upload-modal-close-icon" />
+                        <X className="upload-modal-close-icon" aria-hidden="true" />
                     </button>
                 </div>
 
@@ -94,14 +103,16 @@ export default function UploadModal({ closeUploadModal, handleUpload, pendingFil
                             <div className={`upload-drop-icon-wrapper ${isDragging ? 'active' : ''}`}>
                                 <Upload className={`upload-drop-icon ${isDragging ? 'active' : ''}`} />
                             </div>
+                            <span className="upload-drop-eyebrow">DRAG & DROP</span>
                             <p className="upload-drop-title">
-                                파일을 여기에 드래그하거나 클릭하여 선택하세요
+                                파일을 여기에 놓아주세요
                             </p>
                             <p className="upload-drop-subtitle">
-                                모든 파일 형식 지원
+                                또는 아래 버튼으로 기기에서 파일을 선택하세요
                             </p>
                             <label className="upload-file-select-btn">
-                                파일 선택
+                                <Files aria-hidden="true" />
+                                파일 선택하기
                                 <input
                                     type="file"
                                     multiple
@@ -115,7 +126,7 @@ export default function UploadModal({ closeUploadModal, handleUpload, pendingFil
                     {pendingFiles.length > 0 && (
                         <div className="upload-file-list">
                             <h3 className="upload-file-list-title">
-                                업로드할 파일 ({pendingFiles.length})
+                                업로드 대기 파일 <span>{pendingFiles.length}</span>
                             </h3>
                             <div className="upload-files">
                                 {pendingFiles.map(file => (
@@ -134,13 +145,18 @@ export default function UploadModal({ closeUploadModal, handleUpload, pendingFil
                 </div>
 
                 <div className="upload-modal-actions">
+                    <p className="upload-modal-selection-summary">
+                        {pendingFiles.length > 0 ? `${pendingFiles.length}개 파일 선택됨` : "선택된 파일이 없습니다"}
+                    </p>
                     <button
+                        type="button"
                         onClick={() => closeUploadModal("CANCEL")}
                         className="upload-modal-cancel-btn"
                     >
                         취소
                     </button>
                     <button
+                        type="button"
                         onClick={handleUpload}
                         disabled={pendingFiles.length === 0}
                         className="upload-modal-upload-btn"

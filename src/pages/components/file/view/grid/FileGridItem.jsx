@@ -63,9 +63,29 @@ const FileGridItem = React.memo(({
         };
     }, [file.itemId, file.itemType, folderInfo.folderId]);
 
+    const handleOpenFile = () => {
+        showPreviewModal(file);
+    };
+
+    const handleCardKeyDown = (event) => {
+        if (event.target !== event.currentTarget || (event.key !== "Enter" && event.key !== " ")) {
+            return;
+        }
+
+        event.preventDefault();
+        handleOpenFile();
+    };
+
     return (
         <div className="file-card-wrapper group">
-            <div className="file-card" onDoubleClick={() => showPreviewModal(file)} >
+            <div
+                className="file-card"
+                role="button"
+                tabIndex={0}
+                aria-label={`${file.itemName} 열기`}
+                onClick={handleOpenFile}
+                onKeyDown={handleCardKeyDown}
+            >
                 <div className="file-card-relative">
                     <div className={`file-card-icon-container ${format.getFileColor(file)}`}>
                         {(file.itemType === "image" || file.itemType === "video") && thumbUrl && !thumbError ? (

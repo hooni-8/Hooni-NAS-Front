@@ -76,3 +76,57 @@
   background-color: #f3f4f6;
   margin: 0.25rem 0;
 }
+
+/* Refreshed account menu */
+.header-dropdown-menu {
+  width: 13.5rem;
+  margin-top: 0.65rem;
+  padding: 0.4rem;
+  border-color: #e7e7ee;
+  border-radius: 0.8rem;
+  box-shadow: 0 14px 30px rgba(38, 40, 56, 0.14);
+}
+
+.header-dropdown-header {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.7rem;
+  border: 0;
+}
+
+.header-dropdown-avatar {
+  display: grid;
+  width: 2.15rem;
+  height: 2.15rem;
+  place-items: center;
+  border-radius: 0.65rem;
+  background: #f0eff9;
+  color: #7469bc;
+}
+
+.header-dropdown-avatar svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.header-dropdown-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #46495b;
+}
+
+.header-dropdown-email {
+  color: #969aa8;
+  font-size: 0.68rem;
+}
+
+.header-dropdown-divider {
+  margin: 0.2rem 0;
+  background: #eeeeF3;
+}
+
+.header-dropdown-item {
+  border-radius: 0.55rem;
+  font-size: 0.8rem;
+}
