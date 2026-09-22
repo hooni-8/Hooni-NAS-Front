@@ -1,0 +1,377 @@
+/* Modal Overlay */
+.create-folder-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 1rem;
+}
+
+/* Modal */
+.create-folder-modal {
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  max-width: 28rem;
+}
+
+/* Modal Header */
+.create-folder-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+@media (min-width: 768px) {
+  .create-folder-header {
+    padding: 1.5rem;
+  }
+}
+
+.create-folder-title {
+  font-size: 1.125rem;
+  color: #111827;
+  font-weight: 700;
+}
+
+@media (min-width: 768px) {
+  .create-folder-title {
+    font-size: 1.25rem;
+  }
+}
+
+/* Close Button */
+.create-folder-close-btn {
+  padding: 0.5rem;
+  color: #9ca3af;
+  background: none;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.create-folder-close-btn:hover {
+  color: #4b5563;
+  background-color: #f3f4f6;
+}
+
+.create-folder-close-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Form */
+.create-folder-content {
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  .create-folder-content {
+    padding: 1.5rem;
+  }
+}
+
+/* Field */
+.create-folder-field {
+  margin-bottom: 1.5rem;
+}
+
+.create-folder-label {
+  display: block;
+  font-size: 0.875rem;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+/* Input Wrapper */
+.create-folder-input-wrapper {
+  position: relative;
+}
+
+.create-folder-input-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.create-folder-input {
+  width: 100%;
+  padding-left: 2.5rem;
+  padding-right: 1rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.create-folder-input:focus {
+  outline: none;
+  ring: 2px;
+  ring-color: #3b82f6;
+  box-shadow: 0 0 0 3px #eff6ff;
+  border-color: transparent;
+}
+
+.create-folder-error {
+  margin: 0.55rem 0 0;
+  color: #dc2626;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+/* Actions */
+.create-folder-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .create-folder-actions {
+    gap: 0.75rem;
+  }
+}
+
+/* Cancel Button */
+.create-folder-cancel-btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: #374151;
+  background: none;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+@media (min-width: 768px) {
+  .create-folder-cancel-btn {
+    padding: 0.625rem 1rem;
+    font-size: 1rem;
+  }
+}
+
+.create-folder-cancel-btn:hover {
+  background-color: #f3f4f6;
+}
+
+/* Submit Button */
+.create-folder-submit-btn {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.875rem;
+  background: linear-gradient(to right, #3b82f6, #a855f7);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .create-folder-submit-btn {
+    padding: 0.625rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+.create-folder-submit-btn:hover:not(:disabled) {
+  background: linear-gradient(to right, #2563eb, #9333ea);
+}
+
+.create-folder-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Submit Icon */
+.create-folder-submit-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Spinner */
+.create-folder-spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid white;
+  border-top-color: transparent;
+  border-radius: 9999px;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Refreshed folder dialog */
+.create-folder-modal-overlay {
+  z-index: 70;
+  background: rgba(32, 35, 49, 0.28);
+  backdrop-filter: blur(8px);
+}
+
+.create-folder-modal {
+  max-width: 25.5rem;
+  border-color: #e8e8ef;
+  border-radius: 1.1rem;
+  box-shadow: 0 24px 60px rgba(30, 34, 51, 0.2);
+}
+
+.create-folder-header {
+  padding: 1.25rem 1.35rem;
+  border-bottom-color: #eeeeF3;
+}
+
+.create-folder-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.create-folder-heading-icon {
+  display: grid;
+  width: 2.55rem;
+  height: 2.55rem;
+  place-items: center;
+  border-radius: 0.8rem;
+  background: #f0eff9;
+  color: #7469bc;
+}
+
+.create-folder-heading-icon svg {
+  width: 1.28rem;
+  height: 1.28rem;
+}
+
+.create-folder-eyebrow {
+  display: block;
+  margin-bottom: 0.18rem;
+  color: #887dca;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.create-folder-title {
+  margin: 0;
+  color: #303344;
+  font-size: 1.05rem;
+  font-weight: 750;
+  letter-spacing: -0.03em;
+}
+
+.create-folder-heading p {
+  margin: 0.28rem 0 0;
+  color: #9296a5;
+  font-size: 0.74rem;
+}
+
+.create-folder-close-btn {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  flex: 0 0 auto;
+  place-items: center;
+  line-height: 0;
+  border: 1px solid #ececf2;
+  border-radius: 0.6rem;
+}
+
+.create-folder-close-icon {
+  display: block;
+  margin: 0;
+}
+
+.create-folder-content {
+  padding: 1.35rem;
+}
+
+.create-folder-label {
+  color: #565a6c;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.create-folder-input {
+  box-sizing: border-box;
+  border-color: #e3e4eb;
+  border-radius: 0.7rem;
+  background: #fafbfe;
+}
+
+.create-folder-input:focus {
+  border-color: #9186d6;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(116, 105, 188, 0.12);
+}
+
+.create-folder-input-icon {
+  color: #8b80ca;
+}
+
+.create-folder-error {
+  padding: 0.55rem 0.65rem;
+  border-radius: 0.5rem;
+  background: #fff3f3;
+  color: #c34d57;
+}
+
+.create-folder-actions {
+  gap: 0.65rem;
+}
+
+.create-folder-cancel-btn {
+  border: 1px solid #e6e6ec;
+  border-radius: 0.65rem;
+  background: #fff;
+}
+
+.create-folder-cancel-btn:hover {
+  background: #f7f7fa;
+}
+
+.create-folder-submit-btn {
+  border-radius: 0.65rem;
+  background: #7469bc;
+  box-shadow: 0 5px 12px rgba(116, 105, 188, 0.2);
+}
+
+.create-folder-submit-btn:hover:not(:disabled) {
+  background: #655aae;
+}
+
+@media (max-width: 480px) {
+  .create-folder-header,
+  .create-folder-content {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .create-folder-heading p {
+    display: none;
+  }
+}
