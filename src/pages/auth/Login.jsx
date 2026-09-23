@@ -34,7 +34,7 @@ export default function Login() {
             setErrorMessage("");
             setIsLoading(true);
 
-            const folderId = await login({userId, password});
+            const folderId = await login({userId, password, sourcePath: "NAS"});
 
             navigate(`/main/${folderId}`, { replace: true });
 
