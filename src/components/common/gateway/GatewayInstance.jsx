@@ -14,6 +14,7 @@ const refreshApi = axios.create({
 // Refresh Token 회전 시 동시 요청 중 하나만 기존 토큰을 사용할 수 있으므로
 // 여러 401 응답은 하나의 Refresh 요청을 공유한다.
 let refreshRequest = null;
+let redirectingToLogin = false;
 
 const PUBLIC_AUTH_PATHS = new Set([
     "/auth/login",
@@ -35,6 +36,15 @@ const requestPath = (config) => {
     }
 };
 
+const redirectToLogin = () => {
+    if (redirectingToLogin || window.location.pathname === "/login") {
+        return;
+    }
+
+    redirectingToLogin = true;
+    window.location.replace("/login?reason=session-expired");
+};
+
 export const refreshSession = () => {
     if (!refreshRequest) {
         refreshRequest = refreshApi.post("/auth/refresh")
@@ -49,12 +59,6 @@ api.interceptors.response.use(
     response => response,
     async (error) => {
         const original = error.config;
-
-        const redirectToLogin = () => {
-            if (window.location.pathname !== "/login") {
-                window.location.replace("/login");
-            }
-        };
 
         if (!error.response || !original || error.response.status !== 401) {
             return Promise.reject(error);
@@ -75,15 +79,16 @@ api.interceptors.response.use(
             } catch (refreshError) {
                 // Refresh Token까지 유효하지 않을 때만 로그인 상태를 종료한다.
                 // 네트워크 장애나 하위 API의 JWT 설정 오류는 현재 세션과 별개의 문제다.
-                if (refreshError.response?.status === 401) {
+                if ([401, 403].includes(refreshError.response?.status)) {
                     redirectToLogin();
                 }
                 return Promise.reject(refreshError);
             }
         }
 
-        // 갱신 후 같은 API가 다시 401을 반환하면 세션이 아니라 하위 API 문제일 수 있다.
-        // 호출부에서 오류를 표시할 수 있도록 그대로 전달한다.
+        // 갱신 후 같은 API가 다시 401을 반환하면 현재 브라우저 세션으로는
+        // 보호 API를 사용할 수 없으므로 멈춰 있는 화면 대신 로그인으로 이동한다.
+        redirectToLogin();
         return Promise.reject(error);
     }
 );

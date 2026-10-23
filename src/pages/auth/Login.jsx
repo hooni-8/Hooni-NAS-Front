@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@hooks/useAuth";
 
 import "@styles/pages/auth/Login.scss";
@@ -9,12 +9,17 @@ import { UserRound, LockKeyhole, Eye, EyeOff, ShieldCheck } from "lucide-react";
 
 export default function Login() {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
 
     const [userId, setUserId] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState(
+        searchParams.get("reason") === "session-expired"
+            ? "로그인 세션이 만료되었습니다. 다시 로그인해주세요."
+            : ""
+    );
 
     const { login } = useAuth();
 
