@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 
 import Main from "@pages/Main";
+import Trash from "@pages/components/trash/Trash";
 import ProtectedLayout from "@layout/auth/ProtectedLayout";
 import PublicOnlyLayout from "@layout/auth/PublicOnlyLayout";
 
@@ -22,6 +23,7 @@ export default function Router(props) {
             <Route element={<ProtectedLayout />}>
                 <Route element={<DashBoard />}>
                     <Route path="/main/:folderId" element={<Main {...props} />} />
+                    <Route path="/trash" element={<Trash {...props} />} />
                 </Route>
             </Route>
             <Route path="*" element={<Page404 />} />

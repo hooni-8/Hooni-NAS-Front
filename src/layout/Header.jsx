@@ -1,10 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
+import { useLocation } from "react-router-dom";
 
 import { useModal } from "@hooks/useModal";
 
 import HeaderDropdown from "@layout/components/HeaderDropdown";
 
-import { Search, Upload, Grid3x3, List, User, Menu, FolderPlus, ChevronDown, HardDrive } from 'lucide-react';
+import { Search, Upload, Grid3x3, List, User, Menu, FolderPlus, ChevronDown, HardDrive, Trash2 } from 'lucide-react';
 import "@styles/pages/layout/Header.scss"
 
 export default function Header({
@@ -14,6 +15,9 @@ export default function Header({
                            changeViewMode,
                            onMenuClick
                        }) {
+
+    const location = useLocation();
+    const isTrashPage = location.pathname === "/trash";
 
     const [showUserMenu, setShowUserMenu] = useState(false);
     const menuRef = useRef(null);
@@ -45,17 +49,17 @@ export default function Header({
 
                 <div className="header-search-section">
                     <div className="header-page-context">
-                        <div className="header-page-icon"><HardDrive /></div>
+                        <div className="header-page-icon">{isTrashPage ? <Trash2 /> : <HardDrive />}</div>
                         <div>
-                            <span>MY STORAGE</span>
-                            <strong>내 파일</strong>
+                            <span>{isTrashPage ? "RECOVERY SPACE" : "MY STORAGE"}</span>
+                            <strong>{isTrashPage ? "휴지통" : "내 파일"}</strong>
                         </div>
                     </div>
                     <div className="header-search-wrapper">
                         <Search className="header-search-icon"/>
                         <input
                             type="text"
-                            placeholder="파일 검색..."
+                            placeholder={isTrashPage ? "삭제된 항목 검색..." : "파일 검색..."}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="header-search-input"
@@ -98,24 +102,28 @@ export default function Header({
                     {/*---------------View Toggle---------------*/}
 
                     {/*---------------Create Folder Button---------------*/}
-                    <button
-                        onClick={() => openModal("createFolder")}
-                        className="header-desktop-folder-btn"
-                    >
-                        <FolderPlus className="header-btn-icon"/>
-                        <span>폴더 생성</span>
-                    </button>
+                    {!isTrashPage && (
+                        <button
+                            onClick={() => openModal("createFolder")}
+                            className="header-desktop-folder-btn"
+                        >
+                            <FolderPlus className="header-btn-icon"/>
+                            <span>폴더 생성</span>
+                        </button>
+                    )}
 
                     {/*---------------Create Folder Button---------------*/}
 
                     {/*---------------Upload Button---------------*/}
-                    <button
-                        onClick={() => openModal("uploadOpen")}
-                        className="header-desktop-upload-btn"
-                    >
-                        <Upload className="header-btn-icon"/>
-                        <span>업로드</span>
-                    </button>
+                    {!isTrashPage && (
+                        <button
+                            onClick={() => openModal("uploadOpen")}
+                            className="header-desktop-upload-btn"
+                        >
+                            <Upload className="header-btn-icon"/>
+                            <span>업로드</span>
+                        </button>
+                    )}
 
                     {/*---------------Upload Button---------------*/}
 

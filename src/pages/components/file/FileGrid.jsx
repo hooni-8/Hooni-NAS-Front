@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {useNavigate, useParams} from "react-router-dom";
 
 import * as gateway from "@components/common/gateway/Gateway";
@@ -6,6 +6,7 @@ import * as format from "@components/utils/Format";
 
 import { useFileUpload } from "@hooks/useFileUpload";
 import { useAuth } from "@hooks/useAuth";
+import { useFileControl } from "@hooks/useFileControl";
 import { useModal } from "@hooks/useModal";
 
 import GridView from '@pages/components/file/view/grid/GridView';
@@ -18,7 +19,7 @@ import CreateFolderModal from "@pages/components/modal/CreateFolderModal";
 import UploadModal from '@pages/components/modal/UploadModal';
 import UploadProgressBar from "@pages/components/loding/UploadProgressBar";
 import FileLoadErrorView from "@pages/components/file/FileLoadErrorView";
-import { FolderOpen, Files } from "lucide-react";
+import { CheckSquare2, FolderOpen, Files, Trash2, X } from "lucide-react";
 
 import "@styles/pages/components/file/FileGrid.scss"
 
@@ -29,7 +30,9 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
 
     const { rootFolderId } = useAuth();
     const { modal, openModal, closeModal } = useModal();
+    const { deleteFiles } = useFileControl();
     const { setQueue, pendingToReadyUpdateFile, pendingFiles, readyFiles, deleteStatusFile, processQueue, uploadDoneAt, setUploadDoneAt } = useFileUpload();
+    const selectAllRef = useRef(null);
 
     const [folderInfo, setFolderInfo] = useState('');
     const [fileList, setFileList] = useState([]);
@@ -37,11 +40,17 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
     const [fileLoadError, setFileLoadError] = useState(false);
 
     const [selectedFile, setSelectedFile] = useState({});
+    const [selectedFileIds, setSelectedFileIds] = useState([]);
     const [openMenuId, setOpenMenuId] = useState(null);
 
     useEffect(() => {
         setOpenMenuId(null);
-    }, [folderId, viewMode, selectedCategory, searchQuery]);
+        setSelectedFileIds([]);
+    }, [folderId, selectedCategory, searchQuery]);
+
+    useEffect(() => {
+        setOpenMenuId(null);
+    }, [viewMode]);
 
     // 미리보기 및 폴더 이동
     const showPreviewModal = (file) => {
@@ -132,6 +141,9 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
                 setFileLoadError(false);
                 setFolderInfo(folder);
                 setFileList(convertedFiles);
+                setSelectedFileIds(current => current.filter(id => (
+                    convertedFiles.some(file => file.itemId === id)
+                )));
                 return;
             }
 
@@ -194,6 +206,48 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
         return format.matchesCategory(matchesSearch, selectedCategory, file);
     });
 
+    const selectedFiles = useMemo(() => (
+        fileList.filter(file => selectedFileIds.includes(file.itemId))
+    ), [fileList, selectedFileIds]);
+
+    const allFilteredSelected = filteredFiles.length > 0 && filteredFiles.every(file => (
+        selectedFileIds.includes(file.itemId)
+    ));
+    const someFilteredSelected = filteredFiles.some(file => selectedFileIds.includes(file.itemId));
+
+    useEffect(() => {
+        if (selectAllRef.current) {
+            selectAllRef.current.indeterminate = someFilteredSelected && !allFilteredSelected;
+        }
+    }, [allFilteredSelected, someFilteredSelected]);
+
+    const toggleFileSelection = useCallback((fileId) => {
+        setOpenMenuId(null);
+        setSelectedFileIds(current => (
+            current.includes(fileId)
+                ? current.filter(id => id !== fileId)
+                : [...current, fileId]
+        ));
+    }, []);
+
+    const toggleSelectAll = () => {
+        const filteredIds = filteredFiles.map(file => file.itemId);
+        setOpenMenuId(null);
+        setSelectedFileIds(current => {
+            if (allFilteredSelected) {
+                return current.filter(id => !filteredIds.includes(id));
+            }
+            return [...new Set([...current, ...filteredIds])];
+        });
+    };
+
+    const handleDeleteSelected = () => {
+        deleteFiles(selectedFiles, async () => {
+            await fetchFileList();
+            setSelectedFileIds([]);
+        });
+    };
+
     const isRootFolder = !folderInfo || folderInfo.folderId === folderInfo.parentFolderId;
 
     const handleBackFolder = () => {
@@ -212,9 +266,53 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
                         </h1>
                         <p>파일을 정리하고 필요한 순간에 빠르게 꺼내보세요.</p>
                     </div>
-                    <div className="nas-file-count">
-                        <Files aria-hidden="true" />
-                        <strong>{fileList.length}</strong>개 항목
+                    <div className="nas-file-heading-actions">
+                        {fileList.length > 0 && (
+                            <label className="file-select-all file-select-all-compact">
+                                <input
+                                    ref={selectAllRef}
+                                    type="checkbox"
+                                    checked={allFilteredSelected}
+                                    disabled={filteredFiles.length === 0}
+                                    onChange={toggleSelectAll}
+                                />
+                                <span>전체 선택</span>
+                            </label>
+                        )}
+                        <div className="nas-file-count">
+                            <Files aria-hidden="true" />
+                            <strong>{fileList.length}</strong>개 항목
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {!folderNotFound && !fileLoadError && selectedFiles.length > 0 && (
+                <section className="file-selection-toolbar" aria-label="파일 다중 선택 작업" aria-live="polite">
+                    <div className="file-selection-summary">
+                        <span className="file-selection-icon"><CheckSquare2 aria-hidden="true" /></span>
+                        <div>
+                            <strong>{selectedFiles.length}개 선택됨</strong>
+                            <span>선택한 항목을 한 번에 휴지통으로 이동할 수 있어요.</span>
+                        </div>
+                    </div>
+                    <div className="file-selection-actions">
+                        <button
+                            type="button"
+                            className="file-selection-clear"
+                            onClick={() => setSelectedFileIds([])}
+                        >
+                            <X aria-hidden="true" />
+                            선택 해제
+                        </button>
+                        <button
+                            type="button"
+                            className="file-selection-delete"
+                            onClick={handleDeleteSelected}
+                        >
+                            <Trash2 aria-hidden="true" />
+                            선택 항목 삭제
+                        </button>
                     </div>
                 </section>
             )}
@@ -242,6 +340,8 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
                     onCreateFolder={() => openModal("createFolder")}
                     openMenuId={openMenuId}
                     setOpenMenuId={setOpenMenuId}
+                    selectedFileIds={selectedFileIds}
+                    toggleFileSelection={toggleFileSelection}
                 />
             ) : (
                 <GridView
@@ -256,6 +356,8 @@ export default function FileGrid({ selectedCategory, searchQuery, viewMode }) {
                     onCreateFolder={() => openModal("createFolder")}
                     openMenuId={openMenuId}
                     setOpenMenuId={setOpenMenuId}
+                    selectedFileIds={selectedFileIds}
+                    toggleFileSelection={toggleFileSelection}
                 />
             )}
 

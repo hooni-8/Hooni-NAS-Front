@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import * as gateway from "@components/common/gateway/Gateway";
 import * as format from "@components/utils/Format";
@@ -8,17 +8,29 @@ import { useAuth } from "@hooks/useAuth";
 import "@styles/pages/layout/Sidebar.scss";
 
 import Logo from "@assets/imgs/Hooni_logo.png";
-import { HardDrive, Folder, Image, FileText, Video, Music, X, LogOut, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { HardDrive, Folder, Image, FileText, Video, Music, X, LogOut, PanelLeftClose, PanelLeftOpen, Trash2 } from 'lucide-react';
 
 export default function Sidebar ({ selectedCategory, onCategoryChange, onClose, isCollapsed = false, onToggleCollapse }) {
 
     const { logout, rootFolderId } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+    const isTrashPage = location.pathname === "/trash";
 
     const goToRootFolder = () => {
         if (rootFolderId) {
             navigate(`/main/${rootFolderId}`);
         }
+    };
+
+    const handleCategoryChange = (categoryId) => {
+        onCategoryChange(categoryId);
+        goToRootFolder();
+    };
+
+    const goToTrash = () => {
+        navigate("/trash");
+        onClose?.();
     };
 
     const [totalVolume, setTotalVolume] = useState(0);
@@ -125,11 +137,11 @@ export default function Sidebar ({ selectedCategory, onCategoryChange, onClose, 
                     <p className="sidebar-section-title">카테고리</p>
                     {categories.map(category => {
                         const Icon = category.icon;
-                        const isActive = selectedCategory === category.id;
+                        const isActive = !isTrashPage && selectedCategory === category.id;
                         return (
                             <button
                                 key={category.id}
-                                onClick={() => onCategoryChange(category.id)}
+                                onClick={() => handleCategoryChange(category.id)}
                                 className={`sidebar-nav-item ${isActive ? 'active' : ''}`}
                                 title={isCollapsed ? category.name : undefined}
                             >
@@ -143,6 +155,21 @@ export default function Sidebar ({ selectedCategory, onCategoryChange, onClose, 
                             </button>
                         );
                     })}
+                </div>
+                <div className="sidebar-section">
+                    <p className="sidebar-section-title">관리</p>
+                    <button
+                        type="button"
+                        onClick={goToTrash}
+                        className={`sidebar-nav-item ${isTrashPage ? 'active' : ''}`}
+                        title={isCollapsed ? "휴지통" : undefined}
+                    >
+                        <Trash2
+                            className="sidebar-nav-icon"
+                            style={{color: isTrashPage ? '#7469bc' : '#d96b72'}}
+                        />
+                        <span>휴지통</span>
+                    </button>
                 </div>
             </nav>
 

@@ -13,7 +13,9 @@ const FileListItem = memo(({
                                showPreviewModal,
                                showReNameModal,
                                openMenuId,
-                               setOpenMenuId
+                               setOpenMenuId,
+                               selected,
+                               toggleFileSelection
 }) => {
     const showMenu = openMenuId === file.itemId;
     const menuButtonRef = useRef(null);
@@ -33,15 +35,26 @@ const FileListItem = memo(({
     };
 
     return (
-        <div className="file-list-item group">
+        <div className={`file-list-item group${selected ? " is-selected" : ""}`}>
             <div
-                className="file-item-content"
+                className={`file-item-content${selected ? " is-selected" : ""}`}
                 role="button"
                 tabIndex={0}
                 aria-label={`${file.itemName} 열기`}
                 onClick={handleOpenFile}
                 onKeyDown={handleItemKeyDown}
             >
+                <label
+                    className="file-list-select"
+                    aria-label={`${file.itemName} 선택`}
+                    onClick={(event) => event.stopPropagation()}
+                >
+                    <input
+                        type="checkbox"
+                        checked={selected}
+                        onChange={() => toggleFileSelection(file.itemId)}
+                    />
+                </label>
                 <div className="file-item-name-section">
                     <div className="file-icon-wrapper">
                         {format.getListFileIcon(file)}

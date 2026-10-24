@@ -7,6 +7,19 @@ import "@styles/pages/auth/Login.scss";
 import Logo from "@assets/imgs/Hooni_logo.png";
 import { UserRound, LockKeyhole, Eye, EyeOff, ShieldCheck } from "lucide-react";
 
+const getLoginError = (error) => {
+    // gateway.post는 실패 시 AxiosError가 아니라 error.response(AxiosResponse)를 반환하므로
+    // 두 형태를 모두 지원하고 서버 코드가 숫자로 와도 같은 값으로 비교한다.
+    const response = error?.response ?? error;
+    const payload = response?.data ?? error?.data;
+    const code = payload?.code ?? payload?.data?.code;
+
+    return {
+        status: response?.status,
+        code: code == null ? "" : String(code),
+    };
+};
+
 export default function Login() {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
@@ -44,11 +57,17 @@ export default function Login() {
             navigate(`/main/${folderId}`, { replace: true });
 
         } catch (error) {
-            const code = error?.response?.data?.code ?? error?.response?.data?.data?.code ?? error?.data?.code;
+            const { status, code } = getLoginError(error);
 
-            if (code === '1001') {
+            // 현재 Auth API는 자격 증명 불일치에도 400/0001을 반환하므로
+            // 서버 계약이 401/1001로 정리되기 전까지 두 응답을 모두 지원한다.
+            const isInvalidCredentials = status === 401
+                || code === "1001"
+                || (status === 400 && code === "0001");
+
+            if (isInvalidCredentials) {
                 setErrorMessage('아이디 또는 비밀번호가 올바르지 않습니다.');
-            } else if (code === '1004') {
+            } else if (status === 429 || code === "1004") {
                 setErrorMessage('로그인 시도가 너무 많습니다. 잠시 후 다시 시도해주세요.');
             } else {
                 setErrorMessage('로그인 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.');

@@ -18,7 +18,9 @@ export default function GridView({
                                      onUpload,
                                      onCreateFolder,
                                      openMenuId,
-                                     setOpenMenuId
+                                     setOpenMenuId,
+                                     selectedFileIds,
+                                     toggleFileSelection
 }) {
 
     const data = folderInfo && folderInfo.folderId !== folderInfo.parentFolderId ? [{ type: "back" }, ...filteredFiles] : filteredFiles;
@@ -56,6 +58,8 @@ export default function GridView({
                                 showReNameModal={showReNameModal}
                                 openMenuId={openMenuId}
                                 setOpenMenuId={setOpenMenuId}
+                                selected={selectedFileIds.includes(file.itemId)}
+                                toggleFileSelection={toggleFileSelection}
                             />
                         )
                     }}

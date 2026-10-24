@@ -17,7 +17,9 @@ export default function ListView({
                                      onUpload,
                                      onCreateFolder,
                                      openMenuId,
-                                     setOpenMenuId
+                                     setOpenMenuId,
+                                     selectedFileIds,
+                                     toggleFileSelection
 }) {
 
     const data = folderInfo && folderInfo.folderId !== folderInfo.parentFolderId ? [{ type: "back" }, ...filteredFiles] : filteredFiles;
@@ -26,6 +28,7 @@ export default function ListView({
         <div className="file-grid-container list-view">
             <div className="list-wrapper">
                 <div className="list-header">
+                    <div className="list-header-select" aria-hidden="true"></div>
                     <div>이름</div>
                     <div>크기</div>
                     <div>수정일</div>
@@ -62,6 +65,8 @@ export default function ListView({
                                     showReNameModal={showReNameModal}
                                     openMenuId={openMenuId}
                                     setOpenMenuId={setOpenMenuId}
+                                    selected={selectedFileIds.includes(file.itemId)}
+                                    toggleFileSelection={toggleFileSelection}
                                 />
                             )
                         }}

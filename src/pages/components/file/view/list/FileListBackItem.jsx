@@ -29,6 +29,7 @@ export default function FileListBackItem ({ handleBackFolder })  {
                 onClick={handleBackFolder}
                 onKeyDown={handleKeyDown}
             >
+                <span className="file-list-select-spacer" aria-hidden="true" />
                 <div className="file-item-name-section">
                     <div className="file-icon-wrapper">
                         <Folder {...iconProps} />

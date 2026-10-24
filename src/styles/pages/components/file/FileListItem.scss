@@ -6,7 +6,7 @@
 
 .file-item-content {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1.25rem 1fr auto;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
   border-bottom: 1px solid #f3f4f6;
@@ -18,12 +18,29 @@
   background-color: #f9fafb;
 }
 
+.file-item-content.is-selected,
+.file-item-content.is-selected:hover {
+  background: #f6f4fd;
+}
+
 @media (min-width: 768px) {
   .file-item-content {
-    grid-template-columns: 1fr auto auto auto;
+    grid-template-columns: 1.25rem 1fr auto auto auto;
     gap: 1rem;
     padding: 1rem 1.5rem;
   }
+}
+
+.file-list-select,
+.file-list-select-spacer {
+  display: inline-flex;
+  width: 1.25rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.file-list-select {
+  cursor: pointer;
 }
 
 /* File Icon */

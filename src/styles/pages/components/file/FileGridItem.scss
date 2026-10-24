@@ -25,7 +25,7 @@
 
 @media (min-width: 1024px) {
   .file-card {
-    padding: 1rem;
+    padding: 0.85rem;
   }
 }
 
@@ -34,10 +34,43 @@
   position: relative;
 }
 
+.file-card-select {
+  position: absolute;
+  top: 0.35rem;
+  left: 0.35rem;
+  z-index: 3;
+  display: grid;
+  width: 1.8rem;
+  height: 1.8rem;
+  place-items: center;
+  border: 1px solid #e1dfeb;
+  border-radius: 0.55rem;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 2px 7px rgba(43, 45, 62, 0.08);
+  opacity: 0.78;
+  cursor: pointer;
+  transition: opacity 0.16s ease, border-color 0.16s ease, background-color 0.16s ease;
+}
+
+.file-card-wrapper:hover .file-card-select,
+.file-card-wrapper.is-selected .file-card-select {
+  border-color: #b7afd9;
+  background: #f2effc;
+  opacity: 1;
+}
+
+@media (min-width: 1024px) {
+  .file-card-select {
+    top: 0.5rem;
+    left: 0.5rem;
+  }
+}
+
 /* Icon Container */
 .file-card-icon-container {
   width: 100%;
   aspect-ratio: 1;
+  overflow: hidden;
   border-radius: 0.5rem;
   display: flex;
   align-items: center;
@@ -244,6 +277,13 @@
   border-color: #d6d1ed;
   box-shadow: 0 10px 20px rgba(42, 44, 61, 0.08);
   transform: translateY(-1px);
+}
+
+.file-card.is-selected,
+.file-card.is-selected:hover {
+  border-color: #9589cf;
+  background: #faf9ff;
+  box-shadow: 0 0 0 3px rgba(116, 105, 188, 0.1), 0 10px 20px rgba(42, 44, 61, 0.08);
 }
 
 .file-card-icon-container {

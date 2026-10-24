@@ -15,7 +15,9 @@ const FileGridItem = React.memo(({
                                      showPreviewModal,
                                      showReNameModal,
                                      openMenuId,
-                                     setOpenMenuId
+                                     setOpenMenuId,
+                                     selected,
+                                     toggleFileSelection
 }) => {
     const showMenu = openMenuId === file.itemId;
     const menuButtonRef = useRef(null);
@@ -81,9 +83,9 @@ const FileGridItem = React.memo(({
     };
 
     return (
-        <div className="file-card-wrapper group">
+        <div className={`file-card-wrapper group${selected ? " is-selected" : ""}`}>
             <div
-                className="file-card"
+                className={`file-card${selected ? " is-selected" : ""}`}
                 role="button"
                 tabIndex={0}
                 aria-label={`${file.itemName} 열기`}
@@ -91,6 +93,18 @@ const FileGridItem = React.memo(({
                 onKeyDown={handleCardKeyDown}
             >
                 <div className="file-card-relative">
+                    <label
+                        className="file-card-select"
+                        aria-label={`${file.itemName} 선택`}
+                        onClick={(event) => event.stopPropagation()}
+                        onDoubleClick={(event) => event.stopPropagation()}
+                    >
+                        <input
+                            type="checkbox"
+                            checked={selected}
+                            onChange={() => toggleFileSelection(file.itemId)}
+                        />
+                    </label>
                     <div className={`file-card-icon-container ${format.getFileColor(file)}`}>
                         {(file.itemType === "image" || file.itemType === "video") && thumbUrl && !thumbError ? (
                             <img src={thumbUrl} alt={file.itemName} loading="lazy" />
